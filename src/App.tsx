@@ -14,6 +14,7 @@ import About from './pages/public/About';
 import Contact from './pages/public/Contact';
 import Login from './pages/public/Login';
 import Signup from './pages/public/Signup';
+import Unauthorized from './pages/public/Unauthorized';
 
 // Customer Pages
 import CustomerDashboard from './pages/customer/Dashboard';
@@ -42,10 +43,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
         </Route>
 
         {/* Protected Customer Routes */}
-        <Route path="/portal" element={<ProtectedRoute allowedRole="customer" />}>
+        <Route path="/portal" element={<ProtectedRoute allowedRoles={['customer']} />}>
           <Route element={<CustomerLayout />}>
             <Route index element={<CustomerDashboard />} />
             <Route path="new-order" element={<NewOrder />} />
@@ -54,7 +56,7 @@ function App() {
         </Route>
 
         {/* Protected Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute allowedRole="admin" />}>
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="orders" element={<OrdersList />} />

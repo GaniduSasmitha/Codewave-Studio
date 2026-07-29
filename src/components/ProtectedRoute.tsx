@@ -1,25 +1,27 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 interface ProtectedRouteProps {
-  allowedRole?: 'customer' | 'admin';
+  allowedRoles?: string[];
 }
 
-export default function ProtectedRoute({ allowedRole }: ProtectedRouteProps) {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const userRole = localStorage.getItem('user_role');
+export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
+  const { user, profile, loading } = useAuth();
 
-  if (!isAuthenticated) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRole && userRole !== allowedRole) {
-    if (userRole === 'admin') {
-      return <Navigate to="/admin" replace />;
-    } else if (userRole === 'customer') {
-      return <Navigate to="/portal" replace />;
-    } else {
-      return <Navigate to="/" replace />;
-    }
+  if (allowedRoles && (!profile || !allowedRoles.includes(profile.role))) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return <Outlet />;
