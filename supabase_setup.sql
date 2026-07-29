@@ -24,7 +24,7 @@ create table if not exists public.orders (
   created_at timestamptz default now(),
   verified_at timestamptz,
   verified_by uuid references public.profiles(id),
-  constraint check_status check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled'))
+  constraint check_status check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'))
 );
 
 -- 3. Enable Row Level Security (RLS)
