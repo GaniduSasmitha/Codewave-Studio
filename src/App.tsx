@@ -51,7 +51,7 @@ function App() {
           <Route element={<CustomerLayout />}>
             <Route index element={<CustomerDashboard />} />
             <Route path="new-order" element={<NewOrder />} />
-            <Route path="order-status" element={<OrderStatus />} />
+            <Route path="order/:id" element={<OrderStatus />} />
           </Route>
         </Route>
 

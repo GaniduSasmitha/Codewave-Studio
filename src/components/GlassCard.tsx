@@ -5,14 +5,18 @@ interface GlassCardProps {
   children: ReactNode;
   className?: string;
   hoverEffect?: boolean;
+  onClick?: () => void;
 }
 
-export default function GlassCard({ children, className = '', hoverEffect = true }: GlassCardProps) {
+export default function GlassCard({ children, className = '', hoverEffect = true, onClick }: GlassCardProps) {
   return (
     <motion.div
+      onClick={onClick}
       whileHover={hoverEffect ? { y: -4, borderColor: 'rgba(255, 255, 255, 0.15)', boxShadow: '0 12px 30px -10px rgba(99, 102, 241, 0.25)' } : {}}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={`bg-slate-950/40 backdrop-blur-lg border border-white/5 rounded-2xl p-6 shadow-xl transition-colors duration-300 ${className}`}
+      className={`bg-slate-950/40 backdrop-blur-lg border border-white/5 rounded-2xl p-6 shadow-xl transition-colors duration-300 ${
+        onClick ? 'cursor-pointer' : ''
+      } ${className}`}
     >
       {children}
     </motion.div>
