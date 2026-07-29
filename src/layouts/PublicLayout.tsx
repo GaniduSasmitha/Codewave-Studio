@@ -1,6 +1,9 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 export default function PublicLayout() {
+  const location = useLocation();
+
   return (
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
       <header className="border-b border-slate-800 bg-background/80 backdrop-blur sticky top-0 z-50">
@@ -24,8 +27,15 @@ export default function PublicLayout() {
           </div>
         </div>
       </header>
-      <main className="flex-1">
-        <Outlet />
+      <main className="flex-1 overflow-hidden">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
+          <Outlet />
+        </motion.div>
       </main>
       <footer className="border-t border-slate-800 py-8 bg-slate-950/50">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
