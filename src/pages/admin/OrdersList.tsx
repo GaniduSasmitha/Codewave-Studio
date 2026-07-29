@@ -138,7 +138,59 @@ export default function OrdersList() {
         </div>
       ) : (
         <ScrollReveal>
-          <div className="bg-slate-950/20 backdrop-blur-lg border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+          {/* Card Layout for Mobile */}
+          <div className="md:hidden space-y-4">
+            {filteredOrders.length === 0 ? (
+              <GlassCard className="p-6 text-center text-slate-500" hoverEffect={false}>
+                No orders match the selected filters.
+              </GlassCard>
+            ) : (
+              filteredOrders.map((order) => {
+                let clientName = "Unknown Client";
+                if (order.profiles) {
+                  const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
+                  clientName = prof?.full_name || "Unknown Client";
+                }
+                return (
+                  <GlassCard key={order.id} className="p-5 border border-white/5 bg-slate-900/10 space-y-4" hoverEffect={false}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">{clientName}</h4>
+                        <span className="font-mono text-[10px] text-slate-400">#{order.id.slice(0, 8)}</span>
+                      </div>
+                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                        statusColors[order.status] || "bg-slate-500/10 text-slate-400"
+                      }`}>
+                        {order.status.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs border-t border-b border-slate-800/60 py-3">
+                      <div>
+                        <span className="text-slate-500 block text-[10px] uppercase font-semibold">Package</span>
+                        <span className="font-semibold text-slate-300">{planNames[order.package] || "Custom Project"}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-slate-500 block text-[10px] uppercase font-semibold">Price</span>
+                        <span className="font-bold text-white">${order.price}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-[11px] text-slate-500 font-mono">{new Date(order.created_at).toLocaleDateString()}</span>
+                      <Link
+                        to={`/admin/orders/${order.id}`}
+                        className="text-xs text-accent hover:underline border border-slate-800 hover:bg-slate-950 px-4 py-2 rounded font-bold min-h-[44px] flex items-center justify-center"
+                      >
+                        Manage
+                      </Link>
+                    </div>
+                  </GlassCard>
+                );
+              })
+            )}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-slate-950/20 backdrop-blur-lg border border-white/5 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-800 text-left text-sm text-slate-300">
                 <thead className="bg-slate-950/60 text-xs uppercase text-slate-400 font-semibold">
@@ -161,7 +213,6 @@ export default function OrdersList() {
                     </tr>
                   ) : (
                     filteredOrders.map((order) => {
-                      // Extract name safely whether profiles is single or array
                       let clientName = "Unknown Client";
                       if (order.profiles) {
                         const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;

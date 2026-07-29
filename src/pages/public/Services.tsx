@@ -73,7 +73,7 @@ export default function Services() {
         />
       </ScrollReveal>
 
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 mt-12">
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-12">
         {services.map((service, i) => (
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard className="h-full flex flex-col justify-between p-8 border border-white/5 bg-slate-900/30">

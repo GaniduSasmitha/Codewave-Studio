@@ -191,11 +191,11 @@ export default function NewOrder() {
             />
           </div>
 
-          <div className="flex gap-4 pt-4 border-t border-slate-800/60">
-            <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-1/2 py-3">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-800/60">
+            <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-3">
               Back to Plans
             </AnimatedButton>
-            <AnimatedButton onClick={handleNextStep} variant="primary" className="w-1/2 py-3">
+            <AnimatedButton onClick={handleNextStep} variant="primary" className="w-full sm:w-1/2 py-3">
               Review Summary
             </AnimatedButton>
           </div>
@@ -207,7 +207,7 @@ export default function NewOrder() {
         <GlassCard className="p-8 border border-white/5 bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
           <h2 className="text-xl font-bold text-white border-b border-slate-800 pb-4">Review Order Details</h2>
 
-          <div className="grid gap-6 grid-cols-2 text-sm">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
             <div>
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Selected Package</span>
               <span className="text-white font-bold block mt-1">{activePlan?.name}</span>
@@ -233,15 +233,15 @@ export default function NewOrder() {
             </p>
           </div>
 
-          <div className="flex gap-4 pt-6 border-t border-slate-800/60">
-            <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-1/2 py-3">
+          <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-800/60">
+            <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-3">
               Back to Edit
             </AnimatedButton>
             <AnimatedButton
               onClick={handleSubmit}
               variant="primary"
               disabled={submitting}
-              className="w-1/2 py-3"
+              className="w-full sm:w-1/2 py-3"
             >
               {submitting ? "Submitting Order..." : "Confirm & Submit"}
             </AnimatedButton>

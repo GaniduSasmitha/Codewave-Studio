@@ -61,7 +61,7 @@ export default function Pricing() {
       </ScrollReveal>
 
       {/* Tier Cards Grid */}
-      <div className="grid gap-8 grid-cols-1 lg:grid-cols-3 mt-12">
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12">
         {tiers.map((tier, i) => (
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard

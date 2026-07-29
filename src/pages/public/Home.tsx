@@ -81,18 +81,18 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 border border-primary/30 px-3.5 py-1.5 rounded-full bg-primary/5 backdrop-blur text-xs font-semibold text-accent uppercase tracking-wider">
             <span>✨ Code meets Craft</span>
           </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
             Elevate Your <br />
             <span className="gradient-brand bg-clip-text text-transparent">Digital Wave</span>
           </h1>
           <p className="max-w-xl text-lg text-slate-400 leading-relaxed">
             We build immersive 3D experiences, stunning interfaces, and high-performance applications custom tailored to your goals.
           </p>
-          <div className="flex gap-4">
-            <AnimatedButton onClick={() => navigate('/pricing')} variant="primary">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <AnimatedButton onClick={() => navigate('/pricing')} variant="primary" className="w-full sm:w-auto">
               Get a Website
             </AnimatedButton>
-            <AnimatedButton onClick={() => navigate('/portfolio')} variant="glass">
+            <AnimatedButton onClick={() => navigate('/portfolio')} variant="glass" className="w-full sm:w-auto">
               View Our Work
             </AnimatedButton>
           </div>
@@ -230,15 +230,15 @@ export default function Home() {
           <GlassCard className="relative overflow-hidden p-12 text-center border border-primary/20 bg-gradient-to-tr from-slate-950 to-primary/10">
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-white">Ready to Start Your Project?</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white">Ready to Start Your Project?</h2>
             <p className="mt-4 max-w-xl mx-auto text-slate-400">
               Let's craft an industry-leading digital presence custom tailored to your business rules.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
-              <AnimatedButton onClick={() => navigate('/contact')} variant="primary">
+            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+              <AnimatedButton onClick={() => navigate('/contact')} variant="primary" className="w-full sm:w-auto">
                 Get Started Today
               </AnimatedButton>
-              <AnimatedButton onClick={() => navigate('/pricing')} variant="glass">
+              <AnimatedButton onClick={() => navigate('/pricing')} variant="glass" className="w-full sm:w-auto">
                 Compare Packages
               </AnimatedButton>
             </div>

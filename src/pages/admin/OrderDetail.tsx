@@ -53,6 +53,7 @@ export default function OrderDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchOrderAndClient = async () => {
     if (!id) return;
@@ -222,7 +223,7 @@ export default function OrderDetail() {
                 </div>
               </div>
 
-              <div className="grid gap-6 grid-cols-2 text-sm">
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Created Date</span>
                   <span className="text-white font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
@@ -326,7 +327,10 @@ export default function OrderDetail() {
                       </a>
                     </div>
                   ) : (
-                    <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-950/60 p-2">
+                    <div 
+                      className="border border-slate-800 rounded-lg overflow-hidden bg-slate-950/60 p-2 cursor-pointer hover:border-primary/40 transition-colors"
+                      onClick={() => setIsModalOpen(true)}
+                    >
                       <img
                         src={signedSlipUrl}
                         alt="Receipt slip preview"
@@ -337,6 +341,47 @@ export default function OrderDetail() {
                 </div>
               )}
             </GlassCard>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Slip Viewer */}
+      {isModalOpen && signedSlipUrl && order && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/90 backdrop-blur-sm"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[90vh] bg-slate-950 sm:bg-slate-900 border-0 sm:border sm:border-slate-800 rounded-none sm:rounded-2xl p-4 overflow-hidden flex flex-col sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center pb-3 border-b border-slate-800/85 mb-4 mt-2 sm:mt-0">
+              <div>
+                <h3 className="font-bold text-white text-base">Payment Receipt</h3>
+                <p className="text-[10px] text-slate-500 font-mono mt-0.5">Order ID: #{order.id}</p>
+              </div>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-400 hover:text-white text-xs font-bold px-3 py-1.5 border border-slate-800 hover:bg-slate-800 rounded-lg min-h-[36px] flex items-center"
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto flex items-center justify-center bg-slate-950/40 rounded-lg p-2">
+              <img 
+                src={signedSlipUrl} 
+                alt="Receipt large view" 
+                className="max-w-full max-h-[70vh] sm:max-h-[65vh] object-contain rounded" 
+              />
+            </div>
+            <div className="pt-4 border-t border-slate-800/85 mt-4 text-center sm:hidden">
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="w-full bg-slate-800 text-white font-bold py-3 rounded-lg min-h-[44px]"
+              >
+                Close Viewer
+              </button>
+            </div>
           </div>
         </div>
       )}

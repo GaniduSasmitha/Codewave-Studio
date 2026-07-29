@@ -49,7 +49,7 @@ export default function About() {
         <ScrollReveal delay={0.15}>
           <GlassCard className="p-8 border border-white/5 bg-slate-900/10 text-left">
             <h4 className="text-lg font-bold text-accent mb-4">Core Numbers</h4>
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               <div>
                 <p className="text-3xl font-black text-white">40+</p>
                 <p className="text-xs text-slate-500 mt-1">Projects Built</p>
@@ -77,7 +77,7 @@ export default function About() {
           />
         </ScrollReveal>
 
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-3 mt-8">
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
           {team.map((member, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
               <GlassCard className="h-full flex flex-col justify-between text-left p-6 border border-white/5 bg-slate-900/15">
