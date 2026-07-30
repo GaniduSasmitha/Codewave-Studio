@@ -128,9 +128,9 @@ export default function Home() {
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const [orderError, setOrderError] = useState('');
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (silent = false) => {
     if (!user) return;
-    setLoadingOrders(true);
+    if (!silent) setLoadingOrders(true);
     try {
       const { data, error } = await supabase
         .from('orders')
@@ -143,7 +143,7 @@ export default function Home() {
     } catch (err) {
       console.error('Error fetching orders:', err);
     } finally {
-      setLoadingOrders(false);
+      if (!silent) setLoadingOrders(false);
     }
   };
 
@@ -151,6 +151,31 @@ export default function Home() {
     if (user && profile?.role === 'customer') {
       fetchOrders();
     }
+  }, [user, profile]);
+
+  useEffect(() => {
+    if (!user || profile?.role !== 'customer') return;
+
+    const channel = supabase
+      .channel('customer-orders-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `customer_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Realtime change received for customer:', payload);
+          fetchOrders(true); // silent fetch on changes
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user, profile]);
 
   const handleSelectPackage = (pkgId: string, price: number) => {
@@ -418,7 +443,7 @@ export default function Home() {
                             <SlipUpload
                               orderId={order.id}
                               userId={user.id}
-                              onUploadSuccess={fetchOrders}
+                              onUploadSuccess={() => fetchOrders(true)}
                             />
                           </div>
                         )}

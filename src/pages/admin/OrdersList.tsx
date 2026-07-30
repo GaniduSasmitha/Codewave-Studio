@@ -45,24 +45,46 @@ export default function OrdersList() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date_desc');
 
+  const fetchAllOrders = async (silent = false) => {
+    if (!silent) setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*, profiles:customer_id (full_name, role)');
+
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (err) {
+      console.error('Error fetching admin orders list:', err);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAllOrders = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('*, profiles:customer_id (full_name, role)');
-
-        if (error) throw error;
-        setOrders(data || []);
-      } catch (err) {
-        console.error('Error fetching admin orders list:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAllOrders();
+  }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin-orders-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders'
+        },
+        (payload) => {
+          console.log('Realtime change received for admin:', payload);
+          fetchAllOrders(true); // silent fetch on update
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Filter and Sort logic

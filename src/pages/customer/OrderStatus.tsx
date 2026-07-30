@@ -39,9 +39,9 @@ export default function OrderStatus() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = async (silent = false) => {
     if (!id) return;
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const { data, error } = await supabase
         .from('orders')
@@ -55,12 +55,37 @@ export default function OrderStatus() {
       console.error('Error fetching order details:', err);
       setErrorMsg(err.message || 'Failed to retrieve order details.');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchOrderDetails();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const channel = supabase
+      .channel(`order-timeline-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'orders',
+          filter: `id=eq.${id}`
+        },
+        (payload) => {
+          console.log('Realtime timeline update received:', payload);
+          fetchOrderDetails(true); // silent fetch on update
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id]);
 
   if (loading) {
@@ -192,7 +217,7 @@ export default function OrderStatus() {
           <SlipUpload
             orderId={order.id}
             userId={user.id}
-            onUploadSuccess={fetchOrderDetails}
+            onUploadSuccess={() => fetchOrderDetails(true)}
           />
         </div>
       )}

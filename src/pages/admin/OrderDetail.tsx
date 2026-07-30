@@ -55,9 +55,9 @@ export default function OrderDetail() {
   const [successMsg, setSuccessMsg] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchOrderAndClient = async () => {
+  const fetchOrderAndClient = async (silent = false) => {
     if (!id) return;
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const { data, error } = await supabase
         .from('orders')
@@ -75,7 +75,7 @@ export default function OrderDetail() {
       console.error('Error fetching order details:', err);
       setErrorMsg(err.message || 'Failed to retrieve order details.');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -96,6 +96,31 @@ export default function OrderDetail() {
 
   useEffect(() => {
     fetchOrderAndClient();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const channel = supabase
+      .channel(`admin-order-detail-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `id=eq.${id}`
+        },
+        (payload) => {
+          console.log('Realtime change received for admin order detail:', payload);
+          fetchOrderAndClient(true); // silent fetch on update
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id]);
 
   const updateOrderStatus = async (newStatus: string) => {
