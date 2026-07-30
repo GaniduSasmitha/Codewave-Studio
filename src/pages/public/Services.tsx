@@ -26,7 +26,7 @@ const services = [
     desc: "A fully custom digital store complete with checkout systems, inventory dashboards, and high-converting product pages.",
     features: [
       "Secure payment integration (Stripe, etc.)",
-      "Client order portal (/portal)",
+      "Client order dashboard (/)",
       "Admin verification dashboard (/admin)",
       "Dynamic catalog search and filtering"
     ]

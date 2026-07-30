@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
-import CustomerLayout from './layouts/CustomerLayout';
 import AdminLayout from './layouts/AdminLayout';
 
 // Public Pages
@@ -15,11 +14,6 @@ import Contact from './pages/public/Contact';
 import Login from './pages/public/Login';
 import Signup from './pages/public/Signup';
 import Unauthorized from './pages/public/Unauthorized';
-
-// Customer Pages
-import CustomerDashboard from './pages/customer/Dashboard';
-import NewOrder from './pages/customer/NewOrder';
-import OrderStatus from './pages/customer/OrderStatus';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -44,15 +38,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
-        </Route>
-
-        {/* Protected Customer Routes */}
-        <Route path="/portal" element={<ProtectedRoute allowedRoles={['customer']} />}>
-          <Route element={<CustomerLayout />}>
-            <Route index element={<CustomerDashboard />} />
-            <Route path="new-order" element={<NewOrder />} />
-            <Route path="order/:id" element={<OrderStatus />} />
-          </Route>
         </Route>
 
         {/* Protected Admin Routes */}

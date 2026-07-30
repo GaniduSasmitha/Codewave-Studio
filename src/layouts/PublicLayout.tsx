@@ -1,10 +1,18 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
 
 export default function PublicLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, profile, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
@@ -24,10 +32,47 @@ export default function PublicLayout() {
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login" className="text-sm font-medium hover:text-white transition-colors">Log in</Link>
-            <Link to="/signup" className="text-sm font-medium bg-primary hover:bg-primary/95 text-white px-4 py-2 rounded-lg transition-colors">
-              Sign up
-            </Link>
+            {user && profile?.role === 'customer' ? (
+              <>
+                <Link
+                  to="/#orders-dashboard"
+                  onClick={(e) => {
+                    if (location.pathname === '/') {
+                      e.preventDefault();
+                      document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="text-sm font-medium hover:text-white transition-colors mr-2"
+                >
+                  My Orders
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm font-medium border border-slate-800 hover:bg-slate-900 px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : user && profile?.role === 'admin' ? (
+              <>
+                <Link to="/admin" className="text-sm font-medium hover:text-white transition-colors mr-2">
+                  Admin Dashboard
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm font-medium border border-slate-800 hover:bg-slate-900 px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-sm font-medium hover:text-white transition-colors">Log in</Link>
+                <Link to="/signup" className="text-sm font-medium bg-primary hover:bg-primary/95 text-white px-4 py-2 rounded-lg transition-colors">
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -66,12 +111,60 @@ export default function PublicLayout() {
                 <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-white py-2.5">Contact</Link>
               </div>
               <div className="pt-4 border-t border-slate-800 flex flex-col gap-3">
-                <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center">
-                  Log in
-                </Link>
-                <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium bg-primary hover:bg-primary/95 text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center">
-                  Sign up
-                </Link>
+                {user && profile?.role === 'customer' ? (
+                  <>
+                    <Link
+                      to="/#orders-dashboard"
+                      onClick={(e) => {
+                        setMobileMenuOpen(false);
+                        if (location.pathname === '/') {
+                          e.preventDefault();
+                          document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleSignOut();
+                      }}
+                      className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : user && profile?.role === 'admin' ? (
+                  <>
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
+                    >
+                      Admin Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleSignOut();
+                      }}
+                      className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center">
+                      Log in
+                    </Link>
+                    <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium bg-primary hover:bg-primary/95 text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center">
+                      Sign up
+                    </Link>
+                  </>
+                )}
               </div>
             </motion.div>
           )}

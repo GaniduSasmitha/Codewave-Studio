@@ -29,7 +29,7 @@ export default function Signup() {
       if (profile.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/portal');
+        navigate('/');
       }
     }
   }, [user, profile, navigate]);
