@@ -6,10 +6,12 @@ import AnimatedButton from './AnimatedButton';
 interface SlipUploadProps {
   orderId: string;
   userId: string;
+  orderStatus: string;
+  slipUrl: string | null;
   onUploadSuccess: () => void;
 }
 
-export default function SlipUpload({ orderId, userId, onUploadSuccess }: SlipUploadProps) {
+export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUploadSuccess }: SlipUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -69,7 +71,10 @@ export default function SlipUpload({ orderId, userId, onUploadSuccess }: SlipUpl
           upsert: false
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Supabase Storage Upload Error:", uploadError);
+        throw uploadError;
+      }
       setProgress(75);
 
       // 2. Resolve URL path and update Orders table
@@ -82,10 +87,13 @@ export default function SlipUpload({ orderId, userId, onUploadSuccess }: SlipUpl
         })
         .eq('id', orderId);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error("Supabase Orders Table Update Error:", updateError);
+        throw updateError;
+      }
 
       setProgress(100);
-      setSuccessMsg("Payment slip uploaded successfully! Redirecting...");
+      setSuccessMsg("Payment slip uploaded successfully!");
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
 
@@ -94,13 +102,28 @@ export default function SlipUpload({ orderId, userId, onUploadSuccess }: SlipUpl
       }, 1500);
 
     } catch (err: any) {
-      console.error("Upload error:", err);
+      console.error("Upload error details:", err);
       setErrorMsg(err.message || "Failed to upload slip. Please try again.");
       setProgress(0);
     } finally {
       setUploading(false);
     }
   };
+
+  if (orderStatus === 'pending_verification') {
+    const fileName = slipUrl ? slipUrl.split('/').pop() : "receipt-document";
+    return (
+      <GlassCard className="p-6 border border-white/5 bg-slate-900/5 text-left" hoverEffect={false}>
+        <div className="flex items-center gap-3 text-emerald-400 font-semibold mb-2">
+          <span className="text-xl">✅</span>
+          <h3 className="text-lg font-bold text-white">Slip submitted — awaiting verification</h3>
+        </div>
+        <p className="text-slate-400 text-xs mt-1">
+          Document: <span className="font-mono text-slate-300 bg-slate-950/60 px-2 py-0.5 rounded border border-white/5">{fileName}</span>
+        </p>
+      </GlassCard>
+    );
+  }
 
   return (
     <GlassCard className="p-6 border border-white/5 bg-slate-900/5 text-left" hoverEffect={false}>

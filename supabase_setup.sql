@@ -74,8 +74,14 @@ using (public.is_admin(auth.uid()));
 create policy "Customers can update own orders"
 on public.orders
 for update
-using (customer_id = auth.uid())
-with check (customer_id = auth.uid());
+using (
+  customer_id = auth.uid() 
+  and (status = 'pending_payment' or status = 'rejected')
+)
+with check (
+  customer_id = auth.uid() 
+  and status = 'pending_verification'
+);
 
 -- 7. Trigger to Auto-Create Profile on Auth Signup
 create or replace function public.handle_new_user()

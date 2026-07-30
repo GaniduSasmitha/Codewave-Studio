@@ -212,11 +212,13 @@ export default function OrderStatus() {
       </GlassCard>
 
       {/* Slip Upload Wrapper */}
-      {(order.status === 'pending_payment' || order.status === 'rejected') && user && (
+      {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && user && (
         <div className="animate-fade-in">
           <SlipUpload
             orderId={order.id}
             userId={user.id}
+            orderStatus={order.status}
+            slipUrl={order.slip_url}
             onUploadSuccess={() => fetchOrderDetails(true)}
           />
         </div>
