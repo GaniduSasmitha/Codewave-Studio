@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../hooks/useAuth';
 import Hero3D from '../../components/Hero3D';
 import AnimatedButton from '../../components/AnimatedButton';
 import GlassCard from '../../components/GlassCard';
@@ -63,7 +64,18 @@ const previewProjects = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  useEffect(() => {
+    if (user && profile) {
+      if (profile.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/portal');
+      }
+    }
+  }, [user, profile, navigate]);
 
   const nextTestimonial = () => {
     setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
