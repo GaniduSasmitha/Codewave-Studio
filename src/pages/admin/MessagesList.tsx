@@ -17,6 +17,7 @@ export default function MessagesList() {
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'unread' | 'read'>('all');
+  const [copied, setCopied] = useState(false);
 
   const fetchMessages = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -62,6 +63,7 @@ export default function MessagesList() {
 
   const handleOpenMessage = async (msg: ContactMessage) => {
     setSelectedMessage(msg);
+    setCopied(false);
 
     if (msg.status === 'unread') {
       // Optimistic update
@@ -77,13 +79,18 @@ export default function MessagesList() {
 
         if (error) {
           console.error('Error marking message as read:', error);
-          // revert if error
           fetchMessages(true);
         }
       } catch (err) {
         console.error('Error marking message as read:', err);
       }
     }
+  };
+
+  const copyEmailToClipboard = (email: string) => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   const filteredMessages = messages.filter((m) => {
@@ -210,12 +217,20 @@ export default function MessagesList() {
                           {selectedMessage.status}
                         </span>
                       </div>
-                      <a
-                        href={`mailto:${selectedMessage.email}`}
-                        className="text-xs text-cyan-400 hover:underline block mt-1"
-                      >
-                        {selectedMessage.email}
-                      </a>
+                      <div className="flex items-center gap-2 mt-1">
+                        <a
+                          href={`mailto:${selectedMessage.email}`}
+                          className="text-xs text-cyan-400 hover:underline"
+                        >
+                          {selectedMessage.email}
+                        </a>
+                        <button
+                          onClick={() => copyEmailToClipboard(selectedMessage.email)}
+                          className="text-[11px] text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded transition-colors"
+                        >
+                          {copied ? '✓ Copied' : 'Copy'}
+                        </button>
+                      </div>
                     </div>
                     <button
                       onClick={() => setSelectedMessage(null)}
@@ -239,18 +254,37 @@ export default function MessagesList() {
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block mb-2">
                       Full Message
                     </span>
-                    <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
+                    <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
                       {selectedMessage.message}
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800 flex justify-between items-center">
+                  <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    {/* Mailto link with encoded subject and original message body */}
                     <a
-                      href={`mailto:${selectedMessage.email}?subject=RE: Codewave Studio Inquiry`}
-                      className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white transition-colors"
+                      href={`mailto:${selectedMessage.email}?subject=${encodeURIComponent(
+                        'RE: Codewave Studio Inquiry'
+                      )}&body=${encodeURIComponent(
+                        `Hi ${selectedMessage.name},\n\n\n\n--- Original Message ---\nFrom: ${selectedMessage.name} <${selectedMessage.email}>\nDate: ${new Date(
+                          selectedMessage.created_at
+                        ).toLocaleString()}\nMessage:\n${selectedMessage.message}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 text-xs font-semibold px-4 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-white transition-colors cursor-pointer"
                     >
-                      Reply via Email
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      Open Email Client
                     </a>
+
+                    <button
+                      onClick={() => copyEmailToClipboard(selectedMessage.email)}
+                      className="inline-flex items-center justify-center gap-2 text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    >
+                      {copied ? '✓ Email Copied!' : 'Copy Email Address'}
+                    </button>
                   </div>
                 </GlassCard>
               </ScrollReveal>
