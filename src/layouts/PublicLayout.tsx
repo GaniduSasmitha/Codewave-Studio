@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
+import ProfileMenu from '../components/ProfileMenu';
 
 export default function PublicLayout() {
   const location = useLocation();
@@ -10,6 +11,7 @@ export default function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
+    setMobileMenuOpen(false);
     await signOut();
     navigate('/');
   };
@@ -31,6 +33,7 @@ export default function PublicLayout() {
             <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
           </nav>
           
+          {/* Desktop: auth area */}
           <div className="hidden md:flex items-center space-x-4">
             {user && profile?.role === 'customer' ? (
               <>
@@ -42,28 +45,19 @@ export default function PublicLayout() {
                       document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="text-sm font-medium hover:text-white transition-colors mr-2"
+                  className="text-sm font-medium hover:text-white transition-colors"
                 >
                   My Orders
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-sm font-medium border border-slate-800 hover:bg-slate-900 px-4 py-2 rounded-lg transition-colors cursor-pointer"
-                >
-                  Sign out
-                </button>
+                {/* Profile menu replaces bare sign-out button */}
+                <ProfileMenu />
               </>
             ) : user && profile?.role === 'admin' ? (
               <>
-                <Link to="/admin" className="text-sm font-medium hover:text-white transition-colors mr-2">
+                <Link to="/admin" className="text-sm font-medium hover:text-white transition-colors">
                   Admin Dashboard
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-sm font-medium border border-slate-800 hover:bg-slate-900 px-4 py-2 rounded-lg transition-colors cursor-pointer"
-                >
-                  Sign out
-                </button>
+                <ProfileMenu />
               </>
             ) : (
               <>
@@ -127,10 +121,7 @@ export default function PublicLayout() {
                       My Orders
                     </Link>
                     <button
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        handleSignOut();
-                      }}
+                      onClick={handleSignOut}
                       className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
                     >
                       Sign out
@@ -146,10 +137,7 @@ export default function PublicLayout() {
                       Admin Dashboard
                     </Link>
                     <button
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        handleSignOut();
-                      }}
+                      onClick={handleSignOut}
                       className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
                     >
                       Sign out
@@ -188,4 +176,3 @@ export default function PublicLayout() {
     </div>
   );
 }
-

@@ -108,12 +108,13 @@ export function useAuth() {
   };
 
   const signOut = async () => {
+    // Optimistically clear state immediately so the UI reacts at once
+    // (don't wait for onAuthStateChange to fire after the Supabase call)
+    setUser(null);
+    setProfile(null);
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      setUser(null);
-      setProfile(null);
+      await supabase.auth.signOut();
     } catch (err) {
       console.error('Error signing out:', err);
     } finally {

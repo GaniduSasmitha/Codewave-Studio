@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
+import ProfileMenu from '../components/ProfileMenu';
 
 export default function CustomerLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    navigate('/login');
+  const handleSignOut = async () => {
+    setMobileMenuOpen(false);
+    await signOut();
+    navigate('/');
   };
 
   return (
@@ -25,13 +30,9 @@ export default function CustomerLayout() {
             <Link to="/portal/new-order" className="hover:text-primary transition-colors">New Order</Link>
           </nav>
           
-          <div className="hidden md:block">
-            <button
-              onClick={handleLogout}
-              className="text-sm font-medium border border-slate-800 hover:bg-slate-900 px-4 py-2 rounded-lg transition-colors"
-            >
-              Sign out
-            </button>
+          {/* Desktop: profile menu */}
+          <div className="hidden md:flex items-center gap-3">
+            <ProfileMenu />
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -68,11 +69,8 @@ export default function CustomerLayout() {
               </div>
               <div className="pt-4 border-t border-slate-800">
                 <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center"
+                  onClick={handleSignOut}
+                  className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
                 >
                   Sign out
                 </button>
