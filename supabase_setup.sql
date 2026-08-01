@@ -117,13 +117,32 @@ with check (
   and left(name, 37) = (auth.uid()::text || '/')
 );
 
-create policy "Customers can read own slips, admins read all"
-on storage.objects
-for select
-using (
-  bucket_id = 'payment-slips'
-  and (
-    left(name, 37) = (auth.uid()::text || '/')
-    or public.is_admin(auth.uid())
-  )
+-- 10. Contact Messages Table
+create table if not exists public.contact_messages (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  email text not null,
+  message text not null,
+  status text default 'unread',
+  created_at timestamptz default now(),
+  constraint check_message_status check (status in ('unread', 'read'))
 );
+
+alter table public.contact_messages enable row level security;
+
+-- RLS Policies for contact_messages
+create policy "Anyone can insert contact messages"
+on public.contact_messages
+for insert
+with check (true);
+
+create policy "Admins can read contact messages"
+on public.contact_messages
+for select
+using (public.is_admin(auth.uid()));
+
+create policy "Admins can update contact messages"
+on public.contact_messages
+for update
+using (public.is_admin(auth.uid()));
+

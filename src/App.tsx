@@ -19,6 +19,7 @@ import Unauthorized from './pages/public/Unauthorized';
 import AdminDashboard from './pages/admin/Dashboard';
 import OrdersList from './pages/admin/OrdersList';
 import OrderDetail from './pages/admin/OrderDetail';
+import MessagesList from './pages/admin/MessagesList';
 
 // Guard
 import ProtectedRoute from './components/ProtectedRoute';
@@ -46,6 +47,7 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="orders" element={<OrdersList />} />
             <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="messages" element={<MessagesList />} />
           </Route>
         </Route>
 

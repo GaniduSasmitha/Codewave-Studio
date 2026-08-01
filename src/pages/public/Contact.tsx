@@ -3,10 +3,13 @@ import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import AnimatedButton from '../../components/AnimatedButton';
+import { supabase } from '../../lib/supabase';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   const validate = () => {
@@ -36,12 +39,35 @@ export default function Contact() {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError('');
+
     if (validate()) {
-      setIsSuccess(true);
-      setForm({ name: '', email: '', message: '' });
-      setErrors({ name: '', email: '', message: '' });
+      setIsSubmitting(true);
+      try {
+        const { error } = await supabase
+          .from('contact_messages')
+          .insert({
+            name: form.name.trim(),
+            email: form.email.trim(),
+            message: form.message.trim()
+          });
+
+        if (error) {
+          console.error('Error inserting contact message:', error);
+          setSubmitError(error.message || 'Failed to send message. Please try again.');
+        } else {
+          setIsSuccess(true);
+          setForm({ name: '', email: '', message: '' });
+          setErrors({ name: '', email: '', message: '' });
+        }
+      } catch (err: any) {
+        console.error('Error inserting contact message:', err);
+        setSubmitError(err?.message || 'An unexpected error occurred. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -50,6 +76,9 @@ export default function Contact() {
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+    if (submitError) {
+      setSubmitError('');
     }
   };
 
@@ -69,13 +98,13 @@ export default function Contact() {
           <GlassCard className="p-8 border border-white/5 bg-slate-900/10 text-left">
             {isSuccess ? (
               <div className="space-y-6 py-6 text-center">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 mx-auto border border-emerald-500/20">
-                  ✔
+                <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 mx-auto border border-emerald-500/20 text-2xl">
+                  ✓
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white">Message Sent!</h3>
+                  <h3 className="text-2xl font-bold text-white">✅ Message sent — we'll get back to you soon</h3>
                   <p className="text-slate-400 text-sm">
-                    Thank you for reaching out. A Codewave representative will email you shortly.
+                    Thank you for reaching out. A Codewave representative will review your message shortly.
                   </p>
                 </div>
                 <AnimatedButton onClick={() => setIsSuccess(false)} variant="glass" className="mx-auto px-8">
@@ -84,6 +113,12 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {submitError && (
+                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                    {submitError}
+                  </div>
+                )}
+
                 {/* Name */}
                 <div>
                   <label htmlFor="name" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
@@ -95,6 +130,7 @@ export default function Contact() {
                     type="text"
                     value={form.name}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors ${
                       errors.name ? 'border-red-500/50' : 'border-slate-800'
                     }`}
@@ -114,6 +150,7 @@ export default function Contact() {
                     type="text"
                     value={form.email}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors ${
                       errors.email ? 'border-red-500/50' : 'border-slate-800'
                     }`}
@@ -133,6 +170,7 @@ export default function Contact() {
                     rows={4}
                     value={form.message}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors h-32 ${
                       errors.message ? 'border-red-500/50' : 'border-slate-800'
                     }`}
@@ -141,8 +179,13 @@ export default function Contact() {
                   {errors.message && <p className="text-xs text-red-500 mt-1.5">{errors.message}</p>}
                 </div>
 
-                <AnimatedButton type="submit" variant="primary" className="w-full py-3">
-                  Submit Inquiry
+                <AnimatedButton
+                  type="submit"
+                  variant="primary"
+                  className="w-full py-3 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Submit Inquiry'}
                 </AnimatedButton>
               </form>
             )}
