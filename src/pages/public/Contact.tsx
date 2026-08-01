@@ -46,24 +46,28 @@ export default function Contact() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const { error } = await supabase
+        console.log('Submitting message to Supabase contact_messages table...', form);
+        const { data, error } = await supabase
           .from('contact_messages')
           .insert({
             name: form.name.trim(),
             email: form.email.trim(),
             message: form.message.trim()
-          });
+          })
+          .select();
+
+        console.log('Supabase contact_messages insert response:', { data, error });
 
         if (error) {
           console.error('Error inserting contact message:', error);
-          setSubmitError(error.message || 'Failed to send message. Please try again.');
+          setSubmitError(error.message || `Database error code ${error.code}: ${JSON.stringify(error)}`);
         } else {
           setIsSuccess(true);
           setForm({ name: '', email: '', message: '' });
           setErrors({ name: '', email: '', message: '' });
         }
       } catch (err: any) {
-        console.error('Error inserting contact message:', err);
+        console.error('Unexpected error inserting contact message:', err);
         setSubmitError(err?.message || 'An unexpected error occurred. Please try again.');
       } finally {
         setIsSubmitting(false);
@@ -114,8 +118,8 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {submitError && (
-                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-                    {submitError}
+                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm break-words">
+                    <strong>Error submitting form:</strong> {submitError}
                   </div>
                 )}
 
