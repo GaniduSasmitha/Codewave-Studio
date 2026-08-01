@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
+import Logo from '../../components/Logo';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -55,6 +56,9 @@ export default function Login() {
   return (
     <div className="py-20 max-w-md mx-auto px-4 text-left">
       <GlassCard className="p-8 border border-white/5 bg-slate-900/10">
+        <div className="flex justify-center mb-4">
+          <Logo size="lg" showText={false} />
+        </div>
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-white">Welcome Back</h1>
           <p className="text-slate-400 text-xs mt-2">Sign in to manage your website projects.</p>

@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
+import Logo from '../components/Logo';
 
 export default function PublicLayout() {
   const location = useLocation();
@@ -20,9 +21,8 @@ export default function PublicLayout() {
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
       <header className="border-b border-slate-800 bg-background/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center font-black text-slate-900">C</span>
-            <span>Codewave Studio</span>
+          <Link to="/">
+            <Logo size="md" />
           </Link>
           
           <nav className="hidden md:flex space-x-8 text-sm font-medium">
@@ -49,7 +49,6 @@ export default function PublicLayout() {
                 >
                   My Orders
                 </Link>
-                {/* Profile menu replaces bare sign-out button */}
                 <ProfileMenu />
               </>
             ) : user && profile?.role === 'admin' ? (
@@ -169,7 +168,8 @@ export default function PublicLayout() {
         </motion.div>
       </main>
       <footer className="border-t border-slate-800 py-8 bg-slate-950/50">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <Logo size="sm" showText={true} />
           <p>© {new Date().getFullYear()} Codewave Studio. All rights reserved.</p>
         </div>
       </footer>

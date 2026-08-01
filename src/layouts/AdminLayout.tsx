@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
+import Logo from '../components/Logo';
 import { supabase } from '../lib/supabase';
 
 export default function AdminLayout() {
@@ -60,9 +61,8 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/admin" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-black text-slate-900">A</span>
-            <span>Admin Console</span>
+          <Link to="/admin">
+            <Logo size="md" subtitle="Admin Console" />
           </Link>
           
           <nav className="hidden md:flex space-x-6 text-sm font-medium items-center">

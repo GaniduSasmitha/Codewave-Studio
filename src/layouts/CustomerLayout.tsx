@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
+import Logo from '../components/Logo';
 
 export default function CustomerLayout() {
   const navigate = useNavigate();
@@ -20,9 +21,8 @@ export default function CustomerLayout() {
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
       <header className="border-b border-slate-800 bg-background/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/portal" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center font-black text-slate-900">C</span>
-            <span>Client Portal</span>
+          <Link to="/portal">
+            <Logo size="md" subtitle="Client Portal" />
           </Link>
           
           <nav className="hidden md:flex space-x-6 text-sm font-medium">
