@@ -124,12 +124,7 @@ export default function AdminLayout() {
                 </Link>
               </div>
               <div className="pt-4 border-t border-slate-800">
-                <button
-                  onClick={handleSignOut}
-                  className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
-                >
-                  Sign out
-                </button>
+                <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />
               </div>
             </motion.div>
           )}

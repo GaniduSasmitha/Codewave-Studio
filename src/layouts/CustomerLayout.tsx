@@ -68,12 +68,7 @@ export default function CustomerLayout() {
                 <Link to="/portal/new-order" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-white py-2.5">New Order</Link>
               </div>
               <div className="pt-4 border-t border-slate-800">
-                <button
-                  onClick={handleSignOut}
-                  className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
-                >
-                  Sign out
-                </button>
+                <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />
               </div>
             </motion.div>
           )}

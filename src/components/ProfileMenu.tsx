@@ -31,9 +31,13 @@ function getInitial(name: string): string {
 interface ProfileMenuProps {
   /** Extra className applied to the root wrapper */
   className?: string;
+  /** Rendering style: 'desktop' for dropdown popover, 'mobile' for inline menu block */
+  variant?: 'desktop' | 'mobile';
+  /** Optional callback fired when an item (like Sign Out) is clicked */
+  onItemClick?: () => void;
 }
 
-export default function ProfileMenu({ className = '' }: ProfileMenuProps) {
+export default function ProfileMenu({ className = '', variant = 'desktop', onItemClick }: ProfileMenuProps) {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -46,20 +50,20 @@ export default function ProfileMenu({ className = '' }: ProfileMenuProps) {
         setOpen(false);
       }
     }
-    if (open) {
+    if (open && variant === 'desktop') {
       document.addEventListener('mousedown', handleClick);
     }
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [open]);
+  }, [open, variant]);
 
   // Close on Escape
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') setOpen(false);
     }
-    if (open) document.addEventListener('keydown', handleKey);
+    if (open && variant === 'desktop') document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
-  }, [open]);
+  }, [open, variant]);
 
   if (!user) return null;
 
@@ -72,9 +76,72 @@ export default function ProfileMenu({ className = '' }: ProfileMenuProps) {
 
   const handleSignOut = async () => {
     setOpen(false);
+    if (onItemClick) onItemClick();
     await signOut();
     navigate('/');
   };
+
+  if (variant === 'mobile') {
+    return (
+      <div className={`flex flex-col gap-3 ${className}`}>
+        {/* User Info Header Block */}
+        <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0 ring-2 ring-slate-700/80"
+              style={{ backgroundColor: avatarBg }}
+              aria-hidden="true"
+            >
+              {avatarInitial}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-white truncate">
+                {displayName}
+              </p>
+              <p className="text-xs text-slate-400 truncate mt-0.5">{email}</p>
+            </div>
+          </div>
+          {/* Role badge */}
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide flex-shrink-0 ${
+              role === 'admin'
+                ? 'bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-500/30'
+                : 'bg-indigo-500/15 text-indigo-300 ring-1 ring-indigo-500/30'
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-cyan-400' : 'bg-indigo-400'}`}
+              aria-hidden="true"
+            />
+            {roleLabel}
+          </span>
+        </div>
+
+        {/* Sign Out Button (min 44px tap target) */}
+        <button
+          id="profile-menu-signout"
+          onClick={handleSignOut}
+          className="w-full text-center text-sm font-medium border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-3 px-4 rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <svg
+            className="w-4 h-4 flex-shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>

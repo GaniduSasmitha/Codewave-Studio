@@ -104,43 +104,32 @@ export default function PublicLayout() {
                 <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-white py-2.5">Contact</Link>
               </div>
               <div className="pt-4 border-t border-slate-800 flex flex-col gap-3">
-                {user && profile?.role === 'customer' ? (
+                {user ? (
                   <>
-                    <Link
-                      to="/#orders-dashboard"
-                      onClick={(e) => {
-                        setMobileMenuOpen(false);
-                        if (location.pathname === '/') {
-                          e.preventDefault();
-                          document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
-                    >
-                      My Orders
-                    </Link>
-                    <button
-                      onClick={handleSignOut}
-                      className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
-                    >
-                      Sign out
-                    </button>
-                  </>
-                ) : user && profile?.role === 'admin' ? (
-                  <>
-                    <Link
-                      to="/admin"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
-                    >
-                      Admin Dashboard
-                    </Link>
-                    <button
-                      onClick={handleSignOut}
-                      className="w-full text-center text-sm font-medium border border-slate-800 hover:bg-slate-900 hover:text-white py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
-                    >
-                      Sign out
-                    </button>
+                    {profile?.role === 'customer' ? (
+                      <Link
+                        to="/#orders-dashboard"
+                        onClick={(e) => {
+                          setMobileMenuOpen(false);
+                          if (location.pathname === '/') {
+                            e.preventDefault();
+                            document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }}
+                        className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
+                      >
+                        My Orders
+                      </Link>
+                    ) : profile?.role === 'admin' ? (
+                      <Link
+                        to="/admin"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-center text-sm font-medium hover:text-white py-3 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors min-h-[44px] flex items-center justify-center"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    ) : null}
+                    <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />
                   </>
                 ) : (
                   <>
