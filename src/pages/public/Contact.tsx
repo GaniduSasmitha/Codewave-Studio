@@ -103,7 +103,7 @@ export default function Contact() {
 
           {/* Paragraph */}
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
-            Whether you have an opportunity, a project idea, or just want to connect – I would love to hear from you. Fill out the form and I will get back to you as soon as possible.
+            Whether you have an opportunity, a project idea, or just want to connect – We would love to hear from you. Fill out the form and we will get back to you as soon as possible.
           </p>
         </div>
       </ScrollReveal>
