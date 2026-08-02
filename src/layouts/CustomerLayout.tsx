@@ -35,8 +35,9 @@ export default function CustomerLayout() {
             <ProfileMenu />
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <div className="flex md:hidden">
+          {/* Mobile Menu Toggle & Profile Menu */}
+          <div className="flex md:hidden items-center gap-3">
+            <ProfileMenu />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-slate-400 hover:text-white focus:outline-none p-2"
