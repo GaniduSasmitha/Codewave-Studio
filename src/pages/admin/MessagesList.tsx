@@ -286,7 +286,7 @@ export default function MessagesList() {
                           href={mailtoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+                          className="inline-flex items-center justify-center gap-2 text-xs font-semibold px-4 py-2.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
                           title="Open default OS or mobile email application"
                         >
                           <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,14 +294,6 @@ export default function MessagesList() {
                           </svg>
                           Mail App
                         </a>
-
-                        {/* Copy Email Address */}
-                        <button
-                          onClick={() => copyEmailToClipboard(selectedMessage.email)}
-                          className="inline-flex items-center justify-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                        >
-                          {copied ? '✓ Copied' : 'Copy Email'}
-                        </button>
                       </div>
                     );
                   })()}
