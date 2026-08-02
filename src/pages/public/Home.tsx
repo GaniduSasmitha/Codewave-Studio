@@ -241,13 +241,7 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    if (user && profile) {
-      if (profile.role === 'admin') {
-        navigate('/admin');
-      }
-    }
-  }, [user, profile, navigate]);
+
 
   useEffect(() => {
     if (window.location.hash === '#orders-dashboard') {
