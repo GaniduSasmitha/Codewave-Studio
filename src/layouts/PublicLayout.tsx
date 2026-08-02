@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
@@ -7,15 +7,8 @@ import Logo from '../components/Logo';
 
 export default function PublicLayout() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    setMobileMenuOpen(false);
-    await signOut();
-    navigate('/');
-  };
 
   return (
     <div className="min-h-screen bg-background text-slate-100 flex flex-col font-sans">
