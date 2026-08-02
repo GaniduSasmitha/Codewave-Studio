@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
 import { supabase } from '../lib/supabase';
 
 export default function AdminLayout() {
   const location = useLocation();
+  const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
@@ -67,16 +69,17 @@ export default function AdminLayout() {
                 </span>
               )}
             </Link>
+            <Link to="/" className="hover:text-accent transition-colors text-slate-400">Main Site</Link>
           </nav>
           
           {/* Desktop: profile menu */}
           <div className="hidden md:flex items-center gap-3">
-            <ProfileMenu />
+            {user && <ProfileMenu />}
           </div>
 
           {/* Mobile Menu Toggle & Profile Menu */}
           <div className="flex md:hidden items-center gap-3">
-            <ProfileMenu />
+            {user && <ProfileMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-slate-400 hover:text-white focus:outline-none p-2"
@@ -106,7 +109,7 @@ export default function AdminLayout() {
               <div className="flex flex-col space-y-2">
                 <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-accent py-2.5 border-b border-slate-800/40">Dashboard</Link>
                 <Link to="/admin/orders" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-accent py-2.5 border-b border-slate-800/40">Orders</Link>
-                <Link to="/admin/messages" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-accent py-2.5 flex items-center justify-between">
+                <Link to="/admin/messages" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-300 hover:text-accent py-2.5 border-b border-slate-800/40 flex items-center justify-between">
                   <span>Messages</span>
                   {unreadCount > 0 && (
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
@@ -114,9 +117,10 @@ export default function AdminLayout() {
                     </span>
                   )}
                 </Link>
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-slate-400 hover:text-accent py-2.5">Main Site</Link>
               </div>
               <div className="pt-4 border-t border-slate-800">
-                <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />
+                {user && <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />}
               </div>
             </motion.div>
           )}
