@@ -5,6 +5,8 @@ import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
 
+import SocialLinks from '../components/SocialLinks';
+
 export default function PublicLayout() {
   const location = useLocation();
   const { user, profile } = useAuth();
@@ -150,10 +152,13 @@ export default function PublicLayout() {
           <Outlet />
         </motion.div>
       </main>
-      <footer className="border-t border-slate-800 py-8 bg-slate-950/50">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <Logo size="sm" showText={true} />
-          <p>© {new Date().getFullYear()} Codewave Studio. All rights reserved.</p>
+      <footer className="border-t border-slate-800 py-10 bg-slate-950/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-400">
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <Logo size="sm" showText={true} />
+            <p>© {new Date().getFullYear()} Codewave Studio. All rights reserved.</p>
+          </div>
+          <SocialLinks />
         </div>
       </footer>
     </div>
