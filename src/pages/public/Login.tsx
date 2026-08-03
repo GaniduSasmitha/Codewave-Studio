@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
@@ -8,6 +8,9 @@ import Logo from '../../components/Logo';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const packageId = searchParams.get('package') || '';
+
   const { signIn, user, profile, loading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,11 +20,13 @@ export default function Login() {
     if (user && profile) {
       if (profile.role === 'admin') {
         navigate('/admin');
+      } else if (packageId) {
+        navigate(`/?package=${packageId}#orders-dashboard`);
       } else {
         navigate('/');
       }
     }
-  }, [user, profile, navigate]);
+  }, [user, profile, packageId, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,7 +148,7 @@ export default function Login() {
 
         <div className="mt-6 text-center text-xs text-slate-500">
           Don't have an account?{' '}
-          <Link to="/signup" className="text-accent hover:underline font-semibold">
+          <Link to={`/signup${packageId ? `?package=${packageId}` : ''}`} className="text-accent hover:underline font-semibold">
             Create Account
           </Link>
         </div>

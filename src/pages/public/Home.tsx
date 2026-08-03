@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -110,6 +110,7 @@ const previewProjects = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, profile } = useAuth();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   
@@ -177,6 +178,27 @@ export default function Home() {
       supabase.removeChannel(channel);
     };
   }, [user, profile]);
+
+  // Handle URL package parameter to open order modal automatically
+  useEffect(() => {
+    const pkg = searchParams.get('package');
+    if (user && profile?.role === 'customer' && pkg) {
+      const match = packages.find((p) => p.id === pkg);
+      if (match) {
+        setSelectedPackage(match.id);
+        setSelectedPrice(match.price);
+        setNewOrderStep(2);
+        setNewOrderOpen(true);
+        setOrderError('');
+        const el = document.getElementById('orders-dashboard');
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }
+      }
+    }
+  }, [user, profile, searchParams]);
 
   const handleSelectPackage = (pkgId: string, price: number) => {
     setSelectedPackage(pkgId);

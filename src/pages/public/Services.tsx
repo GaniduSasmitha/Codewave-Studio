@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
@@ -61,6 +62,15 @@ const services = [
 
 export default function Services() {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
+
+  const handleSelectPackage = (packageId: string) => {
+    if (user && profile?.role === 'customer') {
+      navigate(`/?package=${packageId}#orders-dashboard`);
+    } else {
+      navigate(`/signup?package=${packageId}`);
+    }
+  };
 
   return (
     <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
@@ -102,7 +112,7 @@ export default function Services() {
 
               <div className="mt-8 pt-4">
                 <AnimatedButton
-                  onClick={() => navigate(`/signup?package=${service.id}`)}
+                  onClick={() => handleSelectPackage(service.id)}
                   variant={i === 1 || i === 2 ? 'primary' : 'glass'}
                   className="w-full py-3"
                 >

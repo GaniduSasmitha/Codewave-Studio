@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
@@ -44,10 +45,16 @@ const featuresList = [
 
 export default function Pricing() {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
 
   const handleSelectPackage = (packageId: string) => {
-    navigate(`/signup?package=${packageId}`);
+    if (user && profile?.role === 'customer') {
+      navigate(`/?package=${packageId}#orders-dashboard`);
+    } else {
+      navigate(`/signup?package=${packageId}`);
+    }
   };
+
 
   return (
     <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">

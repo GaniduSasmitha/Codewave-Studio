@@ -28,11 +28,13 @@ export default function Signup() {
     if (user && profile) {
       if (profile.role === 'admin') {
         navigate('/admin');
+      } else if (packageId) {
+        navigate(`/?package=${packageId}#orders-dashboard`);
       } else {
         navigate('/');
       }
     }
-  }, [user, profile, navigate]);
+  }, [user, profile, packageId, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,7 +182,7 @@ export default function Signup() {
 
         <div className="mt-6 text-center text-xs text-slate-500">
           Already have an account?{' '}
-          <Link to="/login" className="text-accent hover:underline font-semibold">
+          <Link to={`/login${packageId ? `?package=${packageId}` : ''}`} className="text-accent hover:underline font-semibold">
             Log In
           </Link>
         </div>
