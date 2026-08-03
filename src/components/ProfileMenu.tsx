@@ -28,6 +28,51 @@ function getInitial(name: string): string {
   return name.trim().charAt(0).toUpperCase();
 }
 
+interface UserAvatarProps {
+  src: string | null;
+  displayName: string;
+  initial: string;
+  bgColor: string;
+  sizeClass?: string;
+  ringClass?: string;
+}
+
+function UserAvatar({
+  src,
+  displayName,
+  initial,
+  bgColor,
+  sizeClass = 'w-8 h-8 text-sm',
+  ringClass = 'ring-2 ring-slate-700/80',
+}: UserAvatarProps) {
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [src]);
+
+  const showImg = Boolean(src && !imgError);
+
+  return (
+    <span
+      className={`${sizeClass} ${ringClass} rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 overflow-hidden relative transition-all duration-200`}
+      style={{ backgroundColor: bgColor }}
+      aria-hidden="true"
+    >
+      {showImg ? (
+        <img
+          src={src!}
+          alt={displayName}
+          onError={() => setImgError(true)}
+          className="w-full h-full object-cover rounded-full"
+        />
+      ) : (
+        initial
+      )}
+    </span>
+  );
+}
+
 interface ProfileMenuProps {
   /** Extra className applied to the root wrapper */
   className?: string;
@@ -74,6 +119,9 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
   const avatarInitial = getInitial(displayName);
   const avatarBg = getAvatarColor(displayName);
 
+  const customAvatar = profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture;
+  const avatarSrc = customAvatar || (email ? `https://unavatar.io/${encodeURIComponent(email)}` : null);
+
   const handleSignOut = async () => {
     setOpen(false);
     if (onItemClick) onItemClick();
@@ -87,13 +135,14 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         {/* User Info Header Block */}
         <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <span
-              className="w-10 h-10 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0 ring-2 ring-slate-700/80"
-              style={{ backgroundColor: avatarBg }}
-              aria-hidden="true"
-            >
-              {avatarInitial}
-            </span>
+            <UserAvatar
+              src={avatarSrc}
+              displayName={displayName}
+              initial={avatarInitial}
+              bgColor={avatarBg}
+              sizeClass="w-10 h-10 text-base"
+              ringClass="ring-2 ring-slate-700/80"
+            />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-white truncate">
                 {displayName}
@@ -154,13 +203,14 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         className="flex items-center gap-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 group cursor-pointer"
       >
         {/* Circular avatar */}
-        <span
-          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white ring-2 ring-transparent group-hover:ring-primary/40 transition-all duration-200 flex-shrink-0"
-          style={{ backgroundColor: avatarBg }}
-          aria-hidden="true"
-        >
-          {avatarInitial}
-        </span>
+        <UserAvatar
+          src={avatarSrc}
+          displayName={displayName}
+          initial={avatarInitial}
+          bgColor={avatarBg}
+          sizeClass="w-8 h-8 text-sm"
+          ringClass="ring-2 ring-transparent group-hover:ring-primary/40"
+        />
 
         {/* Name — hidden on mobile */}
         <span className="hidden sm:block text-sm font-medium text-slate-200 max-w-[140px] truncate group-hover:text-white transition-colors">
@@ -194,13 +244,14 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
             {/* User info header */}
             <div className="px-4 py-4 border-b border-slate-800/70">
               <div className="flex items-center gap-3">
-                <span
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0 ring-2 ring-slate-700"
-                  style={{ backgroundColor: avatarBg }}
-                  aria-hidden="true"
-                >
-                  {avatarInitial}
-                </span>
+                <UserAvatar
+                  src={avatarSrc}
+                  displayName={displayName}
+                  initial={avatarInitial}
+                  bgColor={avatarBg}
+                  sizeClass="w-10 h-10 text-base"
+                  ringClass="ring-2 ring-slate-700"
+                />
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-white truncate">
                     {profile?.full_name || 'User'}
@@ -259,3 +310,4 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
     </div>
   );
 }
+
