@@ -122,9 +122,11 @@ export default function OrderStatus() {
     requirements.description = order.requirements;
   }
 
-  // Resolve current active step index (map rejected status back to step 0 with warning styling)
+  // Map 'rejected' status back to step 0 ("Pending Payment") so timeline shows Pending Payment as active
   const isRejected = order.status === 'rejected';
-  const currentStepIndex = isRejected ? 0 : steps.findIndex((s) => s.id === order.status);
+  const currentStepIndex = (order.status === 'pending_payment' || isRejected)
+    ? 0
+    : steps.findIndex((s) => s.id === order.status);
 
   return (
     <div className="max-w-3xl mx-auto text-left space-y-8 pb-16">
@@ -163,27 +165,26 @@ export default function OrderStatus() {
           {steps.map((step, idx) => {
             const isCompleted = !isRejected && idx < currentStepIndex;
             const isActive = idx === currentStepIndex;
-            const isRejectedStep = isRejected && idx === 0;
 
             return (
               <div key={step.id} className="flex md:flex-col items-center gap-4 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${
-                    isRejectedStep ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
+                    isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
                     isCompleted ? "bg-primary border-primary text-white" :
                     isActive ? "bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
                     "bg-slate-950 border-slate-800 text-slate-600"
                   }`}
                 >
-                  {isRejectedStep ? "❌" : isCompleted ? "✓" : idx + 1}
+                  {isCompleted ? "✓" : idx + 1}
                 </div>
                 <span
                   className={`text-xs font-semibold ${
-                    isRejectedStep ? "text-red-400 font-bold" :
+                    isActive && isRejected ? "text-red-400 font-bold" :
                     isActive ? "text-accent font-bold" : isCompleted ? "text-slate-300" : "text-slate-600"
                   }`}
                 >
-                  {isRejectedStep ? "Receipt Rejected" : step.label}
+                  {step.label}
                 </span>
               </div>
             );
