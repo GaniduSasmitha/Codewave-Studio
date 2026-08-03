@@ -187,9 +187,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
           setProcessingFile(false);
         });
     }
-
-    // Reset input value so re-selecting the same file triggers onChange
-    e.target.value = '';
   };
 
   const handleUpload = async () => {
@@ -339,13 +336,18 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
 
       <div className="space-y-4">
         {!file ? (
-          <div className="relative w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] overflow-hidden cursor-pointer group">
-            {/* Direct Full Overlay File Input: guarantees 100% native mobile touch event capture */}
+          <label
+            htmlFor={inputId}
+            className="relative w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] overflow-hidden cursor-pointer group"
+          >
             <input
               id={inputId}
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}
+              onClick={(e) => {
+                (e.target as HTMLInputElement).value = '';
+              }}
               accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 block"
               disabled={uploading}
@@ -357,7 +359,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             <span className="text-[10px] text-slate-500 mt-1">
               Supports JPEG, PNG, WEBP, HEIC, PDF
             </span>
-          </div>
+          </label>
         ) : (
           <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
@@ -387,20 +389,18 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
-              <div className="relative">
+              <label className="relative px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center inline-block">
                 <input
                   type="file"
                   onChange={handleFileChange}
+                  onClick={(e) => {
+                    (e.target as HTMLInputElement).value = '';
+                  }}
                   accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 />
-                <button
-                  type="button"
-                  className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center"
-                >
-                  Change
-                </button>
-              </div>
+                Change
+              </label>
               <button
                 type="button"
                 onClick={clearSelectedFile}
