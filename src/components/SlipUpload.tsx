@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import GlassCard from './GlassCard';
 import AnimatedButton from './AnimatedButton';
@@ -11,7 +11,7 @@ interface SlipUploadProps {
   onUploadSuccess: () => void;
 }
 
-// Client-side image compression helper for mobile phone camera photos (which are routinely 8MB-15MB)
+// Client-side image compression helper for mobile phone camera photos (routinely 8MB-15MB)
 const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> => {
   if (originalFile.type === 'application/pdf' || originalFile.name.endsWith('.pdf')) {
     return originalFile;
@@ -89,15 +89,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   const [successMsg, setSuccessMsg] = useState('');
   const [isReplacing, setIsReplacing] = useState(false);
 
-  useEffect(() => {
-    return () => {
-      if (filePreview) {
-        URL.revokeObjectURL(filePreview);
-      }
-    };
-  }, [filePreview]);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMsg('');
     setSuccessMsg('');
     setProgress(0);
@@ -109,72 +101,60 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
 
     setProcessingFile(true);
 
-    try {
-      const fileType = (selectedFile.type || '').toLowerCase();
-      const fileName = (selectedFile.name || '').toLowerCase();
+    const fileType = (selectedFile.type || '').toLowerCase();
+    const fileName = (selectedFile.name || '').toLowerCase();
 
-      // Mobile-friendly image and pdf validation
-      const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
-      const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
+    // Mobile-friendly image and pdf validation
+    const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
+    const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
 
-      if (!isImage && !isPdf) {
-        setErrorMsg("Invalid format. Please select an image or PDF document.");
-        clearSelectedFile();
-        return;
-      }
-
-      // Check max size: allow up to 25MB initial mobile photo selection (which we compress)
-      if (selectedFile.size > 25 * 1024 * 1024) {
-        setErrorMsg("File size is too large (max 25MB). Please select a smaller file.");
-        clearSelectedFile();
-        return;
-      }
-
-      // Compress mobile image if needed
-      const processedFile = await compressMobileImageIfNeeded(selectedFile);
-
-      if (filePreview) {
-        URL.revokeObjectURL(filePreview);
-        setFilePreview(null);
-      }
-
-      if (isImage) {
-        try {
-          const previewUrl = URL.createObjectURL(processedFile);
-          setFilePreview(previewUrl);
-        } catch (err) {
-          console.error("Preview creation error:", err);
-          setFilePreview(null);
-        }
-      }
-
-      setFile(processedFile);
-    } catch (err) {
-      console.error("Error processing file selection:", err);
-      setErrorMsg("Failed to load selected file. Please try another image.");
+    if (!isImage && !isPdf) {
+      setErrorMsg("Invalid format. Please select an image or PDF document.");
       clearSelectedFile();
-    } finally {
       setProcessingFile(false);
+      return;
     }
+
+    if (selectedFile.size > 25 * 1024 * 1024) {
+      setErrorMsg("File size is too large (max 25MB). Please select a smaller file.");
+      clearSelectedFile();
+      setProcessingFile(false);
+      return;
+    }
+
+    // Process image & read preview via FileReader for 100% mobile compatibility
+    compressMobileImageIfNeeded(selectedFile)
+      .then((processedFile) => {
+        setFile(processedFile);
+        if (isImage) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            setFilePreview(evt.target?.result as string);
+            setProcessingFile(false);
+          };
+          reader.onerror = () => {
+            setFilePreview(null);
+            setProcessingFile(false);
+          };
+          reader.readAsDataURL(processedFile);
+        } else {
+          setFilePreview(null);
+          setProcessingFile(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Error processing file selection:", err);
+        setErrorMsg("Failed to load selected file. Please try another image.");
+        clearSelectedFile();
+        setProcessingFile(false);
+      });
   };
 
   const clearSelectedFile = () => {
     setFile(null);
-    if (filePreview) {
-      URL.revokeObjectURL(filePreview);
-      setFilePreview(null);
-    }
+    setFilePreview(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
-    }
-  };
-
-  const triggerSelect = () => {
-    setErrorMsg('');
-    setSuccessMsg('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-      fileInputRef.current.click();
     }
   };
 
@@ -316,10 +296,10 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         </div>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-4 relative">
         {/*
-          Hidden File Input positioned using opacity/absolute rather than display:none,
-          which ensures 100% reliable mobile browser WebKit file picker callbacks.
+          Permanently mounted File Input positioned using opacity-0 / absolute.
+          Natively linked to <label htmlFor={inputId}> for 100% reliable mobile browser trigger.
         */}
         <input
           id={inputId}
@@ -331,7 +311,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
           disabled={uploading || processingFile}
         />
 
-        {/* File Selection Dropzone or Selected File Display */}
         {processingFile ? (
           <div className="w-full border border-primary/30 bg-slate-950/60 rounded-xl p-6 flex items-center justify-center gap-3 text-xs text-slate-300">
             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
@@ -340,7 +319,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         ) : !file ? (
           <label
             htmlFor={inputId}
-            onClick={triggerSelect}
             className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group text-center touch-manipulation min-h-[110px]"
           >
             <span className="text-3xl mb-1 group-hover:scale-110 transition-transform">📄</span>
@@ -379,13 +357,12 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
-              <button
-                type="button"
-                onClick={triggerSelect}
-                className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
+              <label
+                htmlFor={inputId}
+                className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center"
               >
                 Change
-              </button>
+              </label>
               <button
                 type="button"
                 onClick={clearSelectedFile}
@@ -422,5 +399,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     </GlassCard>
   );
 }
+
 
 
