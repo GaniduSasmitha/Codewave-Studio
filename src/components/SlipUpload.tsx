@@ -47,10 +47,15 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       return;
     }
 
-    // Format check: images or PDF
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-    if (!allowedTypes.includes(selectedFile.type)) {
-      setErrorMsg("Invalid format. Only JPEG, PNG, WEBP, or PDF files are allowed.");
+    const fileType = (selectedFile.type || '').toLowerCase();
+    const fileName = (selectedFile.name || '').toLowerCase();
+
+    // Mobile-friendly image and pdf validation (handles mobile gallery MIME variations, HEIC, empty MIME, etc.)
+    const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
+    const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
+
+    if (!isImage && !isPdf) {
+      setErrorMsg("Invalid format. Please select an image or PDF document.");
       clearSelectedFile();
       return;
     }
@@ -60,9 +65,14 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       setFilePreview(null);
     }
 
-    if (selectedFile.type.startsWith('image/')) {
-      const previewUrl = URL.createObjectURL(selectedFile);
-      setFilePreview(previewUrl);
+    if (isImage) {
+      try {
+        const previewUrl = URL.createObjectURL(selectedFile);
+        setFilePreview(previewUrl);
+      } catch (err) {
+        console.error("Preview creation error:", err);
+        setFilePreview(null);
+      }
     }
 
     setFile(selectedFile);
@@ -86,7 +96,8 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setProgress(15);
 
     try {
-      const fileExt = file.name.split('.').pop();
+      const rawExt = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
+      const fileExt = rawExt ? rawExt.toLowerCase() : 'jpg';
       const fileName = `${orderId}-${Date.now()}.${fileExt}`;
       const filePath = `${userId}/${fileName}`;
 
@@ -97,6 +108,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         .from('payment-slips')
         .upload(filePath, file, {
           cacheControl: '3600',
+          contentType: file.type || 'image/jpeg',
           upsert: false
         });
 
@@ -216,13 +228,12 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       )}
 
       <div className="space-y-4">
-        {/* Hidden File Input with dynamic ID */}
         <input
           id={inputId}
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/jpeg,image/png,image/webp,application/pdf"
+          accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
           className="hidden"
           disabled={uploading}
         />
