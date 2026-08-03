@@ -2,6 +2,7 @@ import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import ganiduImg from '../../assets/ganidu.jpg';
+import asekaImg from '../../assets/aseka.png';
 
 interface TeamMember {
   name: string;
@@ -31,7 +32,7 @@ const team: TeamMember[] = [
     role: "UI/UX & Brand Director",
     bio: "Glassmorphic stylist. Aseka sets our curated dark color palettes, typography, and responsive grid layouts.",
     avatar: "✏️",
-    image: null
+    image: asekaImg
   }
 ];
 
@@ -92,10 +93,10 @@ export default function About() {
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
           {team.map((member, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
-              <GlassCard className="h-full flex flex-col justify-between text-left p-6 sm:p-8 border border-white/10 bg-slate-900/20 hover:border-primary/30 transition-all duration-300 group">
-                <div>
-                  {/* Large Stylized Avatar Display */}
-                  <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 flex-shrink-0 group-hover:shadow-primary/20 group-hover:scale-[1.02] transition-all duration-300">
+              <GlassCard className="h-full flex flex-col justify-between items-center text-center p-6 sm:p-8 border border-white/10 bg-slate-900/20 hover:border-primary/30 transition-all duration-300 group">
+                <div className="flex flex-col items-center text-center w-full">
+                  {/* Centered Large Stylized Avatar Display */}
+                  <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 mx-auto flex-shrink-0 group-hover:shadow-primary/20 group-hover:scale-[1.02] transition-all duration-300">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-slate-950/90 flex items-center justify-center border border-white/10">
                       {member.image ? (
                         <img
@@ -111,13 +112,13 @@ export default function About() {
                     </div>
                   </div>
 
-                  <h4 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-200">
+                  <h4 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-200 text-center">
                     {member.name}
                   </h4>
-                  <span className="text-xs text-accent font-semibold block mt-1.5 uppercase tracking-wider">
+                  <span className="text-xs text-accent font-semibold block mt-1.5 uppercase tracking-wider text-center">
                     {member.role}
                   </span>
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-4">
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-4 text-center">
                     {member.bio}
                   </p>
                 </div>
@@ -129,4 +130,5 @@ export default function About() {
     </div>
   );
 }
+
 
