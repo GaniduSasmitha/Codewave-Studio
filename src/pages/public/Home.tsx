@@ -454,7 +454,7 @@ export default function Home() {
                         </div>
 
                         {/* Slip Upload Inline within expanded card */}
-                        {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && (
+                        {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && user?.id && (
                           <div className="pt-4 border-t border-slate-800/60 max-w-xl">
                             <SlipUpload
                               orderId={order.id}

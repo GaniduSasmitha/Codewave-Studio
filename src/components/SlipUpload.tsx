@@ -165,10 +165,18 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setProgress(15);
 
     try {
+      // Resolve active Supabase auth user ID to ensure RLS matching on mobile
+      const { data: authData } = await supabase.auth.getUser();
+      const currentUserId = authData.user?.id || userId;
+
+      if (!currentUserId) {
+        throw new Error("Authentication session missing. Please log in again.");
+      }
+
       const rawExt = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
       const fileExt = rawExt ? rawExt.toLowerCase() : 'jpg';
       const fileName = `${orderId}-${Date.now()}.${fileExt}`;
-      const filePath = `${userId}/${fileName}`;
+      const filePath = `${currentUserId}/${fileName}`;
 
       setProgress(40);
 
