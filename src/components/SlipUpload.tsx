@@ -13,13 +13,18 @@ interface SlipUploadProps {
 
 // Client-side image compression helper for mobile phone camera photos (routinely 8MB-15MB)
 const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> => {
-  if (originalFile.type === 'application/pdf' || originalFile.name.toLowerCase().endsWith('.pdf')) {
+  const fileName = (originalFile.name || '').toLowerCase();
+  const fileType = (originalFile.type || '').toLowerCase();
+
+  const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
+  const isHeic = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif)$/i.test(fileName);
+
+  // HEIC and PDF files cannot be decoded natively by HTML Image() canvas - return raw file directly
+  if (isPdf || isHeic) {
     return originalFile;
   }
 
-  const fileName = (originalFile.name || '').toLowerCase();
-  const fileType = (originalFile.type || '').toLowerCase();
-  const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
+  const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp|jfif)$/i.test(fileName);
 
   if (!isImage) return originalFile;
   if (originalFile.size <= 1.5 * 1024 * 1024) return originalFile; // Under 1.5MB doesn't need compression
@@ -131,12 +136,25 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
 
     const files = e.target.files;
     if (!files || files.length === 0) {
+      console.log("SlipUpload: handleFileChange triggered but e.target.files is empty");
       return;
     }
 
     const selectedFile = files[0];
     const fileType = (selectedFile.type || '').toLowerCase();
     const fileName = (selectedFile.name || '').toLowerCase();
+
+    const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
+    const isHeic = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif)$/i.test(fileName);
+
+    // Logging for mobile debugging & tracking
+    console.log("SlipUpload: File selected on mobile/desktop:", {
+      name: selectedFile.name,
+      type: selectedFile.type || "(empty)",
+      size: selectedFile.size,
+      isPdf,
+      isHeic
+    });
 
     // Reject only explicitly non-document extensions (executables, archives, videos)
     const isDisallowed = /\.(exe|apk|app|zip|rar|tar|mp4|avi|mov|mp3|wav)$/i.test(fileName);
@@ -157,24 +175,28 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       URL.revokeObjectURL(filePreview);
     }
 
-    const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
-
-    // 1. INSTANTLY set selected file and preview URL so UI updates without lag on mobile
+    // 1. INSTANTLY set selected file
     setFile(selectedFile);
 
-    if (!isPdf) {
+    // Only generate live image preview for standard web images (JPEG, PNG, WEBP, GIF, SVG, BMP)
+    // HEIC/HEIF (iPhone native photos) and PDF files cannot be rendered by <img> tags in browser environments
+    const isStandardWebImage = !isPdf && !isHeic && (fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif)$/i.test(fileName));
+
+    if (isStandardWebImage) {
       try {
         const objectUrl = URL.createObjectURL(selectedFile);
         setFilePreview(objectUrl);
-      } catch {
+      } catch (err) {
+        console.warn("SlipUpload: Failed to create ObjectURL preview", err);
         setFilePreview(null);
       }
     } else {
+      // For HEIC or PDF files, show generic document file icon with filename and size
       setFilePreview(null);
     }
 
-    // 2. Background compression for larger images (> 1.5MB)
-    if (!isPdf && selectedFile.size > 1.5 * 1024 * 1024) {
+    // 2. Background compression for larger standard images (> 1.5MB)
+    if (isStandardWebImage && selectedFile.size > 1.5 * 1024 * 1024) {
       setProcessingFile(true);
       compressMobileImageIfNeeded(selectedFile)
         .then((compressedFile) => {
