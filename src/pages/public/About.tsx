@@ -1,25 +1,37 @@
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
+import ganiduImg from '../../assets/ganidu.jpg';
 
-const team = [
+interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  avatar: string;
+  image?: string | null;
+}
+
+const team: TeamMember[] = [
   {
-    name: "Alex Vane",
+    name: "Minindu Nuwantha",
     role: "Lead Creative Developer",
-    bio: "Specialist in Three.js, shaders, and browser animations. Alex bridges design files and raw execution code.",
-    avatar: "🎨"
+    bio: "Specialist in Three.js, shaders, and browser animations. Minindu bridges design files and raw execution code.",
+    avatar: "🎨",
+    image: null
   },
   {
-    name: "Sarah Jenkins",
+    name: "Ganidu Sasmitha",
     role: "Chief Architect / Full Stack",
-    bio: "Auth expert and database engineer. Sarah manages our API setups, Stripe checkout portals, and database safety.",
-    avatar: "💻"
+    bio: "Auth expert and database engineer. Ganidu manages our API setups, Stripe checkout portals, and database safety.",
+    avatar: "💻",
+    image: ganiduImg
   },
   {
-    name: "Elena Rostova",
+    name: "Aseka Kasundi",
     role: "UI/UX & Brand Director",
-    bio: "Glassmorphic stylist. Elena sets our curated dark color palettes, typography, and responsive grid layouts.",
-    avatar: "✏️"
+    bio: "Glassmorphic stylist. Aseka sets our curated dark color palettes, typography, and responsive grid layouts.",
+    avatar: "✏️",
+    image: null
   }
 ];
 
@@ -80,16 +92,32 @@ export default function About() {
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
           {team.map((member, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
-              <GlassCard className="h-full flex flex-col justify-between text-left p-6 border border-white/5 bg-slate-900/15">
+              <GlassCard className="h-full flex flex-col justify-between text-left p-6 sm:p-8 border border-white/10 bg-slate-900/20 hover:border-primary/30 transition-all duration-300 group">
                 <div>
-                  <div className="w-14 h-14 rounded-full bg-slate-950/80 flex items-center justify-center text-2xl border border-white/10 mb-6 shadow-inner">
-                    {member.avatar}
+                  {/* Large Stylized Avatar Display */}
+                  <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 flex-shrink-0 group-hover:shadow-primary/20 group-hover:scale-[1.02] transition-all duration-300">
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-slate-950/90 flex items-center justify-center border border-white/10">
+                      {member.image ? (
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <span className="text-4xl sm:text-5xl select-none filter drop-shadow">
+                          {member.avatar}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <h4 className="text-lg font-bold text-white">{member.name}</h4>
-                  <span className="text-xs text-accent font-semibold block mt-1 uppercase tracking-wider">
+
+                  <h4 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-200">
+                    {member.name}
+                  </h4>
+                  <span className="text-xs text-accent font-semibold block mt-1.5 uppercase tracking-wider">
                     {member.role}
                   </span>
-                  <p className="text-slate-400 text-xs leading-relaxed mt-4">
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-4">
                     {member.bio}
                   </p>
                 </div>
@@ -101,3 +129,4 @@ export default function About() {
     </div>
   );
 }
+
