@@ -23,9 +23,18 @@ create table if not exists public.orders (
   slip_url text,
   created_at timestamptz default now(),
   verified_at timestamptz,
-  verified_by uuid references public.profiles(id),
-  constraint check_status check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'))
+  verified_by uuid references public.profiles(id)
 );
+
+-- Update check_status constraint on existing orders table
+alter table public.orders drop constraint if exists check_status;
+alter table public.orders add constraint check_status 
+  check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'));
+
+-- Update check_role constraint on existing profiles table
+alter table public.profiles drop constraint if exists check_role;
+alter table public.profiles add constraint check_role 
+  check (role in ('customer', 'admin'));
 
 -- 3. Enable Row Level Security (RLS)
 alter table public.profiles enable row level security;
