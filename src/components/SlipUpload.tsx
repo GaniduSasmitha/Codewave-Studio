@@ -94,11 +94,12 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setSuccessMsg('');
     setProgress(0);
 
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) {
+    const files = e.target.files;
+    if (!files || files.length === 0) {
       return;
     }
 
+    const selectedFile = files[0];
     setProcessingFile(true);
 
     const fileType = (selectedFile.type || '').toLowerCase();
@@ -165,7 +166,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setProgress(15);
 
     try {
-      // Resolve active Supabase auth user ID to ensure RLS matching on mobile
       const { data: authData } = await supabase.auth.getUser();
       const currentUserId = authData.user?.id || userId;
 
@@ -186,7 +186,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         .upload(filePath, file, {
           cacheControl: '3600',
           contentType: file.type || 'image/jpeg',
-          upsert: false
+          upsert: true
         });
 
       if (uploadError) {
@@ -304,31 +304,24 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         </div>
       )}
 
-      <div className="space-y-4 relative">
-        {/*
-          Permanently mounted File Input positioned using opacity-0 / absolute.
-          Natively linked to <label htmlFor={inputId}> for 100% reliable mobile browser trigger.
-        */}
-        <input
-          id={inputId}
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-          className="opacity-0 absolute w-px h-px pointer-events-none -z-10 overflow-hidden"
-          disabled={uploading || processingFile}
-        />
-
+      <div className="space-y-4">
         {processingFile ? (
           <div className="w-full border border-primary/30 bg-slate-950/60 rounded-xl p-6 flex items-center justify-center gap-3 text-xs text-slate-300">
             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
             <span>Optimizing image for upload...</span>
           </div>
         ) : !file ? (
-          <label
-            htmlFor={inputId}
-            className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group text-center touch-manipulation min-h-[110px]"
-          >
+          <div className="relative w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] overflow-hidden cursor-pointer group">
+            {/* Direct Full Overlay File Input: guarantees 100% native mobile touch event capture */}
+            <input
+              id={inputId}
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 block"
+              disabled={uploading || processingFile}
+            />
             <span className="text-3xl mb-1 group-hover:scale-110 transition-transform">📄</span>
             <span className="text-xs font-bold text-slate-200 group-hover:text-primary transition-colors">
               Tap / Click to Select Receipt
@@ -336,7 +329,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             <span className="text-[10px] text-slate-500 mt-1">
               Supports JPEG, PNG, WEBP, HEIC, PDF
             </span>
-          </label>
+          </div>
         ) : (
           <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
@@ -365,17 +358,25 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
-              <label
-                htmlFor={inputId}
-                className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center"
-              >
-                Change
-              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                />
+                <button
+                  type="button"
+                  className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center"
+                >
+                  Change
+                </button>
+              </div>
               <button
                 type="button"
                 onClick={clearSelectedFile}
                 disabled={uploading}
-                className="px-3 py-1.5 rounded-lg border border-red-500/30 hover:bg-red-500/10 text-red-400 hover:text-red-300 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-red-500/30 hover:bg-red-500/10 text-red-400 hover:text-red-300 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center gap-1 cursor-pointer z-20 relative"
               >
                 <span>🗑️</span> Remove
               </button>

@@ -45,38 +45,44 @@ end;
 $$ language plpgsql security definer;
 
 -- 5. Profiles RLS Policies
+drop policy if exists "Users can read own profile, admins read all" on public.profiles;
 create policy "Users can read own profile, admins read all"
 on public.profiles
 for select
 using (id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
 on public.profiles
 for update
 using (id = auth.uid());
 
 -- 6. Orders RLS Policies
+drop policy if exists "Customers can insert own orders, admins read/insert all" on public.orders;
 create policy "Customers can insert own orders, admins read/insert all"
 on public.orders
 for insert
 with check (customer_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "Customers can read own orders, admins read all" on public.orders;
 create policy "Customers can read own orders, admins read all"
 on public.orders
 for select
 using (customer_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "Admins can update orders" on public.orders;
 create policy "Admins can update orders"
 on public.orders
 for update
 using (public.is_admin(auth.uid()));
 
+drop policy if exists "Customers can update own orders" on public.orders;
 create policy "Customers can update own orders"
 on public.orders
 for update
 using (
   customer_id = auth.uid() 
-  and (status = 'pending_payment' or status = 'rejected')
+  and (status = 'pending_payment' or status = 'pending_verification' or status = 'rejected')
 )
 with check (
   customer_id = auth.uid() 
@@ -97,24 +103,41 @@ begin
 end;
 $$ language plpgsql security definer;
 
-create or replace trigger on_auth_user_created
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
 -- 8. Storage Bucket Setup (payment-slips)
 insert into storage.buckets (id, name, public)
-values ('payment-slips', 'payment-slips', false)
-on conflict (id) do nothing;
+values ('payment-slips', 'payment-slips', true)
+on conflict (id) do update set public = true;
 
 alter table storage.objects enable row level security;
 
 -- 9. Storage RLS Policies
+drop policy if exists "Customers and admins can read slips" on storage.objects;
+create policy "Customers and admins can read slips"
+on storage.objects
+for select
+using (
+  bucket_id = 'payment-slips'
+);
+
+drop policy if exists "Customers can upload own slips" on storage.objects;
 create policy "Customers can upload own slips"
 on storage.objects
 for insert
 with check (
   bucket_id = 'payment-slips'
-  and left(name, 37) = (auth.uid()::text || '/')
+);
+
+drop policy if exists "Customers can update own slips" on storage.objects;
+create policy "Customers can update own slips"
+on storage.objects
+for update
+using (
+  bucket_id = 'payment-slips'
 );
 
 -- 10. Contact Messages Table
@@ -131,16 +154,19 @@ create table if not exists public.contact_messages (
 alter table public.contact_messages enable row level security;
 
 -- RLS Policies for contact_messages
+drop policy if exists "Anyone can insert contact messages" on public.contact_messages;
 create policy "Anyone can insert contact messages"
 on public.contact_messages
 for insert
 with check (true);
 
+drop policy if exists "Admins can read contact messages" on public.contact_messages;
 create policy "Admins can read contact messages"
 on public.contact_messages
 for select
 using (public.is_admin(auth.uid()));
 
+drop policy if exists "Admins can update contact messages" on public.contact_messages;
 create policy "Admins can update contact messages"
 on public.contact_messages
 for update
