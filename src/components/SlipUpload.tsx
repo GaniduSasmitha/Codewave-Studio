@@ -13,7 +13,7 @@ interface SlipUploadProps {
 
 // Client-side image compression helper for mobile phone camera photos (routinely 8MB-15MB)
 const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> => {
-  if (originalFile.type === 'application/pdf' || originalFile.name.endsWith('.pdf')) {
+  if (originalFile.type === 'application/pdf' || originalFile.name.toLowerCase().endsWith('.pdf')) {
     return originalFile;
   }
 
@@ -25,55 +25,75 @@ const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> =>
   if (originalFile.size <= 1.5 * 1024 * 1024) return originalFile; // Under 1.5MB doesn't need compression
 
   return new Promise((resolve) => {
+    // 2.5s Timeout guard so slow mobile devices never get stuck
+    const timer = setTimeout(() => {
+      resolve(originalFile);
+    }, 2500);
+
+    const safeResolve = (result: File) => {
+      clearTimeout(timer);
+      resolve(result);
+    };
+
     const reader = new FileReader();
     reader.onload = (e) => {
+      const srcStr = e.target?.result as string;
+      if (!srcStr) {
+        safeResolve(originalFile);
+        return;
+      }
+
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        const maxDim = 1920;
+        try {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1920;
 
-        if (width > maxDim || height > maxDim) {
-          if (width > height) {
-            height = Math.round((height * maxDim) / width);
-            width = maxDim;
-          } else {
-            width = Math.round((width * maxDim) / height);
-            height = maxDim;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          resolve(originalFile);
-          return;
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              resolve(originalFile);
-              return;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
             }
-            const cleanName = originalFile.name.replace(/\.[^/.]+$/, "") + ".jpg";
-            const compressedFile = new File([blob], cleanName, {
-              type: "image/jpeg",
-              lastModified: Date.now()
-            });
-            resolve(compressedFile);
-          },
-          'image/jpeg',
-          0.85
-        );
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            safeResolve(originalFile);
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                safeResolve(originalFile);
+                return;
+              }
+              const cleanName = originalFile.name.replace(/\.[^/.]+$/, "") + ".jpg";
+              const compressedFile = new File([blob], cleanName, {
+                type: "image/jpeg",
+                lastModified: Date.now()
+              });
+              safeResolve(compressedFile);
+            },
+            'image/jpeg',
+            0.85
+          );
+        } catch {
+          safeResolve(originalFile);
+        }
       };
-      img.onerror = () => resolve(originalFile);
-      img.src = e.target?.result as string;
+      img.onerror = () => safeResolve(originalFile);
+      img.src = srcStr;
     };
-    reader.onerror = () => resolve(originalFile);
+    reader.onerror = () => safeResolve(originalFile);
     reader.readAsDataURL(originalFile);
   });
 };
@@ -82,6 +102,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [previewFailed, setPreviewFailed] = useState(false);
   const [processingFile, setProcessingFile] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -89,10 +110,24 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   const [successMsg, setSuccessMsg] = useState('');
   const [isReplacing, setIsReplacing] = useState(false);
 
+  const clearSelectedFile = () => {
+    if (filePreview && filePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(filePreview);
+    }
+    setFile(null);
+    setFilePreview(null);
+    setPreviewFailed(false);
+    setProcessingFile(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMsg('');
     setSuccessMsg('');
     setProgress(0);
+    setPreviewFailed(false);
 
     const files = e.target.files;
     if (!files || files.length === 0) {
@@ -100,63 +135,61 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     }
 
     const selectedFile = files[0];
-    setProcessingFile(true);
-
     const fileType = (selectedFile.type || '').toLowerCase();
     const fileName = (selectedFile.name || '').toLowerCase();
 
-    // Mobile-friendly image and pdf validation
-    const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
-    const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
-
-    if (!isImage && !isPdf) {
-      setErrorMsg("Invalid format. Please select an image or PDF document.");
+    // Reject only explicitly non-document extensions (executables, archives, videos)
+    const isDisallowed = /\.(exe|apk|app|zip|rar|tar|mp4|avi|mov|mp3|wav)$/i.test(fileName);
+    if (isDisallowed) {
+      setErrorMsg("Invalid format. Please select an image or PDF receipt.");
       clearSelectedFile();
-      setProcessingFile(false);
       return;
     }
 
     if (selectedFile.size > 25 * 1024 * 1024) {
       setErrorMsg("File size is too large (max 25MB). Please select a smaller file.");
       clearSelectedFile();
-      setProcessingFile(false);
       return;
     }
 
-    // Process image & read preview via FileReader for 100% mobile compatibility
-    compressMobileImageIfNeeded(selectedFile)
-      .then((processedFile) => {
-        setFile(processedFile);
-        if (isImage) {
-          const reader = new FileReader();
-          reader.onload = (evt) => {
-            setFilePreview(evt.target?.result as string);
-            setProcessingFile(false);
-          };
-          reader.onerror = () => {
-            setFilePreview(null);
-            setProcessingFile(false);
-          };
-          reader.readAsDataURL(processedFile);
-        } else {
-          setFilePreview(null);
-          setProcessingFile(false);
-        }
-      })
-      .catch((err) => {
-        console.error("Error processing file selection:", err);
-        setErrorMsg("Failed to load selected file. Please try another image.");
-        clearSelectedFile();
-        setProcessingFile(false);
-      });
-  };
-
-  const clearSelectedFile = () => {
-    setFile(null);
-    setFilePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    // Revoke previous blob URL if exists
+    if (filePreview && filePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(filePreview);
     }
+
+    const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
+
+    // 1. INSTANTLY set selected file and preview URL so UI updates without lag on mobile
+    setFile(selectedFile);
+
+    if (!isPdf) {
+      try {
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setFilePreview(objectUrl);
+      } catch {
+        setFilePreview(null);
+      }
+    } else {
+      setFilePreview(null);
+    }
+
+    // 2. Background compression for larger images (> 1.5MB)
+    if (!isPdf && selectedFile.size > 1.5 * 1024 * 1024) {
+      setProcessingFile(true);
+      compressMobileImageIfNeeded(selectedFile)
+        .then((compressedFile) => {
+          setFile(compressedFile);
+        })
+        .catch((err) => {
+          console.warn("Mobile image compression fallback to raw file:", err);
+        })
+        .finally(() => {
+          setProcessingFile(false);
+        });
+    }
+
+    // Reset input value so re-selecting the same file triggers onChange
+    e.target.value = '';
   };
 
   const handleUpload = async () => {
@@ -305,12 +338,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       )}
 
       <div className="space-y-4">
-        {processingFile ? (
-          <div className="w-full border border-primary/30 bg-slate-950/60 rounded-xl p-6 flex items-center justify-center gap-3 text-xs text-slate-300">
-            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
-            <span>Optimizing image for upload...</span>
-          </div>
-        ) : !file ? (
+        {!file ? (
           <div className="relative w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] overflow-hidden cursor-pointer group">
             {/* Direct Full Overlay File Input: guarantees 100% native mobile touch event capture */}
             <input
@@ -320,7 +348,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
               onChange={handleFileChange}
               accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 block"
-              disabled={uploading || processingFile}
+              disabled={uploading}
             />
             <span className="text-3xl mb-1 group-hover:scale-110 transition-transform">📄</span>
             <span className="text-xs font-bold text-slate-200 group-hover:text-primary transition-colors">
@@ -333,10 +361,11 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         ) : (
           <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              {filePreview ? (
+              {filePreview && !previewFailed ? (
                 <img
                   src={filePreview}
                   alt="Receipt Preview"
+                  onError={() => setPreviewFailed(true)}
                   className="w-16 h-16 object-cover rounded-lg border border-white/10 shrink-0 bg-slate-900"
                 />
               ) : (
@@ -349,7 +378,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                   {file.name}
                 </p>
                 <p className="text-[10px] text-slate-400 mt-0.5 font-mono">
-                  Size: {formatFileSize(file.size)}
+                  Size: {formatFileSize(file.size)} {processingFile && <span className="text-amber-400 font-sans ml-1">(Optimizing...)</span>}
                 </p>
                 <p className="text-[10px] text-emerald-400 font-semibold mt-1">
                   ✓ Ready for submission
