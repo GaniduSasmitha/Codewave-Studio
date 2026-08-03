@@ -122,8 +122,9 @@ export default function OrderStatus() {
     requirements.description = order.requirements;
   }
 
-  // Resolve current active step index
-  const currentStepIndex = steps.findIndex((s) => s.id === order.status);
+  // Resolve current active step index (map rejected status back to step 0 with warning styling)
+  const isRejected = order.status === 'rejected';
+  const currentStepIndex = isRejected ? 0 : steps.findIndex((s) => s.id === order.status);
 
   return (
     <div className="max-w-3xl mx-auto text-left space-y-8 pb-16">
@@ -135,9 +136,16 @@ export default function OrderStatus() {
           </Link>
           <h1 className="text-3xl font-bold text-white mt-2">Track Project Progress</h1>
         </div>
-        <span className="text-xs font-mono text-slate-500 bg-slate-950/60 border border-white/5 px-3 py-1 rounded">
-          ID: {order.id.slice(0, 8)}...
-        </span>
+        <div className="flex items-center gap-2">
+          {isRejected && (
+            <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+              Receipt Rejected
+            </span>
+          )}
+          <span className="text-xs font-mono text-slate-500 bg-slate-950/60 border border-white/5 px-3 py-1 rounded">
+            ID: {order.id.slice(0, 8)}...
+          </span>
+        </div>
       </div>
 
       {/* Visual Stepper */}
@@ -148,35 +156,52 @@ export default function OrderStatus() {
           <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-800 -z-10 hidden md:block">
             <div
               className="h-full bg-primary transition-all duration-500"
-              style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
+              style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
             ></div>
           </div>
 
           {steps.map((step, idx) => {
-            const isCompleted = idx < currentStepIndex;
+            const isCompleted = !isRejected && idx < currentStepIndex;
             const isActive = idx === currentStepIndex;
+            const isRejectedStep = isRejected && idx === 0;
+
             return (
               <div key={step.id} className="flex md:flex-col items-center gap-4 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${
+                    isRejectedStep ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
                     isCompleted ? "bg-primary border-primary text-white" :
                     isActive ? "bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
                     "bg-slate-950 border-slate-800 text-slate-600"
                   }`}
                 >
-                  {isCompleted ? "✓" : idx + 1}
+                  {isRejectedStep ? "❌" : isCompleted ? "✓" : idx + 1}
                 </div>
                 <span
                   className={`text-xs font-semibold ${
+                    isRejectedStep ? "text-red-400 font-bold" :
                     isActive ? "text-accent font-bold" : isCompleted ? "text-slate-300" : "text-slate-600"
                   }`}
                 >
-                  {step.label}
+                  {isRejectedStep ? "Receipt Rejected" : step.label}
                 </span>
               </div>
             );
           })}
         </div>
+
+        {/* Persistent Rejected Warning Message in Timeline */}
+        {isRejected && (
+          <div className="mt-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-left space-y-1.5 animate-fade-in">
+            <div className="flex items-center gap-2 text-red-400 font-bold text-sm">
+              <span className="text-lg">⚠️</span>
+              <span>Payment Receipt Rejected — Action Required</span>
+            </div>
+            <p className="text-slate-300 text-xs leading-relaxed">
+              Your previously submitted payment slip was reviewed and rejected by our team. Please upload a clear photo or PDF of your payment receipt below to re-initiate payment verification.
+            </p>
+          </div>
+        )}
       </GlassCard>
 
       {/* Details Card */}
