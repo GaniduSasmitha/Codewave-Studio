@@ -96,10 +96,10 @@ export default function About() {
           />
         </ScrollReveal>
 
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
-          {team.map((member, i) => (
-            <ScrollReveal key={i} delay={i * 0.1}>
-              <GlassCard className="h-full flex flex-col justify-between items-center text-center p-6 sm:p-8 border border-white/10 bg-slate-900/20 hover:border-primary/30 transition-all duration-300 group">
+        <ScrollReveal delay={0.1}>
+          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
+            {team.map((member, i) => (
+              <GlassCard key={i} className="h-full flex flex-col justify-between items-center text-center p-6 sm:p-8 border border-white/10 bg-slate-900/20 hover:border-primary/30 transition-all duration-300 group">
                 <div className="flex flex-col items-center text-center w-full">
                   {/* Centered Large Stylized Avatar Display */}
                   <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 mx-auto flex-shrink-0 group-hover:shadow-primary/20 group-hover:scale-[1.02] transition-all duration-300">
@@ -129,13 +129,14 @@ export default function About() {
                   </p>
                 </div>
               </GlassCard>
-            </ScrollReveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollReveal>
       </section>
     </div>
   );
 }
+
 
 
 
