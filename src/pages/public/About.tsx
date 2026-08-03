@@ -10,6 +10,8 @@ interface TeamMember {
   bio: string;
   avatar: string;
   image?: string | null;
+  imagePosition?: string;
+  imageScale?: string;
 }
 
 const team: TeamMember[] = [
@@ -25,14 +27,18 @@ const team: TeamMember[] = [
     role: "Chief Architect / Full Stack",
     bio: "Auth expert and database engineer. Ganidu manages our API setups, Stripe checkout portals, and database safety.",
     avatar: "💻",
-    image: ganiduImg
+    image: ganiduImg,
+    imagePosition: "object-top",
+    imageScale: "scale-100"
   },
   {
     name: "Aseka Kasundi",
     role: "UI/UX & Brand Director",
     bio: "Glassmorphic stylist. Aseka sets our curated dark color palettes, typography, and responsive grid layouts.",
     avatar: "✏️",
-    image: asekaImg
+    image: asekaImg,
+    imagePosition: "object-[center_28%]",
+    imageScale: "scale-[1.3]"
   }
 ];
 
@@ -102,7 +108,7 @@ export default function About() {
                         <img
                           src={member.image}
                           alt={member.name}
-                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                          className={`w-full h-full object-cover ${member.imagePosition || 'object-top'} ${member.imageScale || 'scale-100'} transition-transform duration-500 group-hover:scale-[1.35]`}
                         />
                       ) : (
                         <span className="text-4xl sm:text-5xl select-none filter drop-shadow">
@@ -130,5 +136,6 @@ export default function About() {
     </div>
   );
 }
+
 
 
