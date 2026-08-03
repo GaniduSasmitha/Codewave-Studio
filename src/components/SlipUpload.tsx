@@ -391,37 +391,43 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
 
       <div className="space-y-4">
         {!file ? (
-          <label
-            htmlFor={inputId}
-            onClick={() => {
-              setTapCount((c) => c + 1);
-              addDebugLog("Dropzone <label> tapped / clicked");
-            }}
-            className="relative w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] overflow-hidden cursor-pointer group z-20"
-          >
+          <>
             <input
               id={inputId}
               type="file"
               ref={fileInputRef}
-              onChange={handleFileChange}
+              onChange={(e) => {
+                addDebugLog(`[INPUT onChange] File <input id="${inputId}"> onChange fired! Files count: ${e.target.files?.length || 0}`);
+                handleFileChange(e);
+              }}
               onClick={(e) => {
+                addDebugLog(`[INPUT onClick] File <input id="${inputId}"> native onClick fired`);
                 e.stopPropagation();
-                setTapCount((c) => c + 1);
-                addDebugLog("File <input> element clicked directly");
-                (e.target as HTMLInputElement).value = '';
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = '';
+                }
               }}
               accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30 block"
+              className="sr-only"
               disabled={uploading}
             />
-            <span className="text-3xl mb-1 group-hover:scale-110 transition-transform pointer-events-none">📄</span>
-            <span className="text-xs font-bold text-slate-200 group-hover:text-primary transition-colors pointer-events-none">
-              Tap / Click to Select Receipt
-            </span>
-            <span className="text-[10px] text-slate-500 mt-1 pointer-events-none">
-              Supports JPEG, PNG, WEBP, HEIC, PDF
-            </span>
-          </label>
+            <label
+              htmlFor={inputId}
+              onClick={() => {
+                setTapCount((c) => c + 1);
+                addDebugLog(`[LABEL onClick] Dropzone <label htmlFor="${inputId}"> tapped / clicked`);
+              }}
+              className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] cursor-pointer group transition-all select-none relative"
+            >
+              <span className="text-3xl mb-1 group-hover:scale-110 transition-transform pointer-events-none">📄</span>
+              <span className="text-xs font-bold text-slate-200 group-hover:text-primary transition-colors pointer-events-none">
+                Tap / Click to Select Receipt
+              </span>
+              <span className="text-[10px] text-slate-500 mt-1 pointer-events-none">
+                Supports JPEG, PNG, WEBP, HEIC, PDF
+              </span>
+            </label>
+          </>
         ) : (
           <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
@@ -454,19 +460,29 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
-              <label className="relative px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center inline-block">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setTapCount((c) => c + 1);
-                    addDebugLog("Change <input> element clicked directly");
-                    (e.target as HTMLInputElement).value = '';
-                  }}
-                  accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
+              <input
+                id={`change-${inputId}`}
+                type="file"
+                onChange={(e) => {
+                  addDebugLog(`[INPUT onChange] Change <input id="change-${inputId}"> onChange fired!`);
+                  handleFileChange(e);
+                }}
+                onClick={(e) => {
+                  addDebugLog(`[INPUT onClick] Change <input id="change-${inputId}"> native onClick fired`);
+                  e.stopPropagation();
+                }}
+                accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
+                className="sr-only"
+                disabled={uploading}
+              />
+              <label
+                htmlFor={`change-${inputId}`}
+                onClick={() => {
+                  setTapCount((c) => c + 1);
+                  addDebugLog(`[LABEL onClick] Change button <label htmlFor="change-${inputId}"> tapped / clicked`);
+                }}
+                className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center inline-block select-none"
+              >
                 Change
               </label>
               <button
