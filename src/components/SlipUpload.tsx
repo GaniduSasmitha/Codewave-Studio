@@ -11,10 +11,78 @@ interface SlipUploadProps {
   onUploadSuccess: () => void;
 }
 
+// Client-side image compression helper for mobile phone camera photos (which are routinely 8MB-15MB)
+const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> => {
+  if (originalFile.type === 'application/pdf' || originalFile.name.endsWith('.pdf')) {
+    return originalFile;
+  }
+
+  const fileName = (originalFile.name || '').toLowerCase();
+  const fileType = (originalFile.type || '').toLowerCase();
+  const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
+
+  if (!isImage) return originalFile;
+  if (originalFile.size <= 1.5 * 1024 * 1024) return originalFile; // Under 1.5MB doesn't need compression
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 1920;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(originalFile);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              resolve(originalFile);
+              return;
+            }
+            const cleanName = originalFile.name.replace(/\.[^/.]+$/, "") + ".jpg";
+            const compressedFile = new File([blob], cleanName, {
+              type: "image/jpeg",
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          0.85
+        );
+      };
+      img.onerror = () => resolve(originalFile);
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => resolve(originalFile);
+    reader.readAsDataURL(originalFile);
+  });
+};
+
 export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUploadSuccess }: SlipUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [processingFile, setProcessingFile] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
@@ -29,53 +97,65 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     };
   }, [filePreview]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMsg('');
     setSuccessMsg('');
     setProgress(0);
 
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) {
-      clearSelectedFile();
       return;
     }
 
-    // Size check: max 5MB
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      setErrorMsg("File size exceeds 5MB limit. Please upload a smaller receipt.");
-      clearSelectedFile();
-      return;
-    }
+    setProcessingFile(true);
 
-    const fileType = (selectedFile.type || '').toLowerCase();
-    const fileName = (selectedFile.name || '').toLowerCase();
+    try {
+      const fileType = (selectedFile.type || '').toLowerCase();
+      const fileName = (selectedFile.name || '').toLowerCase();
 
-    // Mobile-friendly image and pdf validation (handles mobile gallery MIME variations, HEIC, empty MIME, etc.)
-    const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
-    const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
+      // Mobile-friendly image and pdf validation
+      const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|heic|heif|gif|bmp|jfif)$/i.test(fileName);
+      const isPdf = fileType === 'application/pdf' || fileName.endsWith('.pdf');
 
-    if (!isImage && !isPdf) {
-      setErrorMsg("Invalid format. Please select an image or PDF document.");
-      clearSelectedFile();
-      return;
-    }
+      if (!isImage && !isPdf) {
+        setErrorMsg("Invalid format. Please select an image or PDF document.");
+        clearSelectedFile();
+        return;
+      }
 
-    if (filePreview) {
-      URL.revokeObjectURL(filePreview);
-      setFilePreview(null);
-    }
+      // Check max size: allow up to 25MB initial mobile photo selection (which we compress)
+      if (selectedFile.size > 25 * 1024 * 1024) {
+        setErrorMsg("File size is too large (max 25MB). Please select a smaller file.");
+        clearSelectedFile();
+        return;
+      }
 
-    if (isImage) {
-      try {
-        const previewUrl = URL.createObjectURL(selectedFile);
-        setFilePreview(previewUrl);
-      } catch (err) {
-        console.error("Preview creation error:", err);
+      // Compress mobile image if needed
+      const processedFile = await compressMobileImageIfNeeded(selectedFile);
+
+      if (filePreview) {
+        URL.revokeObjectURL(filePreview);
         setFilePreview(null);
       }
-    }
 
-    setFile(selectedFile);
+      if (isImage) {
+        try {
+          const previewUrl = URL.createObjectURL(processedFile);
+          setFilePreview(previewUrl);
+        } catch (err) {
+          console.error("Preview creation error:", err);
+          setFilePreview(null);
+        }
+      }
+
+      setFile(processedFile);
+    } catch (err) {
+      console.error("Error processing file selection:", err);
+      setErrorMsg("Failed to load selected file. Please try another image.");
+      clearSelectedFile();
+    } finally {
+      setProcessingFile(false);
+    }
   };
 
   const clearSelectedFile = () => {
@@ -86,6 +166,15 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  const triggerSelect = () => {
+    setErrorMsg('');
+    setSuccessMsg('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+      fileInputRef.current.click();
     }
   };
 
@@ -118,7 +207,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       }
       setProgress(75);
 
-      // 2. Resolve URL path and update Orders table
+      // 2. Update Orders table
       const slipUrlPath = uploadData.path;
       const { error: updateError } = await supabase
         .from('orders')
@@ -159,7 +248,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
 
   const inputId = `slip-input-${orderId}`;
 
-  // If already submitted and user is not currently trying to replace/re-upload it
+  // If already submitted and user is not replacing
   if (orderStatus === 'pending_verification' && !isReplacing) {
     const fileName = slipUrl ? slipUrl.split('/').pop() : "receipt-document";
     return (
@@ -198,7 +287,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             {isReplacing ? "Replace Payment Receipt" : "Upload Payment Receipt"}
           </h3>
           <p className="text-slate-400 text-xs">
-            Please upload your bank receipt or payment slip (PNG, JPG, WEBP, or PDF up to 5MB) to initiate verification.
+            Please upload your bank receipt or payment slip (PNG, JPG, WEBP, or PDF) to initiate verification.
           </p>
         </div>
         {isReplacing && (
@@ -208,7 +297,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
               clearSelectedFile();
               setIsReplacing(false);
             }}
-            className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800/60"
+            className="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded bg-slate-800/60"
           >
             Cancel
           </button>
@@ -216,40 +305,50 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       </div>
 
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-500 font-semibold">
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-500 font-semibold leading-relaxed">
           ⚠️ {errorMsg}
         </div>
       )}
 
       {successMsg && (
-        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-semibold">
+        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-semibold leading-relaxed">
           ✔ {successMsg}
         </div>
       )}
 
       <div className="space-y-4">
+        {/*
+          Hidden File Input positioned using opacity/absolute rather than display:none,
+          which ensures 100% reliable mobile browser WebKit file picker callbacks.
+        */}
         <input
           id={inputId}
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
           accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-          className="hidden"
-          disabled={uploading}
+          className="opacity-0 absolute w-px h-px pointer-events-none -z-10 overflow-hidden"
+          disabled={uploading || processingFile}
         />
 
-        {/* File Select Trigger or Selected File Preview */}
-        {!file ? (
+        {/* File Selection Dropzone or Selected File Display */}
+        {processingFile ? (
+          <div className="w-full border border-primary/30 bg-slate-950/60 rounded-xl p-6 flex items-center justify-center gap-3 text-xs text-slate-300">
+            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
+            <span>Optimizing image for upload...</span>
+          </div>
+        ) : !file ? (
           <label
             htmlFor={inputId}
-            className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group text-center touch-manipulation min-h-[100px]"
+            onClick={triggerSelect}
+            className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group text-center touch-manipulation min-h-[110px]"
           >
-            <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">📄</span>
+            <span className="text-3xl mb-1 group-hover:scale-110 transition-transform">📄</span>
             <span className="text-xs font-bold text-slate-200 group-hover:text-primary transition-colors">
               Tap / Click to Select Receipt
             </span>
             <span className="text-[10px] text-slate-500 mt-1">
-              Supports JPEG, PNG, WEBP, PDF (Max 5MB)
+              Supports JPEG, PNG, WEBP, HEIC, PDF
             </span>
           </label>
         ) : (
@@ -259,30 +358,34 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                 <img
                   src={filePreview}
                   alt="Receipt Preview"
-                  className="w-14 h-14 object-cover rounded-lg border border-white/10 shrink-0 bg-slate-900"
+                  className="w-16 h-16 object-cover rounded-lg border border-white/10 shrink-0 bg-slate-900"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-2xl shrink-0">
+                <div className="w-16 h-16 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-3xl shrink-0">
                   📑
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate max-w-[200px] sm:max-w-[280px]">
+                <p className="text-xs font-bold text-white truncate max-w-[180px] sm:max-w-[280px]">
                   {file.name}
                 </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">
+                <p className="text-[10px] text-slate-400 mt-0.5 font-mono">
                   Size: {formatFileSize(file.size)}
+                </p>
+                <p className="text-[10px] text-emerald-400 font-semibold mt-1">
+                  ✓ Ready for submission
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
-              <label
-                htmlFor={inputId}
+              <button
+                type="button"
+                onClick={triggerSelect}
                 className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
               >
                 Change
-              </label>
+              </button>
               <button
                 type="button"
                 onClick={clearSelectedFile}
@@ -310,7 +413,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         <AnimatedButton
           onClick={handleUpload}
           variant="primary"
-          disabled={!file || uploading}
+          disabled={!file || uploading || processingFile}
           className="w-full py-2.5 mt-2 cursor-pointer"
         >
           {uploading ? "Uploading Slip..." : isReplacing ? "Confirm & Replace Receipt" : "Upload Receipt"}
@@ -319,4 +422,5 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     </GlassCard>
   );
 }
+
 
