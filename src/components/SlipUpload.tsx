@@ -115,16 +115,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   const [successMsg, setSuccessMsg] = useState('');
   const [isReplacing, setIsReplacing] = useState(false);
 
-  // Temporary On-Screen Debug State for Mobile Troubleshooting
-  const [debugLogs, setDebugLogs] = useState<string[]>([]);
-  const [tapCount, setTapCount] = useState(0);
-  const [lastError, setLastError] = useState<string | null>(null);
-
-  const addDebugLog = (msg: string) => {
-    const timestamp = new Date().toLocaleTimeString();
-    setDebugLogs((prev) => [`[${timestamp}] ${msg}`, ...prev]);
-  };
-
   const clearSelectedFile = () => {
     if (filePreview && filePreview.startsWith('blob:')) {
       URL.revokeObjectURL(filePreview);
@@ -143,13 +133,9 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setSuccessMsg('');
     setProgress(0);
     setPreviewFailed(false);
-    setLastError(null);
-
-    addDebugLog("File selected: onChange fired.");
 
     const files = e.target.files;
     if (!files || files.length === 0) {
-      addDebugLog("WARNING: onChange fired but e.target.files is empty!");
       return;
     }
 
@@ -161,15 +147,11 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     const isHeic = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif)$/i.test(fileName);
     const isStandardWebImage = !isPdf && !isHeic && (fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif)$/i.test(fileName));
 
-    addDebugLog(`Selected file: name="${selectedFile.name}", type="${selectedFile.type || '(empty)'}", size=${selectedFile.size}B`);
-    addDebugLog(`Format analysis: isPdf=${isPdf}, isHeic=${isHeic}, isStandardWebImage=${isStandardWebImage}`);
-
     // Reject only explicitly non-document extensions (executables, archives, videos)
     const isDisallowed = /\.(exe|apk|app|zip|rar|tar|mp4|avi|mov|mp3|wav)$/i.test(fileName);
     if (isDisallowed) {
       const err = "Invalid format. Please select an image or PDF receipt.";
       setErrorMsg(err);
-      addDebugLog("❌ " + err);
       clearSelectedFile();
       return;
     }
@@ -177,7 +159,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     if (selectedFile.size > 25 * 1024 * 1024) {
       const err = "File size is too large (max 25MB). Please select a smaller file.";
       setErrorMsg(err);
-      addDebugLog("❌ " + err);
       clearSelectedFile();
       return;
     }
@@ -194,28 +175,21 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       try {
         const objectUrl = URL.createObjectURL(selectedFile);
         setFilePreview(objectUrl);
-        addDebugLog("Created ObjectURL image preview successfully");
-      } catch (err: any) {
-        addDebugLog("Failed ObjectURL preview creation: " + err?.message);
+      } catch {
         setFilePreview(null);
       }
     } else {
       setFilePreview(null);
-      addDebugLog("Non-standard web image or HEIC/PDF selected: using document fallback icon");
     }
 
     // 2. Background compression for larger standard images (> 1.5MB)
     if (isStandardWebImage && selectedFile.size > 1.5 * 1024 * 1024) {
       setProcessingFile(true);
-      addDebugLog("Starting background image optimization...");
       compressMobileImageIfNeeded(selectedFile)
         .then((compressedFile) => {
           setFile(compressedFile);
-          addDebugLog(`Optimization completed: original=${selectedFile.size}B -> compressed=${compressedFile.size}B`);
         })
-        .catch((err) => {
-          addDebugLog("Optimization warning (using raw file): " + err?.message);
-        })
+        .catch(() => {})
         .finally(() => {
           setProcessingFile(false);
         });
@@ -223,23 +197,17 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      addDebugLog("Upload aborted: file state is null");
-      return;
-    }
+    if (!file) return;
     setUploading(true);
     setErrorMsg('');
-    setLastError(null);
     setProgress(15);
-    addDebugLog("Starting handleUpload()...");
 
     try {
       const { data: authData, error: authError } = await supabase.auth.getUser();
       if (authError) {
-        addDebugLog("Auth User warning/error: " + authError.message);
+        console.warn("Auth User warning:", authError.message);
       }
       const currentUserId = authData?.user?.id || userId;
-      addDebugLog("Resolved User ID: " + (currentUserId || 'MISSING'));
 
       if (!currentUserId) {
         throw new Error("Authentication session missing. Please log in again.");
@@ -250,11 +218,9 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       const fileName = `${orderId}-${Date.now()}.${fileExt}`;
       const filePath = `${currentUserId}/${fileName}`;
 
-      addDebugLog("Target Storage path: " + filePath);
       setProgress(40);
 
       // 1. Upload to Supabase Storage
-      addDebugLog("Executing supabase.storage.from('payment-slips').upload(...)");
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('payment-slips')
         .upload(filePath, file, {
@@ -264,18 +230,13 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         });
 
       if (uploadError) {
-        const errDetail = `Storage Error [code=${uploadError.name || 'UNKNOWN'}]: ${uploadError.message || JSON.stringify(uploadError)}`;
-        addDebugLog("❌ " + errDetail);
-        setLastError(errDetail);
         throw uploadError;
       }
 
-      addDebugLog("✔ Storage Upload Successful! Path: " + uploadData.path);
       setProgress(75);
 
       // 2. Update Orders table
       const slipUrlPath = uploadData.path;
-      addDebugLog("Executing supabase.from('orders').update(...) for orderId: " + orderId);
       const { error: updateError } = await supabase
         .from('orders')
         .update({
@@ -285,13 +246,9 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         .eq('id', orderId);
 
       if (updateError) {
-        const dbErrDetail = `Database Error [code=${updateError.code || 'UNKNOWN'}]: ${updateError.message || JSON.stringify(updateError)}`;
-        addDebugLog("❌ " + dbErrDetail);
-        setLastError(dbErrDetail);
         throw updateError;
       }
 
-      addDebugLog("✔ Database Order Status updated to 'pending_verification'");
       setProgress(100);
       setSuccessMsg("Payment slip uploaded successfully!");
       clearSelectedFile();
@@ -305,8 +262,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       console.error("Upload error details:", err);
       const fullMessage = err?.message || JSON.stringify(err) || "Unknown upload error";
       setErrorMsg(fullMessage);
-      setLastError(fullMessage);
-      addDebugLog("❌ EXCEPTION CAUGHT: " + fullMessage);
       setProgress(0);
     } finally {
       setUploading(false);
@@ -396,12 +351,8 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
               id={inputId}
               type="file"
               ref={fileInputRef}
-              onChange={(e) => {
-                addDebugLog(`[INPUT onChange] File <input id="${inputId}"> onChange fired! Files count: ${e.target.files?.length || 0}`);
-                handleFileChange(e);
-              }}
+              onChange={handleFileChange}
               onClick={(e) => {
-                addDebugLog(`[INPUT onClick] File <input id="${inputId}"> native onClick fired`);
                 e.stopPropagation();
                 if (fileInputRef.current) {
                   fileInputRef.current.value = '';
@@ -413,10 +364,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             />
             <label
               htmlFor={inputId}
-              onClick={() => {
-                setTapCount((c) => c + 1);
-                addDebugLog(`[LABEL onClick] Dropzone <label htmlFor="${inputId}"> tapped / clicked`);
-              }}
               className="w-full border-2 border-dashed border-slate-800 hover:border-primary/50 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] cursor-pointer group transition-all select-none relative"
             >
               <span className="text-3xl mb-1 group-hover:scale-110 transition-transform pointer-events-none">📄</span>
@@ -435,10 +382,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                 <img
                   src={filePreview}
                   alt="Receipt Preview"
-                  onError={() => {
-                    addDebugLog("<img> tag preview onError fired: falling back to document icon");
-                    setPreviewFailed(true);
-                  }}
+                  onError={() => setPreviewFailed(true)}
                   className="w-16 h-16 object-cover rounded-lg border border-white/10 shrink-0 bg-slate-900"
                 />
               ) : (
@@ -463,24 +407,14 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
               <input
                 id={`change-${inputId}`}
                 type="file"
-                onChange={(e) => {
-                  addDebugLog(`[INPUT onChange] Change <input id="change-${inputId}"> onChange fired!`);
-                  handleFileChange(e);
-                }}
-                onClick={(e) => {
-                  addDebugLog(`[INPUT onClick] Change <input id="change-${inputId}"> native onClick fired`);
-                  e.stopPropagation();
-                }}
+                onChange={handleFileChange}
+                onClick={(e) => e.stopPropagation()}
                 accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
                 className="sr-only"
                 disabled={uploading}
               />
               <label
                 htmlFor={`change-${inputId}`}
-                onClick={() => {
-                  setTapCount((c) => c + 1);
-                  addDebugLog(`[LABEL onClick] Change button <label htmlFor="change-${inputId}"> tapped / clicked`);
-                }}
                 className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center inline-block select-none"
               >
                 Change
@@ -517,53 +451,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         >
           {uploading ? "Uploading Slip..." : isReplacing ? "Confirm & Replace Receipt" : "Upload Receipt"}
         </AnimatedButton>
-
-        {/* TEMPORARY ON-SCREEN DEBUG PANEL FOR MOBILE DIAGNOSTICS */}
-        <div className="mt-6 p-4 rounded-xl bg-slate-950 border-2 border-amber-500/40 text-left font-mono text-[11px] space-y-3 shadow-2xl">
-          <div className="flex justify-between items-center border-b border-amber-500/20 pb-2">
-            <span className="font-bold text-amber-400 text-xs">🐛 Mobile Debug Diagnostics Panel</span>
-            <span className="text-[10px] text-slate-400 font-semibold bg-slate-900 px-2 py-0.5 rounded border border-white/5">Taps Recorded: {tapCount}</span>
-          </div>
-
-          {lastError && (
-            <div className="p-3 rounded-lg bg-red-950/80 border border-red-500 text-red-300 font-bold leading-relaxed whitespace-pre-wrap break-all">
-              ❌ FULL ERROR: {lastError}
-            </div>
-          )}
-
-          <div className="space-y-1">
-            <span className="text-slate-400 font-bold block text-[10px] uppercase tracking-wider">Current State:</span>
-            <div className="text-slate-200 bg-slate-900/90 p-2.5 rounded border border-white/5 space-y-0.5 text-[11px]">
-              <p><span className="text-slate-400">File State:</span> {file ? `${file.name} | type: "${file.type || '(empty)'}" | size: ${file.size}B` : '<null> (No file object in state)'}</p>
-              <p><span className="text-slate-400">Preview State:</span> {filePreview ? (filePreview.length > 40 ? filePreview.slice(0, 40) + '...' : filePreview) : '<null> (Fallback Document Icon Active)'}</p>
-              <p><span className="text-slate-400">Processing:</span> {processingFile ? 'true (optimizing...)' : 'false'} | <span className="text-slate-400">Uploading:</span> {uploading ? 'true' : 'false'}</p>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-400 font-bold text-[10px] uppercase tracking-wider">Event & Diagnostic Logs ({debugLogs.length}):</span>
-              <button
-                type="button"
-                onClick={() => setDebugLogs([])}
-                className="text-[10px] text-slate-400 hover:text-white underline cursor-pointer"
-              >
-                Clear Logs
-              </button>
-            </div>
-            <div className="bg-slate-900/90 p-2.5 rounded border border-white/5 max-h-56 overflow-y-auto space-y-1 text-[10px] text-slate-300">
-              {debugLogs.length === 0 ? (
-                <p className="text-slate-500 italic">No events logged yet. Tap the box above on your phone to select a receipt file.</p>
-              ) : (
-                debugLogs.map((log, idx) => (
-                  <div key={idx} className="border-b border-slate-800/60 pb-0.5 last:border-0 leading-relaxed whitespace-pre-wrap break-all">
-                    {log}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
       </div>
     </GlassCard>
   );
