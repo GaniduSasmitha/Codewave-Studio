@@ -69,7 +69,7 @@ const projects: Project[] = [
     tags: ["React", "QA Automation", "Sprint Delivery"],
     link: "https://github.com/nestle-commhub-group1/nestle-commhub.git",
     image: nestleCommHubImg,
-    badge: "Personal Project"
+    badge: "Company Project"
   },
   {
     id: 6,
@@ -84,6 +84,8 @@ const projects: Project[] = [
 ];
 
 export default function Portfolio() {
+  const showProjectLinks = false; // Set to true to display View Project links
+
   return (
     <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       <ScrollReveal>
@@ -122,9 +124,13 @@ export default function Portfolio() {
                   </>
                 )}
 
-                {/* Subtle Personal Project Badge */}
+                {/* Project Badge */}
                 {project.badge && (
-                  <span className="absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-950/80 text-amber-400 border border-amber-400/30 backdrop-blur-md shadow-md">
+                  <span className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-950/80 backdrop-blur-md shadow-md border ${
+                    project.badge === 'Company Project'
+                      ? 'text-cyan-400 border-cyan-400/30'
+                      : 'text-amber-400 border-amber-400/30'
+                  }`}>
                     {project.badge}
                   </span>
                 )}
@@ -151,24 +157,26 @@ export default function Portfolio() {
                     ))}
                   </div>
 
-                  {/* External Link or Disabled Case Study Button */}
-                  <div className="pt-2 border-t border-slate-800/60">
-                    {project.link ? (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-white transition-colors group/link"
-                      >
-                        <span>View Project</span>
-                        <span className="transition-transform group-hover/link:translate-x-1">→</span>
-                      </a>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-950/50 px-3 py-1 rounded border border-slate-800/80 cursor-not-allowed select-none">
-                        <span>Case Study Coming Soon</span>
-                      </span>
-                    )}
-                  </div>
+                  {/* External Link or Disabled Case Study Button (Hidden for now as requested) */}
+                  {showProjectLinks && (
+                    <div className="pt-2 border-t border-slate-800/60">
+                      {project.link ? (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-white transition-colors group/link"
+                        >
+                          <span>View Project</span>
+                          <span className="transition-transform group-hover/link:translate-x-1">→</span>
+                        </a>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-950/50 px-3 py-1 rounded border border-slate-800/80 cursor-not-allowed select-none">
+                          <span>Case Study Coming Soon</span>
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </GlassCard>
