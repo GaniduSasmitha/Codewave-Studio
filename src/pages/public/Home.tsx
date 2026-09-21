@@ -97,14 +97,14 @@ const features = [
 
 const previewProjects = [
   {
-    title: "Metaverse Showroom",
-    category: "3D Interaction / WebGL",
-    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=600&q=80"
+    title: "Beadoria",
+    category: "E-COMMERCE / JEWELRY",
+    link: "https://ganidusasmitha.github.io/Beadoria/"
   },
   {
-    title: "Nova Fintech Suite",
-    category: "SaaS App / Dashboard",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80"
+    title: "Personal Fitness Tracker",
+    category: "SAAS APP / FITNESS",
+    link: "https://personal-fitness-tracker-cyan.vercel.app/"
   }
 ];
 
