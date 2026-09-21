@@ -10,6 +10,9 @@ import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import SlipUpload from '../../components/SlipUpload';
 
+import beadoriaImg from '../../assets/projects/beadoria.png';
+import fitnessTrackerImg from '../../assets/projects/fitness-tracker.png';
+
 interface Order {
   id: string;
   customer_id: string;
@@ -99,12 +102,14 @@ const previewProjects = [
   {
     title: "Beadoria",
     category: "E-COMMERCE / JEWELRY",
-    link: "https://ganidusasmitha.github.io/Beadoria/"
+    link: "https://ganidusasmitha.github.io/Beadoria/",
+    image: beadoriaImg
   },
   {
     title: "Personal Fitness Tracker",
     category: "SAAS APP / FITNESS",
-    link: "https://personal-fitness-tracker-cyan.vercel.app/"
+    link: "https://personal-fitness-tracker-cyan.vercel.app/",
+    image: fitnessTrackerImg
   }
 ];
 
@@ -707,13 +712,23 @@ export default function Home() {
           {previewProjects.map((project, i) => (
             <ScrollReveal key={i} delay={i * 0.15}>
               <GlassCard hoverEffect={false} className="group overflow-hidden p-0 relative rounded-2xl border border-white/5 bg-slate-950/20">
-                <div className="aspect-video w-full overflow-hidden relative">
-                  {/* Subtle placeholder fallback for images using absolute overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 to-primary/20 z-0"></div>
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                  <div className="absolute inset-0 flex items-center justify-center text-slate-700 font-black text-6xl tracking-widest select-none z-0 opacity-20">
-                    CODEWAVE
-                  </div>
+                <div className="aspect-video w-full overflow-hidden relative border-b border-slate-800">
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <>
+                      {/* Subtle placeholder fallback for images using absolute overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 to-primary/20 z-0"></div>
+                      <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                      <div className="absolute inset-0 flex items-center justify-center text-slate-700 font-black text-6xl tracking-widest select-none z-0 opacity-20">
+                        CODEWAVE
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="p-6 bg-slate-950/40 backdrop-blur border-t border-white/5 relative z-20">
                   <span className="text-xs font-semibold text-accent uppercase tracking-wider">{project.category}</span>
