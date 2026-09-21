@@ -59,19 +59,19 @@ const packages = [
 
 const testimonials = [
   {
-    text: "Codewave transformed our legacy dashboard into a beautiful, lightning-fast 3D product catalog. Our conversion rate increased by 40%!",
-    author: "Sarah Jenkins",
-    role: "VP of Product, Acme Corp"
+    text: "Codewave built our Personal Fitness Tracker application with incredible precision. The real-time workout analytics, streak tracking, and fluid dashboard performance made user engagement skyrocket!",
+    author: "Mr. Chandika Mahawatte",
+    role: "DevOps Architect at London Stock Exchange Group"
   },
   {
-    text: "The glassmorphic layouts, micro-animations, and overall dark theme design guidelines matched our branding perfectly. An absolute work of art.",
-    author: "Michael Chang",
-    role: "Co-Founder, Fintech Lab"
+    text: "Codewave crafted the Beadoria online storefront with a stunning aesthetic and seamless shopping experience. Our jewelry catalog looks exquisite and customer orders flow effortlessly!",
+    author: "Ms. Niweka Minusandi",
+    role: "Owner & Founder at Beadoria"
   },
   {
-    text: "Professional WebGL interactive developers. They took our complex wireframes and converted them into high-fidelity fluid motion states on time.",
-    author: "Elena Rostova",
-    role: "Technical Lead, Cyberdyne Systems"
+    text: "Codewave delivered the Nestlé CommHub internal platform with exceptional architectural quality. The workflow tracking, ticket management, and team collaboration setup exceeded all enterprise standards!",
+    author: "Dr. Tharanga Peiris",
+    role: "Lecturer at APIIT Lanka Pvt (Ltd)"
   }
 ];
 
