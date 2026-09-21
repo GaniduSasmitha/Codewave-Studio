@@ -6,10 +6,10 @@ import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package ($499)",
-  business: "Business Suite ($999)",
-  custom: "Custom WebGL App ($1999)",
-  maintenance: "Active Maintenance ($99/mo)"
+  starter: "Starter Package ($79)",
+  business: "Business Suite ($199)",
+  custom: "Custom Web App (Starting at $399)",
+  maintenance: "Maintenance & Support ($15/mo)"
 };
 
 export default function Signup() {

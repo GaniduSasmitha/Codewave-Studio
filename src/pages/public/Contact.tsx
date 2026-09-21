@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
 import AnimatedButton from '../../components/AnimatedButton';
@@ -6,11 +7,23 @@ import SocialLinks from '../../components/SocialLinks';
 import { supabase } from '../../lib/supabase';
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
+  const pkgParam = searchParams.get('package');
+
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (pkgParam === 'custom') {
+      setForm((prev) => ({
+        ...prev,
+        message: "Hi Codewave team, I would like to request a custom quote for a Web App / Custom Software project. Here are details about my project scope:"
+      }));
+    }
+  }, [pkgParam]);
 
   const validate = () => {
     const newErrors = { name: '', email: '', message: '' };

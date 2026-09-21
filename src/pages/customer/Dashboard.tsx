@@ -29,8 +29,8 @@ const statusColors: Record<string, string> = {
 const planNames: Record<string, string> = {
   starter: "Starter Package",
   business: "Business Suite",
-  custom: "Custom WebGL App",
-  maintenance: "Active Maintenance"
+  custom: "Custom Web App",
+  maintenance: "Maintenance & Support"
 };
 
 export default function CustomerDashboard() {

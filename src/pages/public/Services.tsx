@@ -10,52 +10,52 @@ const services = [
     id: "starter",
     title: "Business Website",
     icon: "🏢",
-    price: "$499",
+    price: "$79",
     desc: "A premium corporate presence custom tailored to display your services, build brand authority, and capture leads.",
     features: [
-      "Custom responsive design (Tailwind CSS)",
-      "Standard sub-pages (Home, About, Services, Contact)",
-      "Basic SEO optimizations",
-      "Lead generation forms"
+      "Custom responsive design",
+      "Up to 5 included pages",
+      "Lead generation contact form",
+      "Basic SEO optimizations"
     ]
   },
   {
     id: "business",
-    title: "E-Commerce Suite",
+    title: "E-commerce Store",
     icon: "🛒",
-    price: "$999",
-    desc: "A fully custom digital store complete with checkout systems, inventory dashboards, and high-converting product pages.",
+    price: "$199",
+    desc: "A fully custom digital store complete with product catalog, CMS/blog, custom contact forms, and SEO setup.",
     features: [
-      "Secure payment integration (Stripe, etc.)",
-      "Client order dashboard (/)",
-      "Admin verification dashboard (/admin)",
-      "Dynamic catalog search and filtering"
+      "Up to 10 included pages",
+      "CMS & Blog integration",
+      "SEO setup & metadata",
+      "Custom contact forms & dashboards"
     ]
   },
   {
     id: "custom",
-    title: "WebGL Web App",
+    title: "Web App / Custom Software",
     icon: "⚡",
-    price: "$1999",
-    desc: "Breathtaking interactive experiences incorporating Three.js 3D models, GSAP physics animations, and custom cloud database actions.",
+    price: "starting at $399",
+    desc: "Full-stack web application featuring custom database architecture, user authentication, admin dashboards, and custom logic.",
     features: [
-      "Low-poly interactive 3D scene layers",
-      "Full database operations (Supabase)",
-      "Fluid state-controlled animations",
-      "High performance indexing"
+      "Full-stack web app & database",
+      "User auth & admin dashboard",
+      "Custom business logic & APIs",
+      "Unlimited revisions during build"
     ]
   },
   {
     id: "maintenance",
-    title: "Active Maintenance",
+    title: "Maintenance & Support",
     icon: "🔧",
-    price: "$99/mo",
+    price: "$15/month",
     desc: "Keep your application secure, up-to-date, and lightning-fast with dedicated support and server health checks.",
     features: [
       "24/7 server monitoring checks",
-      "Weekly security patches and updates",
+      "Weekly security patches & updates",
       "Dedicated developer support hours",
-      "Speed audit reports"
+      "Performance & speed audit reports"
     ]
   }
 ];
@@ -65,7 +65,9 @@ export default function Services() {
   const { user, profile } = useAuth();
 
   const handleSelectPackage = (packageId: string) => {
-    if (user && profile?.role === 'customer') {
+    if (packageId === 'custom') {
+      navigate('/contact?package=custom');
+    } else if (user && profile?.role === 'customer') {
       navigate(`/?package=${packageId}#orders-dashboard`);
     } else {
       navigate(`/signup?package=${packageId}`);
@@ -116,7 +118,7 @@ export default function Services() {
                   variant={i === 1 || i === 2 ? 'primary' : 'glass'}
                   className="w-full py-3"
                 >
-                  Order {service.title}
+                  {service.id === 'custom' ? 'Get a Quote' : `Order ${service.title}`}
                 </AnimatedButton>
               </div>
             </GlassCard>

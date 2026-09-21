@@ -6,10 +6,10 @@ import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
 
 const packages = [
-  { id: "starter", name: "Starter Package", price: 499, desc: "Sleek lead generation presence." },
-  { id: "business", name: "Business Suite", price: 999, desc: "Portal integration and backends." },
-  { id: "custom", name: "Custom WebGL App", price: 1999, desc: "Immersive 3D interactive web." },
-  { id: "maintenance", name: "Active Maintenance", price: 99, desc: "Server safety updates." }
+  { id: "starter", name: "Starter Package", price: 79, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
+  { id: "business", name: "Business Suite", price: 199, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
+  { id: "custom", name: "Custom Web App", price: 399, desc: "Full-stack web app, database, auth, admin dashboard, custom scope." },
+  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "24/7 server monitoring, updates, and developer support." }
 ];
 
 export default function NewOrder() {
@@ -19,7 +19,7 @@ export default function NewOrder() {
 
   const [step, setStep] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState('starter');
-  const [selectedPrice, setSelectedPrice] = useState(499);
+  const [selectedPrice, setSelectedPrice] = useState(79);
 
   // Requirements form fields
   const [businessName, setBusinessName] = useState('');

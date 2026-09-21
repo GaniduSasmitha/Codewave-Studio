@@ -8,39 +8,41 @@ import AnimatedButton from '../../components/AnimatedButton';
 const tiers = [
   {
     id: "starter",
-    name: "Starter Package",
-    price: "$499",
+    name: "Starter",
+    price: "$79",
     billing: "One-time payment",
-    desc: "Perfect for establishing brand authority and showcasing services.",
+    desc: "Up to 5 pages, responsive design, contact form, basic SEO, 1 revision round, 5-day delivery.",
     popular: false
   },
   {
     id: "business",
-    name: "Business Suite",
-    price: "$999",
+    name: "Business",
+    price: "$199",
     billing: "One-time payment",
-    desc: "Full client portal integration and backend ordering database.",
+    desc: "Up to 10 pages, CMS/blog, SEO setup, custom contact forms, 2 revision rounds, 10-day delivery.",
     popular: true
   },
   {
     id: "custom",
-    name: "Custom WebGL App",
-    price: "$1999",
-    billing: "Starting price",
-    desc: "Breathtaking interactive 3D WebGL scenes and custom animation physics.",
+    name: "Custom",
+    price: "starting at $399",
+    billing: "Quote-based",
+    desc: "Full-stack web app, database, user auth, admin dashboard, unlimited revisions during build, timeline based on scope.",
     popular: false
   }
 ];
 
 const featuresList = [
-  { name: "Custom Responsive Design", starter: true, business: true, custom: true },
-  { name: "Page Limit", starter: "Up to 5", business: "Up to 15", custom: "Unlimited" },
-  { name: "Supabase Database & API", starter: false, business: "Basic Integration", custom: "Custom Schema" },
-  { name: "Client Portal & Orders list", starter: false, business: true, custom: true },
-  { name: "Stripe Checkout Setup", starter: false, business: true, custom: true },
-  { name: "Interactive 3D WebGL Scene", starter: false, business: false, custom: "Premium Fiber Scene" },
-  { name: "GSAP Motion Transitions", starter: "Basic", business: "Advanced", custom: "Fully Customized" },
-  { name: "Monthly Support Hours", starter: "1 Hour", business: "5 Hours", custom: "24/7 Priority Support" }
+  { name: "Pages Included", starter: "Up to 5 pages", business: "Up to 10 pages", custom: "Scope-based" },
+  { name: "Responsive Design", starter: true, business: true, custom: true },
+  { name: "Contact & Lead Forms", starter: "Contact form", business: "Custom contact forms", custom: "Advanced & Automated" },
+  { name: "SEO Optimization", starter: "Basic SEO", business: "SEO setup", custom: "Full SEO & Indexing" },
+  { name: "CMS / Blog Integration", starter: false, business: true, custom: true },
+  { name: "Full-Stack Web App & Database", starter: false, business: false, custom: true },
+  { name: "User Auth & Admin Dashboard", starter: false, business: false, custom: true },
+  { name: "Revision Rounds", starter: "1 revision round", business: "2 revision rounds", custom: "Unlimited during build" },
+  { name: "Delivery Time", starter: "5-day delivery", business: "10-day delivery", custom: "Based on scope" },
+  { name: "Support & Maintenance", starter: "Standard Support", business: "Priority Support", custom: "Dedicated Support" }
 ];
 
 export default function Pricing() {
@@ -48,7 +50,9 @@ export default function Pricing() {
   const { user, profile } = useAuth();
 
   const handleSelectPackage = (packageId: string) => {
-    if (user && profile?.role === 'customer') {
+    if (packageId === 'custom') {
+      navigate('/contact?package=custom');
+    } else if (user && profile?.role === 'customer') {
       navigate(`/?package=${packageId}#orders-dashboard`);
     } else {
       navigate(`/signup?package=${packageId}`);
@@ -85,7 +89,7 @@ export default function Pricing() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-                  <p className="text-slate-400 text-xs mt-2">{tier.desc}</p>
+                  <p className="text-slate-400 text-xs mt-2 leading-relaxed">{tier.desc}</p>
                 </div>
 
                 <div className="pt-4 border-t border-slate-800/60">
@@ -100,7 +104,7 @@ export default function Pricing() {
                   variant={tier.popular ? 'primary' : 'glass'}
                   className="w-full py-3"
                 >
-                  Order {tier.name.split(' ')[0]}
+                  {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
                 </AnimatedButton>
               </div>
             </GlassCard>
