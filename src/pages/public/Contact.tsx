@@ -203,10 +203,10 @@ export default function Contact() {
               <div className="min-w-0">
                 <p className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">PHONE</p>
                 <a
-                  href="tel:0717441420"
+                  href="tel:+94717441420"
                   className="text-sm font-semibold text-slate-900 dark:text-white font-mono hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate mt-1"
                 >
-                  071-7441420
+                  +94 71 744 1420
                 </a>
               </div>
             </motion.div>
