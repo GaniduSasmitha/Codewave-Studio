@@ -78,7 +78,7 @@ export default function OrderStatus() {
         },
         (payload) => {
           console.log('Realtime timeline update received:', payload);
-          fetchOrderDetails(true); // silent fetch on update
+          fetchOrderDetails(true);
         }
       )
       .subscribe();
@@ -98,10 +98,10 @@ export default function OrderStatus() {
 
   if (errorMsg || !order) {
     return (
-      <GlassCard className="p-12 text-center border border-white/5 bg-slate-900/10 max-w-xl mx-auto mt-12">
+      <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
         <div className="text-4xl mb-4">⚠️</div>
-        <h3 className="text-xl font-bold text-white">Order not found</h3>
-        <p className="text-slate-400 text-sm mt-2">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Order not found</h3>
+        <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">
           {errorMsg || "We couldn't retrieve the requested order details. Please verify your portal link."}
         </p>
         <Link
@@ -114,7 +114,6 @@ export default function OrderStatus() {
     );
   }
 
-  // Parse requirements JSON
   let requirements = { businessName: '', preferredDomain: '', description: '' };
   try {
     requirements = JSON.parse(order.requirements);
@@ -122,7 +121,6 @@ export default function OrderStatus() {
     requirements.description = order.requirements;
   }
 
-  // Map 'rejected' status back to step 0 ("Pending Payment") so timeline shows Pending Payment as active
   const isRejected = order.status === 'rejected';
   const currentStepIndex = (order.status === 'pending_payment' || isRejected)
     ? 0
@@ -133,29 +131,29 @@ export default function OrderStatus() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/portal" className="text-xs text-accent hover:underline font-bold uppercase tracking-wider">
+          <Link to="/portal" className="text-xs text-primary dark:text-accent hover:underline font-bold uppercase tracking-wider">
             ← Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-white mt-2">Track Project Progress</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Track Project Progress</h1>
         </div>
         <div className="flex items-center gap-2">
           {isRejected && (
-            <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+            <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
               Receipt Rejected
             </span>
           )}
-          <span className="text-xs font-mono text-slate-500 bg-slate-950/60 border border-white/5 px-3 py-1 rounded">
+          <span className="text-xs font-mono text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5 px-3 py-1 rounded">
             ID: {order.id.slice(0, 8)}...
           </span>
         </div>
       </div>
 
       {/* Visual Stepper */}
-      <GlassCard className="p-8 border border-white/5 bg-slate-900/10" hoverEffect={false}>
-        <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-8">Project Timeline</h3>
+      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-8">Project Timeline</h3>
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4">
           {/* Connector Line for Desktop */}
-          <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-800 -z-10 hidden md:block">
+          <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-300 dark:bg-slate-800 -z-10 hidden md:block">
             <div
               className="h-full bg-primary transition-all duration-500"
               style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
@@ -170,18 +168,18 @@ export default function OrderStatus() {
               <div key={step.id} className="flex md:flex-col items-center gap-4 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${
-                    isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
+                    isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-600 dark:text-red-400 ring-2 ring-red-500/30 animate-pulse" :
                     isCompleted ? "bg-primary border-primary text-white" :
-                    isActive ? "bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
-                    "bg-slate-950 border-slate-800 text-slate-600"
+                    isActive ? "bg-white dark:bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
+                    "bg-slate-100 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-slate-500 dark:text-slate-600"
                   }`}
                 >
                   {isCompleted ? "✓" : idx + 1}
                 </div>
                 <span
                   className={`text-xs font-semibold ${
-                    isActive && isRejected ? "text-red-400 font-bold" :
-                    isActive ? "text-accent font-bold" : isCompleted ? "text-slate-300" : "text-slate-600"
+                    isActive && isRejected ? "text-red-600 dark:text-red-400 font-bold" :
+                    isActive ? "text-accent font-bold" : isCompleted ? "text-slate-700 dark:text-slate-300" : "text-slate-500"
                   }`}
                 >
                   {step.label}
@@ -194,11 +192,11 @@ export default function OrderStatus() {
         {/* Persistent Rejected Warning Message in Timeline */}
         {isRejected && (
           <div className="mt-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-left space-y-1.5 animate-fade-in">
-            <div className="flex items-center gap-2 text-red-400 font-bold text-sm">
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-bold text-sm">
               <span className="text-lg">⚠️</span>
               <span>Payment Receipt Rejected — Action Required</span>
             </div>
-            <p className="text-slate-300 text-xs leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">
               Your previously submitted payment slip was reviewed and rejected by our team. Please upload a clear photo or PDF of your payment receipt below to re-initiate payment verification.
             </p>
           </div>
@@ -206,32 +204,32 @@ export default function OrderStatus() {
       </GlassCard>
 
       {/* Details Card */}
-      <GlassCard className="p-8 border border-white/5 bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
-        <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
+        <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
           <div>
-            <h2 className="text-2xl font-bold text-white">{requirements.businessName || "Project Order"}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{requirements.businessName || "Project Order"}</h2>
             <p className="text-xs text-slate-500 mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
           </div>
           <div className="text-right">
             <span className="text-xs text-slate-500 block uppercase tracking-wider font-semibold">Total Price</span>
-            <span className="text-xl font-bold text-white">${order.price}</span>
+            <span className="text-xl font-bold text-slate-900 dark:text-white">${order.price}</span>
           </div>
         </div>
 
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 text-sm">
           <div>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Created Date</span>
-            <span className="text-white font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
+            <span className="text-slate-900 dark:text-white font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
           </div>
           <div>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Preferred Domain</span>
-            <span className="text-white font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
+            <span className="text-slate-900 dark:text-white font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
           </div>
         </div>
 
         <div>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Project Description</span>
-          <p className="text-slate-300 text-xs mt-2 bg-slate-950/60 p-4 rounded border border-white/5 leading-relaxed whitespace-pre-wrap">
+          <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
             {requirements.description}
           </p>
         </div>

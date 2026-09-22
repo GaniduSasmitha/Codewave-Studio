@@ -18,8 +18,8 @@ export default function AnimatedButton({
 
   const variants = {
     primary: 'bg-primary text-white hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]',
-    secondary: 'border border-slate-800 hover:bg-slate-900 text-slate-100 hover:border-slate-700',
-    glass: 'bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-white/20 text-white shadow-lg'
+    secondary: 'border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-transparent dark:hover:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-700',
+    glass: 'bg-slate-900/5 dark:bg-white/5 backdrop-blur-md border border-slate-900/10 dark:border-white/10 hover:bg-slate-900/10 dark:hover:bg-white/10 text-slate-900 dark:text-white shadow-sm dark:shadow-lg'
   };
 
   return (

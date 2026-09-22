@@ -60,24 +60,24 @@ export default function Login() {
 
   return (
     <div className="py-20 max-w-md mx-auto px-4 text-left">
-      <GlassCard className="p-8 border border-white/5 bg-slate-900/10">
+      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 shadow-xl">
         <div className="flex justify-center mb-4">
           <Logo size="lg" showText={false} />
         </div>
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-white">Welcome Back</h1>
-          <p className="text-slate-400 text-xs mt-2">Sign in to manage your website projects.</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Welcome Back</h1>
+          <p className="text-slate-600 dark:text-slate-400 text-xs mt-2">Sign in to manage your website projects.</p>
         </div>
 
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-500 font-semibold leading-relaxed">
+          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-600 dark:text-red-500 font-semibold leading-relaxed">
             ⚠️ {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -86,14 +86,14 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 block w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors"
+              className="mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
             <div className="flex justify-between items-center">
-              <label htmlFor="password" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label htmlFor="password" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Password
               </label>
             </div>
@@ -103,19 +103,19 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 block w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors"
+              className="mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
               placeholder="••••••••"
             />
           </div>
 
-          <AnimatedButton type="submit" variant="primary" disabled={loading} className="w-full py-3">
+          <AnimatedButton type="submit" variant="primary" disabled={loading} className="w-full py-3 cursor-pointer">
             {loading ? 'Signing In...' : 'Sign In'}
           </AnimatedButton>
         </form>
 
         <div className="relative my-6 flex items-center justify-center">
-          <div className="absolute w-full border-t border-slate-850"></div>
-          <span className="relative bg-[#0c0d16] px-3 text-xs text-slate-500 font-semibold uppercase tracking-wider">
+          <div className="absolute w-full border-t border-slate-200 dark:border-slate-800"></div>
+          <span className="relative bg-white dark:bg-slate-900 px-3 text-xs text-slate-500 font-semibold uppercase tracking-wider">
             or
           </span>
         </div>
@@ -123,7 +123,7 @@ export default function Login() {
         <button
           type="button"
           onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-lg text-sm transition-all duration-200 shadow-md hover:shadow-white/5 active:scale-[0.98] cursor-pointer"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-white dark:hover:bg-slate-100 text-slate-900 font-semibold rounded-lg text-sm transition-all duration-200 shadow-sm border border-slate-200 dark:border-none cursor-pointer"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -148,7 +148,7 @@ export default function Login() {
 
         <div className="mt-6 text-center text-xs text-slate-500">
           Don't have an account?{' '}
-          <Link to={`/signup${packageId ? `?package=${packageId}` : ''}`} className="text-accent hover:underline font-semibold">
+          <Link to={`/signup${packageId ? `?package=${packageId}` : ''}`} className="text-primary dark:text-accent hover:underline font-semibold">
             Create Account
           </Link>
         </div>

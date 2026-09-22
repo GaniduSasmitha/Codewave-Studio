@@ -43,7 +43,7 @@ function UserAvatar({
   initial,
   bgColor,
   sizeClass = 'w-8 h-8 text-sm',
-  ringClass = 'ring-2 ring-slate-700/80',
+  ringClass = 'ring-2 ring-slate-300 dark:ring-slate-700/80',
 }: UserAvatarProps) {
   const [imgError, setImgError] = useState(false);
 
@@ -133,7 +133,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
     return (
       <div className={`flex flex-col gap-3 ${className}`}>
         {/* User Info Header Block */}
-        <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm flex items-center justify-between gap-3">
+        <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/60 backdrop-blur-sm flex items-center justify-between gap-3 shadow-sm">
           <div className="flex items-center gap-3 min-w-0">
             <UserAvatar
               src={avatarSrc}
@@ -141,21 +141,21 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
               initial={avatarInitial}
               bgColor={avatarBg}
               sizeClass="w-10 h-10 text-base"
-              ringClass="ring-2 ring-slate-700/80"
+              ringClass="ring-2 ring-slate-300 dark:ring-slate-700/80"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-white truncate">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
                 {displayName}
               </p>
-              <p className="text-xs text-slate-400 truncate mt-0.5">{email}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{email}</p>
             </div>
           </div>
           {/* Role badge */}
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide flex-shrink-0 ${
               role === 'admin'
-                ? 'bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-500/30'
-                : 'bg-indigo-500/15 text-indigo-300 ring-1 ring-indigo-500/30'
+                ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 ring-1 ring-cyan-500/30'
+                : 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 ring-1 ring-indigo-500/30'
             }`}
           >
             <span
@@ -170,7 +170,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         <button
           id="profile-menu-signout"
           onClick={handleSignOut}
-          className="w-full text-center text-sm font-medium border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-3 px-4 rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full text-center text-sm font-medium border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 py-3 px-4 rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-2 cursor-pointer"
         >
           <svg
             className="w-4 h-4 flex-shrink-0"
@@ -213,7 +213,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         />
 
         {/* Name — hidden on mobile */}
-        <span className="hidden sm:block text-sm font-medium text-slate-200 max-w-[140px] truncate group-hover:text-white transition-colors">
+        <span className="hidden sm:block text-sm font-medium text-slate-700 dark:text-slate-200 max-w-[140px] truncate group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
           {profile?.full_name || email}
         </span>
 
@@ -239,10 +239,10 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -8 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="absolute right-0 top-full mt-2.5 w-64 origin-top-right rounded-xl border border-slate-700/80 bg-slate-900/95 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2.5 w-64 origin-top-right rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-xl shadow-slate-300/50 dark:shadow-black/40 overflow-hidden z-50"
           >
             {/* User info header */}
-            <div className="px-4 py-4 border-b border-slate-800/70">
+            <div className="px-4 py-4 border-b border-slate-100 dark:border-slate-800/70">
               <div className="flex items-center gap-3">
                 <UserAvatar
                   src={avatarSrc}
@@ -250,13 +250,13 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
                   initial={avatarInitial}
                   bgColor={avatarBg}
                   sizeClass="w-10 h-10 text-base"
-                  ringClass="ring-2 ring-slate-700"
+                  ringClass="ring-2 ring-slate-300 dark:ring-slate-700"
                 />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
                     {profile?.full_name || 'User'}
                   </p>
-                  <p className="text-xs text-slate-400 truncate mt-0.5">{email}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{email}</p>
                 </div>
               </div>
 
@@ -265,8 +265,8 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
                 <span
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide ${
                     role === 'admin'
-                      ? 'bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-500/30'
-                      : 'bg-indigo-500/15 text-indigo-300 ring-1 ring-indigo-500/30'
+                      ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 ring-1 ring-cyan-500/30'
+                      : 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 ring-1 ring-indigo-500/30'
                   }`}
                 >
                   <span
@@ -284,7 +284,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
                 id="profile-menu-signout"
                 role="menuitem"
                 onClick={handleSignOut}
-                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors duration-150 cursor-pointer"
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 transition-colors duration-150 cursor-pointer"
               >
                 {/* Logout icon */}
                 <svg
@@ -310,4 +310,3 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
     </div>
   );
 }
-

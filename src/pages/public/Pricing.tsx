@@ -59,7 +59,6 @@ export default function Pricing() {
     }
   };
 
-
   return (
     <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
       <ScrollReveal>
@@ -77,23 +76,25 @@ export default function Pricing() {
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard
               className={`h-full flex flex-col justify-between p-8 border relative ${
-                tier.popular ? 'border-primary/50 bg-slate-900/50' : 'border-white/5 bg-slate-900/20'
+                tier.popular
+                  ? 'border-primary/50 bg-indigo-50/50 dark:bg-slate-900/50 shadow-md'
+                  : 'border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/20'
               }`}
             >
               {tier.popular && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] uppercase font-extrabold tracking-widest px-3 py-1 rounded-full border border-primary/20">
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] uppercase font-extrabold tracking-widest px-3 py-1 rounded-full border border-primary/20 shadow-sm">
                   Most Popular
                 </span>
               )}
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-                  <p className="text-slate-400 text-xs mt-2 leading-relaxed">{tier.desc}</p>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{tier.name}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">{tier.desc}</p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/60">
-                  <span className="text-4xl font-black text-white">{tier.price}</span>
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800/60">
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">{tier.price}</span>
                   <span className="text-slate-500 text-xs block mt-1">{tier.billing}</span>
                 </div>
               </div>
@@ -102,7 +103,7 @@ export default function Pricing() {
                 <AnimatedButton
                   onClick={() => handleSelectPackage(tier.id)}
                   variant={tier.popular ? 'primary' : 'glass'}
-                  className="w-full py-3"
+                  className="w-full py-3 cursor-pointer"
                 >
                   {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
                 </AnimatedButton>
@@ -123,10 +124,10 @@ export default function Pricing() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          <div className="mt-8 bg-slate-950/20 backdrop-blur-lg border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+          <div className="mt-8 bg-white/80 dark:bg-slate-950/20 backdrop-blur-lg border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-800 text-left text-sm text-slate-300">
-                <thead className="bg-slate-950/60 text-xs uppercase text-slate-400 font-semibold">
+              <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm text-slate-700 dark:text-slate-300">
+                <thead className="bg-slate-100 dark:bg-slate-950/60 text-xs uppercase text-slate-600 dark:text-slate-400 font-semibold">
                   <tr>
                     <th className="px-6 py-4">Features</th>
                     <th className="px-6 py-4">Starter</th>
@@ -134,27 +135,27 @@ export default function Pricing() {
                     <th className="px-6 py-4">Custom</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/80">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800/80">
                   {featuresList.map((feature, idx) => (
-                    <tr key={idx} className="hover:bg-slate-900/10">
-                      <td className="px-6 py-4 font-medium text-white">{feature.name}</td>
+                    <tr key={idx} className="hover:bg-slate-100/60 dark:hover:bg-slate-900/10 transition-colors">
+                      <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{feature.name}</td>
                       <td className="px-6 py-4">
                         {typeof feature.starter === 'boolean' ? (
-                          feature.starter ? <span className="text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.starter ? <span className="text-primary dark:text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.starter
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.business === 'boolean' ? (
-                          feature.business ? <span className="text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.business ? <span className="text-primary dark:text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.business
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.custom === 'boolean' ? (
-                          feature.custom ? <span className="text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.custom ? <span className="text-primary dark:text-accent text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.custom
                         )}

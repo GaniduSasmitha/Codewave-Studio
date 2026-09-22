@@ -10,14 +10,14 @@ export default function SectionHeading({ title, subtitle, gradientWord, align = 
 
   return (
     <div className={`flex flex-col ${alignment} mb-10`}>
-      <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-white">
+      <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-slate-900 dark:text-white">
         {title}{' '}
         {gradientWord && (
           <span className="gradient-brand bg-clip-text text-transparent">{gradientWord}</span>
         )}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-slate-400 max-w-2xl text-base sm:text-lg leading-relaxed">
+        <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl text-base sm:text-lg leading-relaxed">
           {subtitle}
         </p>
       )}

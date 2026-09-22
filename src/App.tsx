@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
@@ -26,35 +27,37 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-        </Route>
-
-        {/* Protected Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']} />}>
-          <Route element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="orders" element={<OrdersList />} />
-            <Route path="orders/:id" element={<OrderDetail />} />
-            <Route path="messages" element={<MessagesList />} />
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
-        </Route>
 
-        {/* Fallback redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          {/* Protected Admin Routes */}
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']} />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="orders" element={<OrdersList />} />
+              <Route path="orders/:id" element={<OrderDetail />} />
+              <Route path="messages" element={<MessagesList />} />
+            </Route>
+          </Route>
+
+          {/* Fallback redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

@@ -73,8 +73,8 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8 text-left">
       <div>
-        <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-        <p className="text-slate-400 mt-2">Oversee client orders, verify payments, and advance project statuses.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">Oversee client orders, verify payments, and advance project statuses.</p>
       </div>
 
       {loading ? (
@@ -85,36 +85,36 @@ export default function AdminDashboard() {
         <>
           {/* Summary Stat Tiles */}
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Orders</h3>
-              <p className="text-4xl font-extrabold text-white mt-3 font-mono">{stats.total}</p>
+              <p className="text-4xl font-extrabold text-slate-900 dark:text-white mt-3 font-mono">{stats.total}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Pending Verification</h3>
-              <p className="text-4xl font-extrabold text-accent mt-3 font-mono">{stats.pendingVerification}</p>
+              <p className="text-4xl font-extrabold text-primary dark:text-accent mt-3 font-mono">{stats.pendingVerification}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Payments Verified</h3>
               <p className="text-4xl font-extrabold text-primary mt-3 font-mono">{stats.verified}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</h3>
-              <p className="text-4xl font-extrabold text-emerald-400 mt-3 font-mono">${stats.revenue}</p>
+              <p className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3 font-mono">${stats.revenue}</p>
             </GlassCard>
           </div>
 
           {/* Recent Orders Showcase */}
-          <GlassCard className="p-6 border border-white/5 bg-slate-900/10" hoverEffect={false}>
+          <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
             <div className="flex justify-between items-center mb-6">
               <SectionHeading
                 title="Recent Project"
                 gradientWord="Requests"
                 subtitle="Actions pending verification or recent updates."
               />
-              <Link to="/admin/orders" className="text-sm font-semibold text-accent hover:underline mb-8">
+              <Link to="/admin/orders" className="text-sm font-semibold text-primary dark:text-accent hover:underline mb-8">
                 View All Orders →
               </Link>
             </div>
@@ -122,21 +122,21 @@ export default function AdminDashboard() {
             {orders.length === 0 ? (
               <p className="text-slate-500 text-center py-12 text-sm">No client project orders found.</p>
             ) : (
-              <div className="divide-y divide-slate-800/60">
+              <div className="divide-y divide-slate-200 dark:divide-slate-800/60">
                 {orders.slice(0, 5).map((order) => (
                   <div key={order.id} className="py-4 flex justify-between items-center text-sm">
                     <div>
-                      <p className="font-bold text-white">{planNames[order.package] || "Custom Project"}</p>
+                      <p className="font-bold text-slate-900 dark:text-white">{planNames[order.package] || "Custom Project"}</p>
                       <p className="text-xs text-slate-500 mt-1">ID: #{order.id.slice(0, 8)}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-slate-400 font-semibold">${order.price}</span>
+                      <span className="text-slate-700 dark:text-slate-400 font-semibold">${order.price}</span>
                       <span className="text-xs text-slate-500 font-mono hidden md:block">
                         {new Date(order.created_at).toLocaleDateString()}
                       </span>
                       <Link
                         to={`/admin/orders/${order.id}`}
-                        className="text-xs text-accent hover:underline border border-slate-800 hover:bg-slate-950 px-3 py-1 rounded font-bold"
+                        className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
                       >
                         Manage
                       </Link>

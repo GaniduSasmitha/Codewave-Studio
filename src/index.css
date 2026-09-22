@@ -1,12 +1,17 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
-  :root {
+  html.dark {
     color-scheme: dark;
   }
+  html:not(.dark) {
+    color-scheme: light;
+  }
   body {
-    @apply bg-background text-slate-100;
+    @apply bg-slate-50 text-slate-900 dark:bg-background dark:text-slate-100 transition-colors duration-300;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }

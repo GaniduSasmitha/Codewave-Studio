@@ -34,13 +34,13 @@ const planNames: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  pending_payment: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
-  pending_verification: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-  verified: "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20",
-  in_progress: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
-  completed: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
-  cancelled: "bg-rose-500/10 text-rose-400 border border-rose-500/20",
-  rejected: "bg-red-500/10 text-red-400 border border-red-500/20"
+  pending_payment: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+  pending_verification: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
+  verified: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20",
+  in_progress: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
+  completed: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+  cancelled: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
+  rejected: "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
 };
 
 export default function OrderDetail() {
@@ -83,7 +83,7 @@ export default function OrderDetail() {
     try {
       const { data, error } = await supabase.storage
         .from('payment-slips')
-        .createSignedUrl(path, 120); // 120 seconds expiry
+        .createSignedUrl(path, 120);
 
       if (error) throw error;
       if (data) {
@@ -113,7 +113,7 @@ export default function OrderDetail() {
         },
         (payload) => {
           console.log('Realtime change received for admin order detail:', payload);
-          fetchOrderAndClient(true); // silent fetch on update
+          fetchOrderAndClient(true);
         }
       )
       .subscribe();
@@ -163,13 +163,13 @@ export default function OrderDetail() {
 
   if (errorMsg && !order) {
     return (
-      <GlassCard className="p-12 text-center border border-white/5 bg-slate-900/10 max-w-xl mx-auto mt-12">
+      <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
         <div className="text-4xl mb-4">⚠️</div>
-        <h3 className="text-xl font-bold text-white">Order not found</h3>
-        <p className="text-slate-400 text-sm mt-2">{errorMsg}</p>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Order not found</h3>
+        <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">{errorMsg}</p>
         <Link
           to="/admin/orders"
-          className="mt-8 inline-block bg-accent hover:bg-accent/90 text-slate-950 font-bold px-6 py-2.5 rounded-lg text-sm transition-colors"
+          className="mt-8 inline-block bg-primary dark:bg-accent hover:opacity-95 text-white dark:text-slate-950 font-bold px-6 py-2.5 rounded-lg text-sm transition-colors"
         >
           Back to Orders List
         </Link>
@@ -177,13 +177,11 @@ export default function OrderDetail() {
     );
   }
 
-  // Parse customer profile safely
   let clientProfile: Profile | null = null;
   if (order?.profiles) {
     clientProfile = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
   }
 
-  // Parse requirements JSON
   let requirements = { businessName: '', preferredDomain: '', description: '' };
   try {
     if (order) requirements = JSON.parse(order.requirements);
@@ -198,26 +196,26 @@ export default function OrderDetail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/admin/orders" className="text-xs text-accent hover:underline font-bold uppercase tracking-wider">
+          <Link to="/admin/orders" className="text-xs text-primary dark:text-accent hover:underline font-bold uppercase tracking-wider">
             ← Back to Orders List
           </Link>
-          <h1 className="text-3xl font-bold text-white mt-2">Manage Project Scope</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Manage Project Scope</h1>
         </div>
         <span className={`text-[10px] font-extrabold uppercase px-3 py-1 rounded-full ${
-          order ? statusColors[order.status] || "bg-slate-500/10 text-slate-400" : ""
+          order ? statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400" : ""
         }`}>
           {order?.status.replace(/_/g, ' ')}
         </span>
       </div>
 
       {successMsg && (
-        <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-semibold leading-relaxed">
+        <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-600 dark:text-emerald-400 font-semibold leading-relaxed">
           ✔ {successMsg}
         </div>
       )}
 
       {errorMsg && (
-        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-500 font-semibold leading-relaxed">
+        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-600 dark:text-red-500 font-semibold leading-relaxed">
           ⚠️ {errorMsg}
         </div>
       )}
@@ -227,41 +225,41 @@ export default function OrderDetail() {
           {/* Left Columns - Client & Project Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Customer profile */}
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Customer Profile</h3>
               <div className="text-sm">
-                <p className="text-lg font-bold text-white">{clientProfile?.full_name || "Unknown Customer"}</p>
-                <p className="text-xs text-slate-400 mt-1">Profile User ID: #{order.customer_id}</p>
+                <p className="text-lg font-bold text-slate-900 dark:text-white">{clientProfile?.full_name || "Unknown Customer"}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Profile User ID: #{order.customer_id}</p>
               </div>
             </GlassCard>
 
             {/* Scope sheet details */}
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10 space-y-6" hoverEffect={false}>
-              <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6" hoverEffect={false}>
+              <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-white">{requirements.businessName || "Project Details"}</h3>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">{requirements.businessName || "Project Details"}</h3>
                   <p className="text-xs text-slate-500 mt-1">Plan: {planNames[order.package] || "Custom Build"}</p>
                 </div>
                 <div className="text-right">
                   <span className="text-xs text-slate-500 block uppercase tracking-wider font-semibold">Total Price</span>
-                  <span className="text-lg font-bold text-white">${order.price}</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">${order.price}</span>
                 </div>
               </div>
 
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Created Date</span>
-                  <span className="text-white font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
+                  <span className="text-slate-900 dark:text-white font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
                 </div>
                 <div>
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Preferred Domain</span>
-                  <span className="text-white font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
+                  <span className="text-slate-900 dark:text-white font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
                 </div>
               </div>
 
               <div>
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Project Scope</span>
-                <p className="text-slate-300 text-xs mt-2 bg-slate-950/60 p-4 rounded border border-white/5 leading-relaxed whitespace-pre-wrap">
+                <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
                   {requirements.description}
                 </p>
               </div>
@@ -271,7 +269,7 @@ export default function OrderDetail() {
           {/* Right Column - Status Operations & Slip Viewer */}
           <div className="space-y-6">
             {/* Status transitions */}
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Verification Actions</h3>
               
               {/* Payment Verification Steps */}
@@ -281,7 +279,7 @@ export default function OrderDetail() {
                     onClick={() => updateOrderStatus('verified')}
                     disabled={submitting}
                     variant="primary"
-                    className="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white"
+                    className="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer"
                   >
                     Verify
                   </AnimatedButton>
@@ -289,7 +287,7 @@ export default function OrderDetail() {
                     onClick={() => updateOrderStatus('rejected')}
                     disabled={submitting}
                     variant="secondary"
-                    className="w-1/2 border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+                    className="w-1/2 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:border-red-500 cursor-pointer"
                   >
                     Reject
                   </AnimatedButton>
@@ -302,7 +300,7 @@ export default function OrderDetail() {
                   onClick={() => updateOrderStatus('in_progress')}
                   disabled={submitting}
                   variant="primary"
-                  className="w-full"
+                  className="w-full cursor-pointer"
                 >
                   Start Development (In Progress)
                 </AnimatedButton>
@@ -313,7 +311,7 @@ export default function OrderDetail() {
                   onClick={() => updateOrderStatus('completed')}
                   disabled={submitting}
                   variant="primary"
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer"
                 >
                   Complete Development
                 </AnimatedButton>
@@ -331,29 +329,29 @@ export default function OrderDetail() {
             </GlassCard>
 
             {/* Receipt Preview */}
-            <GlassCard className="p-6 border border-white/5 bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Payment Receipt</h3>
               {!order.slip_url ? (
-                <div className="py-12 border border-dashed border-slate-800 rounded-lg text-center text-xs text-slate-600">
+                <div className="py-12 border border-dashed border-slate-300 dark:border-slate-800 rounded-lg text-center text-xs text-slate-500">
                   No document uploaded by client.
                 </div>
               ) : (
                 <div className="space-y-4">
                   {isPdf ? (
-                    <div className="p-4 border border-slate-800 rounded-lg text-center bg-slate-950/60">
-                      <p className="text-xs text-slate-400 mb-4 font-semibold">📄 PDF Payment slip Document</p>
+                    <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-lg text-center bg-slate-100 dark:bg-slate-950/60">
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 font-semibold">📄 PDF Payment slip Document</p>
                       <a
                         href={signedSlipUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-block bg-slate-800 hover:bg-slate-700 text-accent text-xs font-bold px-4 py-2 rounded border border-slate-700 transition-colors"
+                        className="inline-block bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-primary dark:text-accent text-xs font-bold px-4 py-2 rounded border border-slate-300 dark:border-slate-700 transition-colors"
                       >
                         Open PDF in New Tab
                       </a>
                     </div>
                   ) : (
                     <div 
-                      className="border border-slate-800 rounded-lg overflow-hidden bg-slate-950/60 p-2 cursor-pointer hover:border-primary/40 transition-colors"
+                      className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-950/60 p-2 cursor-pointer hover:border-primary/40 transition-colors"
                       onClick={() => setIsModalOpen(true)}
                     >
                       <img
@@ -373,36 +371,36 @@ export default function OrderDetail() {
       {/* Modal for Slip Viewer */}
       {isModalOpen && signedSlipUrl && order && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm"
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-            className="relative w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[90vh] bg-slate-950 sm:bg-slate-900 border-0 sm:border sm:border-slate-800 rounded-none sm:rounded-2xl p-4 overflow-hidden flex flex-col sm:p-6"
+            className="relative w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[90vh] bg-white dark:bg-slate-900 border-0 sm:border border-slate-200 dark:border-slate-800 rounded-none sm:rounded-2xl p-4 overflow-hidden flex flex-col sm:p-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center pb-3 border-b border-slate-800/85 mb-4 mt-2 sm:mt-0">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-800/85 mb-4 mt-2 sm:mt-0">
               <div>
-                <h3 className="font-bold text-white text-base">Payment Receipt</h3>
+                <h3 className="font-bold text-slate-900 dark:text-white text-base">Payment Receipt</h3>
                 <p className="text-[10px] text-slate-500 font-mono mt-0.5">Order ID: #{order.id}</p>
               </div>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white text-xs font-bold px-3 py-1.5 border border-slate-800 hover:bg-slate-800 rounded-lg min-h-[36px] flex items-center"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-bold px-3 py-1.5 border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg min-h-[36px] flex items-center cursor-pointer"
               >
                 Close
               </button>
             </div>
-            <div className="flex-1 overflow-auto flex items-center justify-center bg-slate-950/40 rounded-lg p-2">
+            <div className="flex-1 overflow-auto flex items-center justify-center bg-slate-100 dark:bg-slate-950/40 rounded-lg p-2">
               <img 
                 src={signedSlipUrl} 
                 alt="Receipt large view" 
                 className="max-w-full max-h-[70vh] sm:max-h-[65vh] object-contain rounded" 
               />
             </div>
-            <div className="pt-4 border-t border-slate-800/85 mt-4 text-center sm:hidden">
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800/85 mt-4 text-center sm:hidden">
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="w-full bg-slate-800 text-white font-bold py-3 rounded-lg min-h-[44px]"
+                className="w-full bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white font-bold py-3 rounded-lg min-h-[44px]"
               >
                 Close Viewer
               </button>

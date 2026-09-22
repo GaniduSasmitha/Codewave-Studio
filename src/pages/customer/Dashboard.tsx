@@ -17,13 +17,13 @@ interface Order {
 }
 
 const statusColors: Record<string, string> = {
-  pending_payment: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
-  pending_verification: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-  verified: "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20",
-  in_progress: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
-  completed: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
-  cancelled: "bg-rose-500/10 text-rose-400 border border-rose-500/20",
-  rejected: "bg-red-500/10 text-red-400 border border-red-500/20"
+  pending_payment: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+  pending_verification: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
+  verified: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20",
+  in_progress: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
+  completed: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+  cancelled: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
+  rejected: "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
 };
 
 const planNames: Record<string, string> = {
@@ -67,10 +67,10 @@ export default function CustomerDashboard() {
     <div className="space-y-8 text-left">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Client Dashboard</h1>
-          <p className="text-slate-400 mt-2">Manage your current orders and request new services.</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Client Dashboard</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-2">Manage your current orders and request new services.</p>
         </div>
-        <AnimatedButton onClick={() => navigate('/portal/new-order')} variant="primary" className="py-2.5 px-6">
+        <AnimatedButton onClick={() => navigate('/portal/new-order')} variant="primary" className="py-2.5 px-6 cursor-pointer">
           + New Project Order
         </AnimatedButton>
       </div>
@@ -80,13 +80,13 @@ export default function CustomerDashboard() {
           <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : orders.length === 0 ? (
-        <GlassCard className="p-12 text-center border border-white/5 bg-slate-900/10 max-w-xl mx-auto mt-8">
+        <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-8">
           <div className="text-4xl mb-4">📂</div>
-          <h3 className="text-xl font-bold text-white">No active orders</h3>
-          <p className="text-slate-400 text-sm mt-2 max-w-sm mx-auto">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active orders</h3>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-sm mx-auto">
             You don't have any custom design or development orders. Start your first project now.
           </p>
-          <AnimatedButton onClick={() => navigate('/portal/new-order')} variant="primary" className="mt-8 mx-auto px-8">
+          <AnimatedButton onClick={() => navigate('/portal/new-order')} variant="primary" className="mt-8 mx-auto px-8 cursor-pointer">
             Create Order
           </AnimatedButton>
         </GlassCard>
@@ -95,12 +95,12 @@ export default function CustomerDashboard() {
           {orders.map((order) => (
             <GlassCard
               key={order.id}
-              className="flex flex-col justify-between border border-white/5 bg-slate-900/10 hover:border-primary/20 transition-all duration-300"
+              className="flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300"
             >
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${
-                    statusColors[order.status] || "bg-slate-500/10 text-slate-400"
+                    statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400"
                   }`}>
                     {order.status.replace(/_/g, ' ')}
                   </span>
@@ -110,19 +110,19 @@ export default function CustomerDashboard() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                     {planNames[order.package] || "Custom Project"}
                   </h3>
-                  <p className="text-sm font-semibold text-slate-300 mt-2">
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mt-2">
                     ${order.price}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-800/60">
+              <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60">
                 <Link
                   to={`/portal/order/${order.id}`}
-                  className="text-xs text-accent hover:underline font-bold tracking-wider uppercase flex items-center justify-between"
+                  className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center justify-between"
                 >
                   <span>Track Progress</span>
                   <span>→</span>

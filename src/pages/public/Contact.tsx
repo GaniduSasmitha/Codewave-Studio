@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
 import AnimatedButton from '../../components/AnimatedButton';
@@ -93,95 +94,156 @@ export default function Contact() {
 
   return (
     <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-      {/* Header Section matching Image 2 */}
+      {/* Header Section */}
       <ScrollReveal>
         <div className="text-center space-y-4 max-w-2xl mx-auto">
-          {/* Glowing Mail Icon Badge */}
-          <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto shadow-lg shadow-cyan-500/10">
+          {/* Glowing Mail Icon Badge with Continuous Idle Animation */}
+          <motion.div
+            animate={{
+              rotate: [0, -3, 3, -3, 3, 0],
+              scale: [1, 1.05, 1]
+            }}
+            transition={{
+              duration: 3.5,
+              repeat: Infinity,
+              repeatDelay: 2.5,
+              ease: "easeInOut"
+            }}
+            className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 dark:text-cyan-400 mx-auto shadow-lg shadow-cyan-500/10"
+          >
             <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="16" x="2" y="4" rx="2" />
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
             </svg>
-          </div>
+          </motion.div>
 
           {/* Subtitle Badge */}
-          <p className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold">
+          <p className="text-xs font-mono uppercase tracking-widest text-cyan-600 dark:text-cyan-400 font-semibold">
             — GET IN TOUCH —
           </p>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 dark:from-cyan-400 dark:via-indigo-400 dark:to-purple-400">
             Let's Work Together
           </h1>
 
           {/* Paragraph */}
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
             Whether you have an opportunity, a project idea, or just want to connect – We would love to hear from you. Fill out the form and we will get back to you as soon as possible.
           </p>
         </div>
       </ScrollReveal>
 
-      {/* Contact Details Card matching Image 2 (Excluding University) */}
+      {/* Contact Details Card */}
       <ScrollReveal delay={0.1}>
-        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl shadow-2xl shadow-black/50 space-y-6">
+        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl shadow-xl shadow-slate-200/60 dark:shadow-2xl dark:shadow-black/50 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            {/* Email */}
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            
+            {/* Email Icon Block with Envelope Opening Hover Animation */}
+            <motion.div
+              whileHover="hover"
+              className="flex items-start gap-4 group cursor-pointer"
+            >
+              <motion.div
+                variants={{
+                  hover: { scale: 1.1, y: -2 }
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 relative overflow-hidden shadow-sm"
+              >
+                <motion.svg
+                  className="w-5 h-5 relative z-10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <rect width="20" height="16" x="2" y="4" rx="2" />
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                </svg>
-              </div>
+                  <motion.path
+                    d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                    variants={{
+                      hover: { y: -1.5, scaleY: 0.8, opacity: 0.85 }
+                    }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  />
+                </motion.svg>
+              </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-widest">EMAIL</p>
+                <p className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">EMAIL</p>
                 <a
                   href="mailto:ganiduudage@gmail.com"
-                  className="text-sm font-semibold text-white font-mono hover:text-cyan-400 transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-slate-900 dark:text-white font-mono hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate mt-1"
                 >
                   ganiduudage@gmail.com
                 </a>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Phone */}
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0">
+            {/* Phone Icon Block with Ringing Vibration Hover Animation */}
+            <motion.div
+              whileHover="hover"
+              className="flex items-start gap-4 group cursor-pointer"
+            >
+              <motion.div
+                variants={{
+                  hover: {
+                    rotate: [0, -12, 12, -12, 12, -6, 6, 0],
+                    scale: 1.1
+                  }
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 shadow-sm"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-              </div>
+              </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-widest">PHONE</p>
+                <p className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">PHONE</p>
                 <a
                   href="tel:0717441420"
-                  className="text-sm font-semibold text-white font-mono hover:text-cyan-400 transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-slate-900 dark:text-white font-mono hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate mt-1"
                 >
                   071-7441420
                 </a>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Location */}
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0">
+            {/* Location Icon Block with Drop & Bounce Marker Hover Animation */}
+            <motion.div
+              whileHover="hover"
+              className="flex items-start gap-4 group cursor-pointer"
+            >
+              <motion.div
+                variants={{
+                  hover: {
+                    y: [-6, 0, -3, 0],
+                    scale: [1, 1.12, 1.05, 1.1]
+                  }
+                }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 shadow-sm"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-              </div>
+              </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-widest">LOCATION</p>
-                <p className="text-sm font-semibold text-white font-mono mt-1 leading-snug">
+                <p className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">LOCATION</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white font-mono mt-1 leading-snug">
                   Pitipana, Homagama, Sri Lanka
                 </p>
               </div>
-            </div>
+            </motion.div>
+
           </div>
 
           {/* Social Links inside the card footer */}
-          <div className="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-xs text-slate-400 font-mono">Connect on social media:</span>
+          <div className="pt-6 border-t border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">Connect on social media:</span>
             <SocialLinks />
           </div>
         </div>
@@ -190,8 +252,8 @@ export default function Contact() {
       {/* Inquiry Form */}
       <div className="max-w-xl mx-auto">
         <ScrollReveal delay={0.2}>
-          <GlassCard className="p-8 border border-white/5 bg-slate-900/10 text-left">
-            <h3 className="text-xl font-bold text-white mb-6 text-center">Send Us a Direct Message</h3>
+          <GlassCard className="p-8 border border-slate-200/80 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 text-left">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 text-center">Send Us a Direct Message</h3>
 
             {isSuccess ? (
               <div className="space-y-6 py-6 text-center">
@@ -199,8 +261,8 @@ export default function Contact() {
                   ✓
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white">Message Sent Successfully!</h3>
-                  <p className="text-slate-400 text-sm">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Message Sent Successfully!</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
                     Thank you for reaching out. A Codewave representative will review your message shortly.
                   </p>
                 </div>
@@ -211,14 +273,14 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {submitError && (
-                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm break-words">
+                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm break-words">
                     <strong>Error submitting form:</strong> {submitError}
                   </div>
                 )}
 
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  <label htmlFor="name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                     Full Name
                   </label>
                   <input
@@ -228,8 +290,8 @@ export default function Contact() {
                     value={form.name}
                     onChange={handleChange}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors ${
-                      errors.name ? 'border-red-500/50' : 'border-slate-800'
+                    className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors ${
+                      errors.name ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
                     }`}
                     placeholder="Your name"
                   />
@@ -238,7 +300,7 @@ export default function Contact() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                     Email Address
                   </label>
                   <input
@@ -248,8 +310,8 @@ export default function Contact() {
                     value={form.email}
                     onChange={handleChange}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors ${
-                      errors.email ? 'border-red-500/50' : 'border-slate-800'
+                    className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors ${
+                      errors.email ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
                     }`}
                     placeholder="you@example.com"
                   />
@@ -258,7 +320,7 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  <label htmlFor="message" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                     Your Message
                   </label>
                   <textarea
@@ -268,8 +330,8 @@ export default function Contact() {
                     value={form.message}
                     onChange={handleChange}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-slate-950 border rounded-lg text-sm text-white focus:outline-none focus:border-primary transition-colors h-32 ${
-                      errors.message ? 'border-red-500/50' : 'border-slate-800'
+                    className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors h-32 ${
+                      errors.message ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
                     }`}
                     placeholder="Project details, timeline, or questions..."
                   />
