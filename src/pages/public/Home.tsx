@@ -60,8 +60,8 @@ const packages = [
 const testimonials = [
   {
     text: "Codewave built our Personal Fitness Tracker application with incredible precision. The real-time workout analytics, streak tracking, and fluid dashboard performance made user engagement skyrocket!",
-    author: "Mr. Chandika Mahawatte",
-    role: "DevOps Architect at London Stock Exchange Group"
+    author: "Mr. Indukantha Dissanayaks",
+    role: "Owner & Founder at Personal Fitness Tracker"
   },
   {
     text: "Codewave crafted the Beadoria online storefront with a stunning aesthetic and seamless shopping experience. Our jewelry catalog looks exquisite and customer orders flow effortlessly!",
@@ -143,7 +143,7 @@ export default function Home() {
   const [searchParams] = useSearchParams();
   const { user, profile } = useAuth();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
@@ -275,7 +275,7 @@ export default function Home() {
       });
 
       if (error) throw error;
-      
+
       // Reset form states
       setNewOrderOpen(false);
       setNewOrderStep(1);
@@ -284,7 +284,7 @@ export default function Home() {
       setBusinessName('');
       setPreferredDomain('');
       setDescription('');
-      
+
       // Refresh orders list
       fetchOrders();
     } catch (err: any) {
@@ -410,15 +410,13 @@ export default function Home() {
                 return (
                   <GlassCard
                     key={order.id}
-                    className={`flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${
-                      isExpanded ? "md:col-span-2 lg:col-span-3 border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
-                    }`}
+                    className={`flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${isExpanded ? "md:col-span-2 lg:col-span-3 border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
+                      }`}
                   >
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${
-                          statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400"
-                        }`}>
+                        <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400"
+                          }`}>
                           {order.status.replace(/_/g, ' ')}
                         </span>
                         <span className="text-xs text-slate-500 dark:text-slate-500 font-mono">
@@ -458,18 +456,16 @@ export default function Home() {
                               return (
                                 <div key={step.id} className="flex md:flex-col items-center gap-3 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                                   <div
-                                    className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${
-                                      isCompleted ? "bg-primary border-primary text-white" :
-                                      isActive ? "bg-white dark:bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
-                                      "bg-slate-200 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-slate-500 dark:text-slate-600"
-                                    }`}
+                                    className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${isCompleted ? "bg-primary border-primary text-white" :
+                                        isActive ? "bg-white dark:bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
+                                          "bg-slate-200 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-slate-500 dark:text-slate-600"
+                                      }`}
                                   >
                                     {isCompleted ? "✓" : idx + 1}
                                   </div>
                                   <span
-                                    className={`text-[10px] font-semibold ${
-                                      isActive ? "text-accent font-bold" : isCompleted ? "text-slate-700 dark:text-slate-300" : "text-slate-500"
-                                    }`}
+                                    className={`text-[10px] font-semibold ${isActive ? "text-accent font-bold" : isCompleted ? "text-slate-700 dark:text-slate-300" : "text-slate-500"
+                                      }`}
                                   >
                                     {step.label}
                                   </span>
