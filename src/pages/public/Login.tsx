@@ -32,12 +32,21 @@ export default function Login() {
     e.preventDefault();
     setErrorMsg('');
 
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
       setErrorMsg('Please enter both email and password.');
       return;
     }
 
-    const { error } = await signIn(email, password);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setErrorMsg('Please enter a valid email address.');
+      return;
+    }
+
+    const { error } = await signIn(cleanEmail, cleanPassword);
     if (error) {
       setErrorMsg(error.message || 'Failed to sign in. Please verify your credentials.');
     }

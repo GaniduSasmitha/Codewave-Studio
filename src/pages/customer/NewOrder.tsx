@@ -53,6 +53,18 @@ export default function NewOrder() {
         setErrorMsg('Please fill in both Business Name and Project Description.');
         return;
       }
+      if (businessName.trim().length > 100) {
+        setErrorMsg('Business Name must be under 100 characters.');
+        return;
+      }
+      if (preferredDomain.trim().length > 100) {
+        setErrorMsg('Preferred Domain must be under 100 characters.');
+        return;
+      }
+      if (description.trim().length > 2000) {
+        setErrorMsg('Project Description must be under 2000 characters.');
+        return;
+      }
       setErrorMsg('');
     }
     setStep((prev) => prev + 1);

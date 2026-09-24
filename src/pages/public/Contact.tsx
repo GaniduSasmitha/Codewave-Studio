@@ -33,11 +33,17 @@ export default function Contact() {
     if (!form.name.trim()) {
       newErrors.name = 'Name is required.';
       isValid = false;
+    } else if (form.name.trim().length > 100) {
+      newErrors.name = 'Name must be under 100 characters.';
+      isValid = false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email.trim()) {
       newErrors.email = 'Email is required.';
+      isValid = false;
+    } else if (form.email.trim().length > 255) {
+      newErrors.email = 'Email must be under 255 characters.';
       isValid = false;
     } else if (!emailRegex.test(form.email)) {
       newErrors.email = 'Please enter a valid email address.';
@@ -46,6 +52,9 @@ export default function Contact() {
 
     if (!form.message.trim()) {
       newErrors.message = 'Message is required.';
+      isValid = false;
+    } else if (form.message.trim().length > 2000) {
+      newErrors.message = 'Message must be under 2000 characters.';
       isValid = false;
     }
 
@@ -56,6 +65,17 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError('');
+
+    // Client-side rate limiting / cooldown check (30 seconds)
+    const lastSubmitted = localStorage.getItem('contact_last_submitted');
+    if (lastSubmitted) {
+      const elapsed = Date.now() - parseInt(lastSubmitted, 10);
+      if (elapsed < 30000) {
+        const remaining = Math.ceil((30000 - elapsed) / 1000);
+        setSubmitError(`Please wait ${remaining} seconds before submitting another inquiry.`);
+        return;
+      }
+    }
 
     if (validate()) {
       setIsSubmitting(true);
@@ -69,6 +89,7 @@ export default function Contact() {
         if (error) {
           setSubmitError(error.message || 'Failed to submit message.');
         } else {
+          localStorage.setItem('contact_last_submitted', Date.now().toString());
           setIsSuccess(true);
           setForm({ name: '', email: '', message: '' });
           setErrors({ name: '', email: '', message: '' });

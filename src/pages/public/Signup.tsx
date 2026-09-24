@@ -41,12 +41,32 @@ export default function Signup() {
     setErrorMsg('');
     setSuccessMsg('');
 
-    if (!email.trim() || !password.trim() || !fullName.trim()) {
+    const cleanName = fullName.trim();
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanName || !cleanEmail || !cleanPassword) {
       setErrorMsg('All fields are required.');
       return;
     }
 
-    const { error } = await signUp(email, password, fullName);
+    if (cleanName.length > 100) {
+      setErrorMsg('Full name cannot exceed 100 characters.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setErrorMsg('Please enter a valid email address.');
+      return;
+    }
+
+    if (cleanPassword.length < 6) {
+      setErrorMsg('Password must be at least 6 characters long.');
+      return;
+    }
+
+    const { error } = await signUp(cleanEmail, cleanPassword, cleanName);
     if (error) {
       setErrorMsg(error.message || 'Failed to sign up. Please try again.');
     } else {

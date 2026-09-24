@@ -155,8 +155,8 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       return;
     }
 
-    if (selectedFile.size > 25 * 1024 * 1024) {
-      const err = "File size is too large (max 25MB). Please select a smaller file.";
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      const err = "File size is too large (max 5MB). Please select a smaller file.";
       setErrorMsg(err);
       clearSelectedFile();
       return;
@@ -210,9 +210,11 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       }
 
       const rawExt = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
-      const fileExt = rawExt ? rawExt.toLowerCase() : 'jpg';
-      const fileName = `${orderId}-${Date.now()}.${fileExt}`;
-      const filePath = `${currentUserId}/${fileName}`;
+      const fileExt = (rawExt || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const safeOrderId = orderId.replace(/[^a-zA-Z0-9-]/g, '');
+      const safeUserId = currentUserId.replace(/[^a-zA-Z0-9-]/g, '');
+      const fileName = `${safeOrderId}-${Date.now()}.${fileExt}`;
+      const filePath = `${safeUserId}/${fileName}`;
 
       setProgress(40);
 
