@@ -1,6 +1,6 @@
-import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
+import PortfolioCarousel, { type Project } from '../../components/PortfolioCarousel';
 
 import beadoriaImg from '../../assets/projects/beadoria.png';
 import fitnessTrackerImg from '../../assets/projects/fitness-tracker.png';
@@ -8,17 +8,6 @@ import portfolioPreviewImg from '../../assets/projects/portfolio-preview.jpg';
 import gaming4worldImg from '../../assets/projects/gaming4world.png';
 import nestleCommHubImg from '../../assets/projects/nestle-commhub.jpg';
 import evoraImg from '../../assets/projects/evora.png';
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  description: string;
-  tags: string[];
-  link?: string | null;
-  image?: string;
-  badge?: string;
-}
 
 const projects: Project[] = [
   {
@@ -84,10 +73,8 @@ const projects: Project[] = [
 ];
 
 export default function Portfolio() {
-  const showProjectLinks = false; // Set to true to display View Project links
-
   return (
-    <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       <ScrollReveal>
         <SectionHeading
           title="Our Completed"
@@ -97,91 +84,10 @@ export default function Portfolio() {
         />
       </ScrollReveal>
 
-      {/* Grid Layout with hover scale and gradient overlay */}
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12">
-        {projects.map((project, i) => (
-          <ScrollReveal key={project.id} delay={i * 0.08}>
-            <GlassCard
-              hoverEffect={false}
-              className="group h-full flex flex-col justify-between overflow-hidden p-0 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/20 hover:border-primary/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_12px_30px_-10px_rgba(99,102,241,0.2)]"
-            >
-              {/* Image Area with Fallback Watermark Structure */}
-              <div className="aspect-video w-full overflow-hidden relative border-b border-slate-200 dark:border-slate-800">
-                {project.image ? (
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <>
-                    {/* Fallback pattern with animated gradient overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-200 dark:from-slate-950 to-primary/10 z-0"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                    <div className="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-700 font-black text-4xl tracking-widest select-none z-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300">
-                      CODEWAVE
-                    </div>
-                  </>
-                )}
-
-                {/* Project Badge */}
-                {project.badge && (
-                  <span className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-950/80 backdrop-blur-md shadow-md border ${
-                    project.badge === 'Company Project'
-                      ? 'text-cyan-600 dark:text-cyan-400 border-cyan-500/30'
-                      : 'text-amber-600 dark:text-amber-400 border-amber-500/30'
-                  }`}>
-                    {project.badge}
-                  </span>
-                )}
-              </div>
-
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <span className="text-xs font-semibold text-primary dark:text-accent uppercase tracking-wider">{project.category}</span>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">{project.description}</p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {project.tags.map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/40 px-2 py-0.5 rounded border border-slate-200 dark:border-white/5"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {showProjectLinks && (
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60">
-                      {project.link ? (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-accent hover:underline transition-colors group/link"
-                        >
-                          <span>View Project</span>
-                          <span className="transition-transform group-hover/link:translate-x-1">→</span>
-                        </a>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-950/50 px-3 py-1 rounded border border-slate-200 dark:border-slate-800/80 cursor-not-allowed select-none">
-                          <span>Case Study Coming Soon</span>
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </GlassCard>
-          </ScrollReveal>
-        ))}
-      </div>
+      {/* 3D Circular Arc Carousel Display */}
+      <ScrollReveal delay={0.1}>
+        <PortfolioCarousel projects={projects} />
+      </ScrollReveal>
     </div>
   );
 }
