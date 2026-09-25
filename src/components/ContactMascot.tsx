@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ContactMascotProps {
@@ -6,6 +7,54 @@ interface ContactMascotProps {
 }
 
 export default function ContactMascot({ focusedField, isSuccess }: ContactMascotProps) {
+  const headRef = useRef<HTMLDivElement>(null);
+  const [cursorEyeOffset, setCursorEyeOffset] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  // Check for mobile/touch devices
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
+    };
+    checkTouch();
+    window.addEventListener('resize', checkTouch);
+    return () => window.removeEventListener('resize', checkTouch);
+  }, []);
+
+  // Track mouse cursor for smooth eye movement when no field is focused
+  useEffect(() => {
+    if (isTouchDevice) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!headRef.current) return;
+      const rect = headRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const deltaX = e.clientX - centerX;
+      const deltaY = e.clientY - centerY;
+      const distance = Math.hypot(deltaX, deltaY);
+
+      if (distance < 1) {
+        setCursorEyeOffset({ x: 0, y: 0 });
+        return;
+      }
+
+      // Constrain maximum eye shift to 4px radius for a subtle, natural glance
+      const maxShift = 4;
+      const angle = Math.atan2(deltaY, deltaX);
+      const shiftDist = Math.min(distance * 0.015, maxShift);
+
+      setCursorEyeOffset({
+        x: Math.cos(angle) * shiftDist,
+        y: Math.sin(angle) * shiftDist,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [isTouchDevice]);
+
   // Speech text calculation
   let speechText = "Hi! Tell us about your project. 👋";
   if (isSuccess) {
@@ -18,14 +67,19 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
     speechText = "I'm listening! Tell us all the details.";
   }
 
-  // Eye position offsets
-  let eyeOffset = { x: 0, y: 0 };
-  if (focusedField === 'name') {
-    eyeOffset = { x: -3, y: 1 };
+  // Eye position offsets: focusedField takes priority over cursor tracking
+  let finalEyeOffset = { x: 0, y: 0 };
+  if (isSuccess) {
+    finalEyeOffset = { x: 0, y: 0 };
+  } else if (focusedField === 'name') {
+    finalEyeOffset = { x: -3, y: 1 };
   } else if (focusedField === 'email') {
-    eyeOffset = { x: -3, y: 3 };
+    finalEyeOffset = { x: -3, y: 3 };
   } else if (focusedField === 'message') {
-    eyeOffset = { x: 0, y: 4 };
+    finalEyeOffset = { x: 0, y: 4 };
+  } else {
+    // Default to cursor-tracking eye position on desktop
+    finalEyeOffset = isTouchDevice ? { x: 0, y: 0 } : cursorEyeOffset;
   }
 
   // Head transform / lean
@@ -112,6 +166,7 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
 
         {/* Robot Head Body */}
         <motion.div
+          ref={headRef}
           animate={headTransform}
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border-2 border-primary/50 dark:border-accent/50 shadow-xl shadow-cyan-500/15 flex items-center justify-center overflow-visible"
@@ -128,10 +183,10 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
             {/* Eyes & Face Container */}
             <motion.div
               animate={{
-                x: eyeOffset.x,
-                y: eyeOffset.y,
+                x: finalEyeOffset.x,
+                y: finalEyeOffset.y,
               }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="flex items-center justify-between w-full px-2 z-10"
             >
               {/* Left Eye */}
