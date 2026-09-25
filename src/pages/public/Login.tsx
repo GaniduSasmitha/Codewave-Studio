@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
 import Logo from '../../components/Logo';
+import AuthMascotsPanel from '../../components/AuthMascotsPanel';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -68,8 +69,16 @@ export default function Login() {
   };
 
   return (
-    <div className="py-20 max-w-md mx-auto px-4 text-left">
-      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 shadow-xl">
+    <div className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        {/* Left Side: Illustrated Tech Mascot Panel (Desktop) */}
+        <div className="hidden lg:block">
+          <AuthMascotsPanel />
+        </div>
+
+        {/* Right Side: Form Card */}
+        <div className="w-full max-w-md mx-auto">
+          <GlassCard className="p-6 sm:p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 shadow-xl">
         <div className="flex justify-center mb-4">
           <Logo size="lg" showText={false} />
         </div>
@@ -163,5 +172,7 @@ export default function Login() {
         </div>
       </GlassCard>
     </div>
+  </div>
+</div>
   );
 }

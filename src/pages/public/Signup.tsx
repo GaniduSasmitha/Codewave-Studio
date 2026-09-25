@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
+import AuthMascotsPanel from '../../components/AuthMascotsPanel';
 
 const planNames: Record<string, string> = {
   starter: "Starter Package ($79)",
@@ -91,8 +92,16 @@ export default function Signup() {
   };
 
   return (
-    <div className="py-20 max-w-md mx-auto px-4 text-left">
-      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 shadow-xl">
+    <div className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        {/* Left Side: Illustrated Tech Mascot Panel (Desktop) */}
+        <div className="hidden lg:block">
+          <AuthMascotsPanel />
+        </div>
+
+        {/* Right Side: Form Card */}
+        <div className="w-full max-w-md mx-auto">
+          <GlassCard className="p-6 sm:p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 shadow-xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Get Started</h1>
           <p className="text-slate-600 dark:text-slate-400 text-xs mt-2">Create your account to initiate your project.</p>
@@ -208,5 +217,7 @@ export default function Signup() {
         </div>
       </GlassCard>
     </div>
+  </div>
+</div>
   );
 }
