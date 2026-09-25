@@ -30,9 +30,9 @@ export default function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-background text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-300">
-      <header className="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background/80 backdrop-blur sticky top-0 z-50 transition-colors duration-300 relative overflow-hidden">
+      <header className="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background/80 backdrop-blur sticky top-0 z-50 transition-colors duration-300 relative">
         {/* Ambient Radial Gradient Glow behind Header */}
-        <div className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-primary/10 via-accent/15 to-primary/10 blur-2xl pointer-events-none opacity-70 dark:opacity-50" />
+        <div className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-primary/10 via-accent/15 to-primary/10 blur-2xl pointer-events-none opacity-70 dark:opacity-50 overflow-hidden" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
           <Link to="/">
