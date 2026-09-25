@@ -5,6 +5,7 @@ import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
 import AnimatedButton from '../../components/AnimatedButton';
 import SocialLinks from '../../components/SocialLinks';
+import ContactMascot from '../../components/ContactMascot';
 import { supabase } from '../../lib/supabase';
 
 export default function Contact() {
@@ -13,6 +14,7 @@ export default function Contact() {
 
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({ name: '', email: '', message: '' });
+  const [focusedField, setFocusedField] = useState<'name' | 'email' | 'message' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
@@ -274,6 +276,9 @@ export default function Contact() {
       <div className="max-w-xl mx-auto">
         <ScrollReveal delay={0.2}>
           <GlassCard className="p-8 border border-slate-200/80 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 text-left">
+            {/* Animated Character Mascot */}
+            <ContactMascot focusedField={focusedField} isSuccess={isSuccess} />
+
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 text-center">Send Us a Direct Message</h3>
 
             {isSuccess ? (
@@ -310,6 +315,8 @@ export default function Contact() {
                     type="text"
                     value={form.name}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField('name')}
+                    onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors ${
                       errors.name ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
@@ -330,6 +337,8 @@ export default function Contact() {
                     type="text"
                     value={form.email}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors ${
                       errors.email ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
@@ -350,6 +359,8 @@ export default function Contact() {
                     rows={4}
                     value={form.message}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField('message')}
+                    onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
                     className={`mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary transition-colors h-32 ${
                       errors.message ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-800'
