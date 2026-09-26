@@ -157,24 +157,27 @@ export default function OrderDetail() {
 
   const handleDeleteOrder = async () => {
     if (!order) return;
-    if (order.status === 'in_progress') {
+    if (!['completed', 'cancelled', 'rejected'].includes(order.status)) {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
-    // Try soft delete first
-    const { error: updateError } = await supabase
+    if (order.slip_url) {
+      try {
+        await supabase.storage.from('payment-slips').remove([order.slip_url]);
+      } catch (err) {
+        console.warn('Error removing slip file:', err);
+      }
+    }
+
+    const { data, error } = await supabase
       .from('orders')
-      .update({ deleted_by_admin: true })
-      .eq('id', order.id);
+      .delete()
+      .eq('id', order.id)
+      .select();
 
-    if (updateError) {
-      // Fallback to hard delete if soft delete column is not present or schema cache is stale
-      const { error: deleteError } = await supabase
-        .from('orders')
-        .delete()
-        .eq('id', order.id);
-
-      if (deleteError) throw new Error(deleteError.message || 'Failed to delete order.');
+    if (error) throw new Error(error.message || 'Failed to delete order.');
+    if (!data || data.length === 0) {
+      throw new Error('Failed to delete order: database permission denied or order not found.');
     }
 
     navigate('/admin/orders');

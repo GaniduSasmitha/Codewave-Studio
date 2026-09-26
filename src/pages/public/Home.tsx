@@ -171,8 +171,7 @@ export default function Home() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      const visibleOrders = (data || []).filter((o: any) => o.deleted_by_user !== true);
-      setOrders(visibleOrders);
+      setOrders(data || []);
     } catch (err) {
       console.error('Error fetching orders:', err);
     } finally {
@@ -302,21 +301,23 @@ export default function Home() {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
-    // Try soft delete first
-    const { data: updateData, error: updateError } = await supabase
+    if (order.slip_url) {
+      try {
+        await supabase.storage.from('payment-slips').remove([order.slip_url]);
+      } catch (err) {
+        console.warn('Error removing slip file:', err);
+      }
+    }
+
+    const { data, error } = await supabase
       .from('orders')
-      .update({ deleted_by_user: true })
+      .delete()
       .eq('id', order.id)
       .select();
 
-    if (updateError || !updateData || updateData.length === 0) {
-      // Fallback to hard delete
-      const { error: deleteError } = await supabase
-        .from('orders')
-        .delete()
-        .eq('id', order.id);
-
-      if (deleteError) throw new Error(deleteError.message || 'Failed to delete order.');
+    if (error) throw new Error(error.message || 'Failed to delete order.');
+    if (!data || data.length === 0) {
+      throw new Error('Failed to delete order: database permission denied or order not found.');
     }
 
     setOrders((prev) => prev.filter((o) => o.id !== order.id));

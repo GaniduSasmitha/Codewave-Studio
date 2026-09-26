@@ -89,12 +89,16 @@ export default function MessagesList() {
   };
 
   const handleDeleteMessage = async (msgId: string) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('contact_messages')
       .delete()
-      .eq('id', msgId);
+      .eq('id', msgId)
+      .select();
 
     if (error) throw new Error(error.message || 'Failed to delete message.');
+    if (!data || data.length === 0) {
+      throw new Error('Failed to delete message: database permission denied or message not found.');
+    }
 
     setMessages((prev) => prev.filter((m) => m.id !== msgId));
     if (selectedMessage?.id === msgId) {
