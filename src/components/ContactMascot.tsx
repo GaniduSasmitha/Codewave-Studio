@@ -9,30 +9,16 @@ interface ContactMascotProps {
 export default function ContactMascot({ focusedField, isSuccess }: ContactMascotProps) {
   const headRef = useRef<HTMLDivElement>(null);
   const [cursorEyeOffset, setCursorEyeOffset] = useState({ x: 0, y: 0 });
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-  // Check for mobile/touch devices
+  // Track mouse and touch cursor for smooth eye movement when no field is focused
   useEffect(() => {
-    const checkTouch = () => {
-      setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
-    };
-    checkTouch();
-    window.addEventListener('resize', checkTouch);
-    return () => window.removeEventListener('resize', checkTouch);
-  }, []);
-
-  // Track mouse cursor for smooth eye movement when no field is focused
-  useEffect(() => {
-    if (isTouchDevice) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (clientX: number, clientY: number) => {
       if (!headRef.current) return;
       const rect = headRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      const deltaX = e.clientX - centerX;
-      const deltaY = e.clientY - centerY;
+      const deltaX = clientX - centerX;
+      const deltaY = clientY - centerY;
       const distance = Math.hypot(deltaX, deltaY);
 
       if (distance < 1) {
@@ -51,9 +37,38 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isTouchDevice]);
+    const handleMouseMove = (e: MouseEvent) => {
+      handleMove(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      handleMove(e.clientX, e.clientY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('pointermove', handlePointerMove);
+    };
+  }, []);
 
   // Speech text calculation
   let speechText = "Hi! Tell us about your project. 👋";
@@ -78,8 +93,8 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
   } else if (focusedField === 'message') {
     finalEyeOffset = { x: 0, y: 4 };
   } else {
-    // Default to cursor-tracking eye position on desktop
-    finalEyeOffset = isTouchDevice ? { x: 0, y: 0 } : cursorEyeOffset;
+    // Default to cursor/touch-tracking eye position on all devices including mobile
+    finalEyeOffset = cursorEyeOffset;
   }
 
   // Head transform / lean

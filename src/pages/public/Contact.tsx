@@ -196,10 +196,10 @@ export default function Contact() {
               <div className="min-w-0">
                 <p className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">EMAIL</p>
                 <a
-                  href="mailto:ganiduudage@gmail.com"
+                  href="mailto:codewave.studio.tech@gmail.com"
                   className="text-sm font-semibold text-slate-900 dark:text-white font-mono hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors block truncate mt-1"
                 >
-                  ganiduudage@gmail.com
+                  codewave.studio.tech@gmail.com
                 </a>
               </div>
             </motion.div>

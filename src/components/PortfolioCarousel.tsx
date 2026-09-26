@@ -102,12 +102,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
   };
 
   // Card click handler
-  const handleCardClick = (index: number, project: Project) => {
-    if (index === activeIndex) {
-      if (project.link) {
-        window.open(project.link, '_blank', 'noopener,noreferrer');
-      }
-    } else {
+  const handleCardClick = (index: number) => {
+    if (index !== activeIndex) {
       setActiveIndex(index);
     }
   };
@@ -221,7 +217,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                 }}
                 className={`w-[290px] xs:w-[330px] sm:w-[380px] md:w-[410px] ${isCenter ? 'cursor-pointer' : 'cursor-pointer hover:opacity-90'
                   }`}
-                onClick={() => handleCardClick(i, project)}
+                onClick={() => handleCardClick(i)}
               >
                 <GlassCard
                   hoverEffect={false}
@@ -298,25 +294,14 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                         ))}
                       </div>
 
-                      {/* Action Link / Coming Soon Banner */}
-                      <div className="pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-between">
-                        {project.link ? (
-                          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-accent group/link">
-                            <span>View Project</span>
-                            <span className="transition-transform group-hover/link:translate-x-1">→</span>
-                          </div>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-950/50 px-3 py-1 rounded border border-slate-200 dark:border-slate-800/80 cursor-not-allowed select-none">
-                            <span>Case Study Coming Soon</span>
-                          </span>
-                        )}
-
-                        {!isCenter && (
+                      {/* Action Link section hidden for now for users */}
+                      {!isCenter && (
+                        <div className="pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-end">
                           <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 italic">
                             Click to inspect
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </GlassCard>
