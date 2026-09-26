@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
+import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
 
 interface Profile {
   full_name: string;
@@ -15,6 +17,7 @@ interface Order {
   package: string;
   price: number;
   status: string;
+  slip_url?: string | null;
   created_at: string;
   profiles?: Profile | Profile[];
 }
@@ -86,6 +89,19 @@ export default function OrdersList() {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  const handleDeleteOrder = async (order: Order) => {
+    if (order.slip_url) {
+      try {
+        await supabase.storage.from('payment-slips').remove([order.slip_url]);
+      } catch (err) {
+        console.warn('Error removing slip file:', err);
+      }
+    }
+    const { error } = await supabase.from('orders').delete().eq('id', order.id);
+    if (error) throw error;
+    setOrders((prev) => prev.filter((o) => o.id !== order.id));
+  };
 
   // Filter and Sort logic
   useEffect(() => {
@@ -165,47 +181,66 @@ export default function OrdersList() {
                 No orders match the selected filters.
               </GlassCard>
             ) : (
-              filteredOrders.map((order) => {
-                let clientName = "Unknown Client";
-                if (order.profiles) {
-                  const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
-                  clientName = prof?.full_name || "Unknown Client";
-                }
-                return (
-                  <GlassCard key={order.id} className="p-5 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
-                        <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</span>
-                      </div>
-                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
-                        statusColors[order.status] || "bg-slate-500/10 text-slate-500 dark:text-slate-400"
-                      }`}>
-                        {order.status.replace(/_/g, ' ')}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs border-t border-b border-slate-200 dark:border-slate-800/60 py-3">
-                      <div>
-                        <span className="text-slate-500 block text-[10px] uppercase font-semibold">Package</span>
-                        <span className="font-semibold text-slate-700 dark:text-slate-300">{planNames[order.package] || "Custom Project"}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-slate-500 block text-[10px] uppercase font-semibold">Price</span>
-                        <span className="font-bold text-slate-900 dark:text-white">${order.price}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between pt-1">
-                      <span className="text-[11px] text-slate-500 font-mono">{new Date(order.created_at).toLocaleDateString()}</span>
-                      <Link
-                        to={`/admin/orders/${order.id}`}
-                        className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-4 py-2 rounded font-bold min-h-[44px] flex items-center justify-center"
-                      >
-                        Manage
-                      </Link>
-                    </div>
-                  </GlassCard>
-                );
-              })
+              <AnimatePresence mode="popLayout">
+                {filteredOrders.map((order) => {
+                  let clientName = "Unknown Client";
+                  if (order.profiles) {
+                    const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
+                    clientName = prof?.full_name || "Unknown Client";
+                  }
+                  return (
+                    <motion.div
+                      key={order.id}
+                      initial={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9, height: 0, overflow: 'hidden', transition: { duration: 0.35 } }}
+                      layout
+                    >
+                      <GlassCard className="p-5 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
+                            <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</span>
+                          </div>
+                          <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                            statusColors[order.status] || "bg-slate-500/10 text-slate-500 dark:text-slate-400"
+                          }`}>
+                            {order.status.replace(/_/g, ' ')}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs border-t border-b border-slate-200 dark:border-slate-800/60 py-3">
+                          <div>
+                            <span className="text-slate-500 block text-[10px] uppercase font-semibold">Package</span>
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{planNames[order.package] || "Custom Project"}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-slate-500 block text-[10px] uppercase font-semibold">Price</span>
+                            <span className="font-bold text-slate-900 dark:text-white">${order.price}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-1 gap-2">
+                          <span className="text-[11px] text-slate-500 font-mono">{new Date(order.created_at).toLocaleDateString()}</span>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              to={`/admin/orders/${order.id}`}
+                              className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1.5 rounded-lg font-bold min-h-[38px] flex items-center justify-center"
+                            >
+                              Manage
+                            </Link>
+                            <AnimatedDeleteButton
+                              onDelete={() => handleDeleteOrder(order)}
+                              isBlocked={order.status === 'in_progress'}
+                              blockedMessage="Cannot delete an order that is currently in progress."
+                              confirmTitle="Delete Client Order"
+                              confirmMessage={`Are you sure you want to permanently delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}
+                              size="sm"
+                            />
+                          </div>
+                        </div>
+                      </GlassCard>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             )}
           </div>
 
@@ -232,42 +267,59 @@ export default function OrdersList() {
                       </td>
                     </tr>
                   ) : (
-                    filteredOrders.map((order) => {
-                      let clientName = "Unknown Client";
-                      if (order.profiles) {
-                        const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
-                        clientName = prof?.full_name || "Unknown Client";
-                      }
+                    <AnimatePresence mode="popLayout">
+                      {filteredOrders.map((order) => {
+                        let clientName = "Unknown Client";
+                        if (order.profiles) {
+                          const prof = Array.isArray(order.profiles) ? order.profiles[0] : order.profiles;
+                          clientName = prof?.full_name || "Unknown Client";
+                        }
 
-                      return (
-                        <tr key={order.id} className="hover:bg-slate-100/60 dark:hover:bg-slate-900/10 transition-colors">
-                          <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">{clientName}</td>
-                          <td className="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</td>
-                          <td className="px-6 py-4 font-semibold text-slate-700 dark:text-slate-300">
-                            {planNames[order.package] || "Custom Project"}
-                          </td>
-                          <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">${order.price}</td>
-                          <td className="px-6 py-4">
-                            <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
-                              statusColors[order.status] || "bg-slate-500/10 text-slate-500 dark:text-slate-400"
-                            }`}>
-                              {order.status.replace(/_/g, ' ')}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-xs text-slate-500 font-mono">
-                            {new Date(order.created_at).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <Link
-                              to={`/admin/orders/${order.id}`}
-                              className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
-                            >
-                              Manage
-                            </Link>
-                          </td>
-                        </tr>
-                      );
-                    })
+                        return (
+                          <motion.tr
+                            key={order.id}
+                            initial={{ opacity: 1 }}
+                            exit={{ opacity: 0, scaleY: 0, transition: { duration: 0.3 } }}
+                            className="hover:bg-slate-100/60 dark:hover:bg-slate-900/10 transition-colors"
+                          >
+                            <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">{clientName}</td>
+                            <td className="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</td>
+                            <td className="px-6 py-4 font-semibold text-slate-700 dark:text-slate-300">
+                              {planNames[order.package] || "Custom Project"}
+                            </td>
+                            <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">${order.price}</td>
+                            <td className="px-6 py-4">
+                              <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                                statusColors[order.status] || "bg-slate-500/10 text-slate-500 dark:text-slate-400"
+                              }`}>
+                                {order.status.replace(/_/g, ' ')}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-xs text-slate-500 font-mono">
+                              {new Date(order.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <Link
+                                  to={`/admin/orders/${order.id}`}
+                                  className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
+                                >
+                                  Manage
+                                </Link>
+                                <AnimatedDeleteButton
+                                  onDelete={() => handleDeleteOrder(order)}
+                                  isBlocked={order.status === 'in_progress'}
+                                  blockedMessage="Cannot delete an order that is currently in progress."
+                                  confirmTitle="Delete Client Order"
+                                  confirmMessage={`Are you sure you want to permanently delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}
+                                  size="sm"
+                                />
+                              </div>
+                            </td>
+                          </motion.tr>
+                        );
+                      })}
+                    </AnimatePresence>
                   )}
                 </tbody>
               </table>

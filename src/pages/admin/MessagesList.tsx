@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
+import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
 
 export interface ContactMessage {
   id: string;
@@ -86,6 +88,20 @@ export default function MessagesList() {
     }
   };
 
+  const handleDeleteMessage = async (msgId: string) => {
+    const { error } = await supabase
+      .from('contact_messages')
+      .delete()
+      .eq('id', msgId);
+
+    if (error) throw error;
+
+    setMessages((prev) => prev.filter((m) => m.id !== msgId));
+    if (selectedMessage?.id === msgId) {
+      setSelectedMessage(null);
+    }
+  };
+
   const copyEmailToClipboard = (email: string) => {
     navigator.clipboard.writeText(email);
     setCopied(true);
@@ -145,55 +161,73 @@ export default function MessagesList() {
                 No messages match the current filter.
               </GlassCard>
             ) : (
-              filteredMessages.map((msg) => {
-                const isSelected = selectedMessage?.id === msg.id;
-                const isUnread = msg.status === 'unread';
+              <AnimatePresence mode="popLayout">
+                {filteredMessages.map((msg) => {
+                  const isSelected = selectedMessage?.id === msg.id;
+                  const isUnread = msg.status === 'unread';
 
-                return (
-                  <GlassCard
-                    key={msg.id}
-                    onClick={() => handleOpenMessage(msg)}
-                    className={`p-4 cursor-pointer border transition-all duration-200 ${
-                      isSelected
-                        ? 'border-cyan-500/50 bg-white dark:bg-slate-900/60 shadow-lg shadow-cyan-500/5'
-                        : isUnread
-                        ? 'border-cyan-500/30 bg-indigo-50/50 dark:bg-slate-900/40 hover:border-cyan-500/50 font-medium'
-                        : 'border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-slate-300 dark:hover:border-slate-700 opacity-90 hover:opacity-100'
-                    }`}
-                    hoverEffect={false}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {/* Status Indicator Badge */}
-                        <span
-                          className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
-                            isUnread ? 'bg-cyan-500 dark:bg-cyan-400 animate-pulse shadow-sm shadow-cyan-400' : 'bg-slate-400 dark:bg-slate-700'
-                          }`}
-                        />
-                        <span className={`text-sm truncate ${isUnread ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
-                          {msg.name}
-                        </span>
-                      </div>
+                  return (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9, height: 0, overflow: 'hidden', transition: { duration: 0.35 } }}
+                      layout
+                    >
+                      <GlassCard
+                        onClick={() => handleOpenMessage(msg)}
+                        className={`p-4 cursor-pointer border transition-all duration-200 ${
+                          isSelected
+                            ? 'border-cyan-500/50 bg-white dark:bg-slate-900/60 shadow-lg shadow-cyan-500/5'
+                            : isUnread
+                            ? 'border-cyan-500/30 bg-indigo-50/50 dark:bg-slate-900/40 hover:border-cyan-500/50 font-medium'
+                            : 'border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-slate-300 dark:hover:border-slate-700 opacity-90 hover:opacity-100'
+                        }`}
+                        hoverEffect={false}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            {/* Status Indicator Badge */}
+                            <span
+                              className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
+                                isUnread ? 'bg-cyan-500 dark:bg-cyan-400 animate-pulse shadow-sm shadow-cyan-400' : 'bg-slate-400 dark:bg-slate-700'
+                              }`}
+                            />
+                            <span className={`text-sm truncate ${isUnread ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+                              {msg.name}
+                            </span>
+                          </div>
 
-                      <span className="text-[11px] font-mono text-slate-500 whitespace-nowrap">
-                        {new Date(msg.created_at).toLocaleString([], {
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </span>
-                    </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-mono text-slate-500 whitespace-nowrap">
+                              {new Date(msg.created_at).toLocaleString([], {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </span>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <AnimatedDeleteButton
+                                onDelete={() => handleDeleteMessage(msg.id)}
+                                confirmTitle="Delete Contact Message"
+                                confirmMessage={`Are you sure you want to delete the message from ${msg.name}? This action cannot be undone.`}
+                                size="sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
 
-                    <div className="mt-1 ml-5">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{msg.email}</p>
-                      <p className={`text-xs mt-2 line-clamp-2 ${isUnread ? 'text-slate-800 dark:text-slate-200 font-normal' : 'text-slate-600 dark:text-slate-400'}`}>
-                        {msg.message}
-                      </p>
-                    </div>
-                  </GlassCard>
-                );
-              })
+                        <div className="mt-1 ml-5">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{msg.email}</p>
+                          <p className={`text-xs mt-2 line-clamp-2 ${isUnread ? 'text-slate-800 dark:text-slate-200 font-normal' : 'text-slate-600 dark:text-slate-400'}`}>
+                            {msg.message}
+                          </p>
+                        </div>
+                      </GlassCard>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             )}
           </div>
 
@@ -231,13 +265,21 @@ export default function MessagesList() {
                         </button>
                       </div>
                     </div>
-                    <button
-                      onClick={() => setSelectedMessage(null)}
-                      className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg p-1 cursor-pointer"
-                      title="Close message detail"
-                    >
-                      ✕
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <AnimatedDeleteButton
+                        onDelete={() => handleDeleteMessage(selectedMessage.id)}
+                        confirmTitle="Delete Contact Message"
+                        confirmMessage={`Are you sure you want to delete the message from ${selectedMessage.name}? This action cannot be undone.`}
+                        size="sm"
+                      />
+                      <button
+                        onClick={() => setSelectedMessage(null)}
+                        className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg p-1 cursor-pointer"
+                        title="Close message detail"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
 
                   <div>

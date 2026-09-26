@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
+import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
 
 interface Profile {
   id: string;
@@ -45,6 +46,7 @@ const statusColors: Record<string, string> = {
 
 export default function OrderDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   
   const [order, setOrder] = useState<Order | null>(null);
@@ -153,6 +155,20 @@ export default function OrderDetail() {
     }
   };
 
+  const handleDeleteOrder = async () => {
+    if (!order) return;
+    if (order.slip_url) {
+      try {
+        await supabase.storage.from('payment-slips').remove([order.slip_url]);
+      } catch (err) {
+        console.warn('Error removing slip file:', err);
+      }
+    }
+    const { error } = await supabase.from('orders').delete().eq('id', order.id);
+    if (error) throw error;
+    navigate('/admin/orders');
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20 min-h-[50svh]">
@@ -194,18 +210,30 @@ export default function OrderDetail() {
   return (
     <div className="max-w-6xl mx-auto text-left space-y-8 pb-16">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <Link to="/admin/orders" className="text-xs text-primary dark:text-accent hover:underline font-bold uppercase tracking-wider">
             ← Back to Orders List
           </Link>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Manage Project Scope</h1>
         </div>
-        <span className={`text-[10px] font-extrabold uppercase px-3 py-1 rounded-full ${
-          order ? statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400" : ""
-        }`}>
-          {order?.status.replace(/_/g, ' ')}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className={`text-[10px] font-extrabold uppercase px-3 py-1 rounded-full ${
+            order ? statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400" : ""
+          }`}>
+            {order?.status.replace(/_/g, ' ')}
+          </span>
+          {order && (
+            <AnimatedDeleteButton
+              onDelete={handleDeleteOrder}
+              isBlocked={order.status === 'in_progress'}
+              blockedMessage="Cannot delete an order that is currently in progress."
+              confirmTitle="Delete Order"
+              confirmMessage={`Are you sure you want to permanently delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}
+              size="md"
+            />
+          )}
+        </div>
       </div>
 
       {successMsg && (

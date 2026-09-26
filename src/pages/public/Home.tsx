@@ -9,6 +9,7 @@ import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import SlipUpload from '../../components/SlipUpload';
+import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
 
 import beadoriaImg from '../../assets/projects/beadoria.png';
 import fitnessTrackerImg from '../../assets/projects/fitness-tracker.png';
@@ -295,6 +296,19 @@ export default function Home() {
     }
   };
 
+  const handleDeleteOrder = async (order: Order) => {
+    if (order.slip_url) {
+      try {
+        await supabase.storage.from('payment-slips').remove([order.slip_url]);
+      } catch (err) {
+        console.warn('Error removing slip file:', err);
+      }
+    }
+    const { error } = await supabase.from('orders').delete().eq('id', order.id);
+    if (error) throw error;
+    setOrders((prev) => prev.filter((o) => o.id !== order.id));
+  };
+
   useEffect(() => {
     if (window.location.hash === '#orders-dashboard') {
       const el = document.getElementById('orders-dashboard');
@@ -397,125 +411,143 @@ export default function Home() {
             </GlassCard>
           ) : (
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
-              {orders.map((order) => {
-                let requirements = { businessName: '', preferredDomain: '', description: '' };
-                try {
-                  requirements = JSON.parse(order.requirements);
-                } catch (e) {
-                  requirements.description = order.requirements;
-                }
-                const isExpanded = expandedOrder === order.id;
-                const currentStepIndex = steps.findIndex((s) => s.id === order.status);
+              <AnimatePresence mode="popLayout">
+                {orders.map((order) => {
+                  let requirements = { businessName: '', preferredDomain: '', description: '' };
+                  try {
+                    requirements = JSON.parse(order.requirements);
+                  } catch (e) {
+                    requirements.description = order.requirements;
+                  }
+                  const isExpanded = expandedOrder === order.id;
+                  const currentStepIndex = steps.findIndex((s) => s.id === order.status);
 
-                return (
-                  <GlassCard
-                    key={order.id}
-                    className={`flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${isExpanded ? "md:col-span-2 lg:col-span-3 border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
-                      }`}
-                  >
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400"
-                          }`}>
-                          {order.status.replace(/_/g, ' ')}
-                        </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-500 font-mono">
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                          {requirements.businessName || planNames[order.package] || "Custom Project"}
-                        </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
-                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-300 mt-2">
-                          ${order.price}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Expanded Details and Timeline */}
-                    {isExpanded && (
-                      <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800/80 space-y-6 animate-fade-in text-left">
-                        {/* Timeline */}
-                        <div className="bg-slate-100 dark:bg-slate-950/40 p-6 rounded-xl border border-slate-200 dark:border-white/5">
-                          <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Project Timeline</h4>
-                          <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4">
-                            {/* Connector Line for Desktop */}
-                            <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-300 dark:bg-slate-800 -z-10 hidden md:block">
-                              <div
-                                className="h-full bg-primary transition-all duration-500"
-                                style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
-                              ></div>
-                            </div>
-
-                            {steps.map((step, idx) => {
-                              const isCompleted = idx < currentStepIndex;
-                              const isActive = idx === currentStepIndex;
-                              return (
-                                <div key={step.id} className="flex md:flex-col items-center gap-3 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
-                                  <div
-                                    className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${isCompleted ? "bg-primary border-primary text-white" :
-                                      isActive ? "bg-white dark:bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
-                                        "bg-slate-200 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-slate-500 dark:text-slate-600"
-                                      }`}
-                                  >
-                                    {isCompleted ? "✓" : idx + 1}
-                                  </div>
-                                  <span
-                                    className={`text-[10px] font-semibold ${isActive ? "text-accent font-bold" : isCompleted ? "text-slate-700 dark:text-slate-300" : "text-slate-500"
-                                      }`}
-                                  >
-                                    {step.label}
-                                  </span>
-                                </div>
-                              );
-                            })}
+                  return (
+                    <motion.div
+                      key={order.id}
+                      initial={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.85, height: 0, overflow: 'hidden', transition: { duration: 0.35 } }}
+                      layout
+                      className={isExpanded ? "md:col-span-2 lg:col-span-3" : ""}
+                    >
+                      <GlassCard
+                        className={`flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${isExpanded ? "border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
+                          }`}
+                      >
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center">
+                            <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${statusColors[order.status] || "bg-slate-500/10 text-slate-600 dark:text-slate-400"
+                              }`}>
+                              {order.status.replace(/_/g, ' ')}
+                            </span>
+                            <span className="text-xs text-slate-500 dark:text-slate-500 font-mono">
+                              {new Date(order.created_at).toLocaleDateString()}
+                            </span>
                           </div>
-                        </div>
 
-                        {/* Domain & Requirements details */}
-                        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-xs">
                           <div>
-                            <span className="text-slate-500 font-semibold uppercase tracking-wider block">Preferred Domain</span>
-                            <span className="text-slate-900 dark:text-white mt-1 block font-medium">{requirements.preferredDomain || "None specified"}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 font-semibold uppercase tracking-wider block">Project Description</span>
-                            <p className="text-slate-700 dark:text-slate-300 mt-1.5 p-3 bg-slate-100 dark:bg-slate-950/60 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
-                              {requirements.description}
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                              {requirements.businessName || planNames[order.package] || "Custom Project"}
+                            </h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
+                            <p className="text-sm font-semibold text-slate-800 dark:text-slate-300 mt-2">
+                              ${order.price}
                             </p>
                           </div>
                         </div>
 
-                        {/* Slip Upload Inline within expanded card */}
-                        {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && user?.id && (
-                          <div className="pt-4 border-t border-slate-200 dark:border-slate-800/60 max-w-xl">
-                            <SlipUpload
-                              orderId={order.id}
-                              userId={user.id}
-                              orderStatus={order.status}
-                              slipUrl={order.slip_url}
-                              onUploadSuccess={() => fetchOrders(true)}
-                            />
+                        {/* Expanded Details and Timeline */}
+                        {isExpanded && (
+                          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800/80 space-y-6 animate-fade-in text-left">
+                            {/* Timeline */}
+                            <div className="bg-slate-100 dark:bg-slate-950/40 p-6 rounded-xl border border-slate-200 dark:border-white/5">
+                              <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Project Timeline</h4>
+                              <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4">
+                                {/* Connector Line for Desktop */}
+                                <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-300 dark:bg-slate-800 -z-10 hidden md:block">
+                                  <div
+                                    className="h-full bg-primary transition-all duration-500"
+                                    style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
+                                  ></div>
+                                </div>
+
+                                {steps.map((step, idx) => {
+                                  const isCompleted = idx < currentStepIndex;
+                                  const isActive = idx === currentStepIndex;
+                                  return (
+                                    <div key={step.id} className="flex md:flex-col items-center gap-3 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
+                                      <div
+                                        className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${isCompleted ? "bg-primary border-primary text-white" :
+                                          isActive ? "bg-white dark:bg-background border-accent text-accent ring-2 ring-accent/30 animate-pulse" :
+                                            "bg-slate-200 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-slate-500 dark:text-slate-600"
+                                          }`}
+                                      >
+                                        {isCompleted ? "✓" : idx + 1}
+                                      </div>
+                                      <span
+                                        className={`text-[10px] font-semibold ${isActive ? "text-accent font-bold" : isCompleted ? "text-slate-700 dark:text-slate-300" : "text-slate-500"
+                                          }`}
+                                      >
+                                        {step.label}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Domain & Requirements details */}
+                            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-xs">
+                              <div>
+                                <span className="text-slate-500 font-semibold uppercase tracking-wider block">Preferred Domain</span>
+                                <span className="text-slate-900 dark:text-white mt-1 block font-medium">{requirements.preferredDomain || "None specified"}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 font-semibold uppercase tracking-wider block">Project Description</span>
+                                <p className="text-slate-700 dark:text-slate-300 mt-1.5 p-3 bg-slate-100 dark:bg-slate-950/60 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
+                                  {requirements.description}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Slip Upload Inline within expanded card */}
+                            {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && user?.id && (
+                              <div className="pt-4 border-t border-slate-200 dark:border-slate-800/60 max-w-xl">
+                                <SlipUpload
+                                  orderId={order.id}
+                                  userId={user.id}
+                                  orderStatus={order.status}
+                                  slipUrl={order.slip_url}
+                                  onUploadSuccess={() => fetchOrders(true)}
+                                />
+                              </div>
+                            )}
                           </div>
                         )}
-                      </div>
-                    )}
 
-                    <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60 flex justify-between items-center">
-                      <button
-                        onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                        className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>{isExpanded ? "Collapse Timeline" : "Track Progress"}</span>
-                        <span>{isExpanded ? "↑" : "→"}</span>
-                      </button>
-                    </div>
-                  </GlassCard>
-                );
-              })}
+                        <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60 flex justify-between items-center gap-3">
+                          <button
+                            onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                            className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>{isExpanded ? "Collapse Timeline" : "Track Progress"}</span>
+                            <span>{isExpanded ? "↑" : "→"}</span>
+                          </button>
+
+                          <AnimatedDeleteButton
+                            onDelete={() => handleDeleteOrder(order)}
+                            isBlocked={order.status === 'in_progress'}
+                            blockedMessage="Cannot delete an order that is currently in progress."
+                            confirmTitle="Delete Project Order"
+                            confirmMessage={`Are you sure you want to delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}
+                            size="sm"
+                          />
+                        </div>
+                      </GlassCard>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
           )}
 

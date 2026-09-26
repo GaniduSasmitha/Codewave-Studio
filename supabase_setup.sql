@@ -98,6 +98,12 @@ with check (
   and status = 'pending_verification'
 );
 
+drop policy if exists "Customers can delete own orders, admins delete all" on public.orders;
+create policy "Customers can delete own orders, admins delete all"
+on public.orders
+for delete
+using (customer_id = auth.uid() or public.is_admin(auth.uid()));
+
 -- 7. Trigger to Auto-Create Profile on Auth Signup
 create or replace function public.handle_new_user()
 returns trigger as $$
@@ -149,6 +155,14 @@ using (
   bucket_id = 'payment-slips'
 );
 
+drop policy if exists "Customers and admins can delete slips" on storage.objects;
+create policy "Customers and admins can delete slips"
+on storage.objects
+for delete
+using (
+  bucket_id = 'payment-slips'
+);
+
 -- 10. Contact Messages Table
 create table if not exists public.contact_messages (
   id uuid default gen_random_uuid() primary key,
@@ -179,5 +193,11 @@ drop policy if exists "Admins can update contact messages" on public.contact_mes
 create policy "Admins can update contact messages"
 on public.contact_messages
 for update
+using (public.is_admin(auth.uid()));
+
+drop policy if exists "Admins can delete contact messages" on public.contact_messages;
+create policy "Admins can delete contact messages"
+on public.contact_messages
+for delete
 using (public.is_admin(auth.uid()));
 
