@@ -8,9 +8,17 @@ create table if not exists public.profiles (
   id uuid references auth.users on delete cascade primary key,
   full_name text,
   role text default 'customer',
-  created_at timestamptz default now(),
-  constraint check_role check (role in ('customer', 'admin'))
+  created_at timestamptz default now()
 );
+
+-- Safely ensure columns exist on profiles table
+alter table public.profiles add column if not exists full_name text;
+alter table public.profiles add column if not exists role text default 'customer';
+
+-- Update check_role constraint on profiles table
+alter table public.profiles drop constraint if exists check_role;
+alter table public.profiles add constraint check_role 
+  check (role in ('customer', 'admin'));
 
 -- 2. Orders Table
 create table if not exists public.orders (
@@ -28,19 +36,14 @@ create table if not exists public.orders (
   deleted_by_user boolean default false
 );
 
--- Add soft delete columns if table already exists
+-- Safely ensure soft delete columns exist on orders table
 alter table public.orders add column if not exists deleted_by_admin boolean default false;
 alter table public.orders add column if not exists deleted_by_user boolean default false;
 
--- Update check_status constraint on existing orders table
+-- Update check_status constraint on orders table
 alter table public.orders drop constraint if exists check_status;
 alter table public.orders add constraint check_status 
   check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'));
-
--- Update check_role constraint on existing profiles table
-alter table public.profiles drop constraint if exists check_role;
-alter table public.profiles add constraint check_role 
-  check (role in ('customer', 'admin'));
 
 -- 3. Enable Row Level Security (RLS)
 alter table public.profiles enable row level security;
