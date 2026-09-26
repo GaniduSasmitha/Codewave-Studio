@@ -37,7 +37,7 @@ export default function AdminDashboard() {
       try {
         const { data, error } = await supabase
           .from('orders')
-          .select('id, package, price, status, created_at, deleted_by_admin')
+          .select('*')
           .order('created_at', { ascending: false });
 
         if (error) throw error;

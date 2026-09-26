@@ -301,12 +301,23 @@ export default function Home() {
     if (order.status === 'in_progress') {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
-    const { error } = await supabase
+
+    // Try soft delete first
+    const { error: updateError } = await supabase
       .from('orders')
       .update({ deleted_by_user: true })
       .eq('id', order.id);
 
-    if (error) throw new Error(error.message || 'Failed to delete order.');
+    if (updateError) {
+      // Fallback to hard delete if soft delete column is not present or schema cache is stale
+      const { error: deleteError } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', order.id);
+
+      if (deleteError) throw new Error(deleteError.message || 'Failed to delete order.');
+    }
+
     setOrders((prev) => prev.filter((o) => o.id !== order.id));
   };
 
