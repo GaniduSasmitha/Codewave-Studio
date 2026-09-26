@@ -298,18 +298,19 @@ export default function Home() {
   };
 
   const handleDeleteOrder = async (order: Order) => {
-    if (order.status === 'in_progress') {
+    if (!['completed', 'cancelled', 'rejected'].includes(order.status)) {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
     // Try soft delete first
-    const { error: updateError } = await supabase
+    const { data: updateData, error: updateError } = await supabase
       .from('orders')
       .update({ deleted_by_user: true })
-      .eq('id', order.id);
+      .eq('id', order.id)
+      .select();
 
-    if (updateError) {
-      // Fallback to hard delete if soft delete column is not present or schema cache is stale
+    if (updateError || !updateData || updateData.length === 0) {
+      // Fallback to hard delete
       const { error: deleteError } = await supabase
         .from('orders')
         .delete()
@@ -548,7 +549,7 @@ export default function Home() {
 
                           <AnimatedDeleteButton
                             onDelete={() => handleDeleteOrder(order)}
-                            isBlocked={order.status === 'in_progress'}
+                            isBlocked={!['completed', 'cancelled', 'rejected'].includes(order.status)}
                             blockedMessage="Cannot delete an order that is currently in progress."
                             confirmTitle="Delete Project Order"
                             confirmMessage={`Are you sure you want to delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}

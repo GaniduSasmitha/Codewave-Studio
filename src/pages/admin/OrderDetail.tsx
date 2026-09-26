@@ -237,7 +237,7 @@ export default function OrderDetail() {
           {order && (
             <AnimatedDeleteButton
               onDelete={handleDeleteOrder}
-              isBlocked={order.status === 'in_progress'}
+              isBlocked={!['completed', 'cancelled', 'rejected'].includes(order.status)}
               blockedMessage="Cannot delete an order that is currently in progress."
               confirmTitle="Delete Order"
               confirmMessage={`Are you sure you want to permanently delete order #${order.id.slice(0, 8)}? This action cannot be undone.`}

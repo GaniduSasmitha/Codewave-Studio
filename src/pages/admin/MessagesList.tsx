@@ -94,7 +94,7 @@ export default function MessagesList() {
       .delete()
       .eq('id', msgId);
 
-    if (error) throw error;
+    if (error) throw new Error(error.message || 'Failed to delete message.');
 
     setMessages((prev) => prev.filter((m) => m.id !== msgId));
     if (selectedMessage?.id === msgId) {

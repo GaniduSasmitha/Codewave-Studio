@@ -61,39 +61,24 @@ $$ language plpgsql security definer;
 -- 5. Profiles RLS Policies
 drop policy if exists "Users can read own profile, admins read all" on public.profiles;
 create policy "Users can read own profile, admins read all"
-on public.profiles for select
-using (id = auth.uid() or public.is_admin(auth.uid()) or auth.role() = 'authenticated');
+on public.profiles for select using (true);
 
 drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
-on public.profiles for update
-using (id = auth.uid() or auth.role() = 'authenticated');
+on public.profiles for update using (true);
 
--- 6. Orders RLS Policies (Fully Permissive for Authenticated Users)
+-- 6. Orders RLS Policies (100% Unrestricted for all operations)
 drop policy if exists "Customers can insert own orders, admins read/insert all" on public.orders;
-create policy "Customers can insert own orders, admins read/insert all"
-on public.orders for insert
-with check (auth.role() = 'authenticated');
-
 drop policy if exists "Customers can read own orders, admins read all" on public.orders;
-create policy "Customers can read own orders, admins read all"
-on public.orders for select
-using (auth.role() = 'authenticated');
-
 drop policy if exists "Admins can update orders" on public.orders;
-create policy "Admins can update orders"
-on public.orders for update
-using (auth.role() = 'authenticated');
-
 drop policy if exists "Customers can update own orders" on public.orders;
-create policy "Customers can update own orders"
-on public.orders for update
-using (auth.role() = 'authenticated');
-
 drop policy if exists "Customers can delete own orders, admins delete all" on public.orders;
-create policy "Customers can delete own orders, admins delete all"
-on public.orders for delete
-using (auth.role() = 'authenticated');
+drop policy if exists "Allow full access on orders" on public.orders;
+
+create policy "Allow full access on orders"
+on public.orders for all
+using (true)
+with check (true);
 
 -- 7. User Registration Trigger
 create or replace function public.handle_new_user()
@@ -122,23 +107,19 @@ on conflict (id) do update set public = true;
 -- 9. Storage RLS Policies for payment-slips bucket
 drop policy if exists "Customers and admins can read slips" on storage.objects;
 create policy "Customers and admins can read slips"
-on storage.objects for select
-using (bucket_id = 'payment-slips');
+on storage.objects for select using (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers can upload own slips" on storage.objects;
 create policy "Customers can upload own slips"
-on storage.objects for insert
-with check (bucket_id = 'payment-slips');
+on storage.objects for insert with check (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers can update own slips" on storage.objects;
 create policy "Customers can update own slips"
-on storage.objects for update
-using (bucket_id = 'payment-slips');
+on storage.objects for update using (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers and admins can delete slips" on storage.objects;
 create policy "Customers and admins can delete slips"
-on storage.objects for delete
-using (bucket_id = 'payment-slips');
+on storage.objects for delete using (bucket_id = 'payment-slips');
 
 -- 10. Contact Messages Table Setup & Permissive Policies
 create table if not exists public.contact_messages (
@@ -154,20 +135,15 @@ create table if not exists public.contact_messages (
 alter table public.contact_messages enable row level security;
 
 drop policy if exists "Anyone can insert contact messages" on public.contact_messages;
-create policy "Anyone can insert contact messages" 
-on public.contact_messages for insert with check (true);
-
 drop policy if exists "Admins can read contact messages" on public.contact_messages;
-create policy "Admins can read contact messages" 
-on public.contact_messages for select using (true);
-
 drop policy if exists "Admins can update contact messages" on public.contact_messages;
-create policy "Admins can update contact messages" 
-on public.contact_messages for update using (true);
-
 drop policy if exists "Admins can delete contact messages" on public.contact_messages;
-create policy "Admins can delete contact messages" 
-on public.contact_messages for delete using (true);
+drop policy if exists "Allow full access on contact_messages" on public.contact_messages;
+
+create policy "Allow full access on contact_messages"
+on public.contact_messages for all
+using (true)
+with check (true);
 
 -- 11. Enable Full Replica Identity & Realtime Publication for Live Sync
 alter table public.orders replica identity full;
@@ -191,3 +167,6 @@ exception
   when undefined_object then
     null;
 end $$;
+
+-- 12. Flush and reload schema cache
+NOTIFY pgrst, 'reload schema';
