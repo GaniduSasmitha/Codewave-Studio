@@ -53,11 +53,11 @@ export default function OrdersList() {
     try {
       const { data, error } = await supabase
         .from('orders')
-        .select('*, profiles:customer_id (full_name, role)')
-        .or('deleted_by_admin.is.null,deleted_by_admin.eq.false');
+        .select('*, profiles:customer_id (full_name, role)');
 
       if (error) throw error;
-      setOrders(data || []);
+      const visibleOrders = (data || []).filter((o: any) => o.deleted_by_admin !== true);
+      setOrders(visibleOrders);
     } catch (err) {
       console.error('Error fetching admin orders list:', err);
     } finally {

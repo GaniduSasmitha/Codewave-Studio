@@ -37,13 +37,12 @@ export default function AdminDashboard() {
       try {
         const { data, error } = await supabase
           .from('orders')
-          .select('id, package, price, status, created_at')
-          .or('deleted_by_admin.is.null,deleted_by_admin.eq.false')
+          .select('id, package, price, status, created_at, deleted_by_admin')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        const orderList = data || [];
+        const orderList = (data || []).filter((o: any) => o.deleted_by_admin !== true);
         setOrders(orderList);
 
         // Aggregate statistics

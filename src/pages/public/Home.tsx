@@ -168,11 +168,11 @@ export default function Home() {
         .from('orders')
         .select('*')
         .eq('customer_id', user.id)
-        .or('deleted_by_user.is.null,deleted_by_user.eq.false')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      const visibleOrders = (data || []).filter((o: any) => o.deleted_by_user !== true);
+      setOrders(visibleOrders);
     } catch (err) {
       console.error('Error fetching orders:', err);
     } finally {

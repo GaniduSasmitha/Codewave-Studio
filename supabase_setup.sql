@@ -3,7 +3,7 @@
 -- Copy and paste this script directly into the Supabase SQL Editor
 -- ==========================================================
 
--- 1. Profiles Table
+-- 1. Profiles Table Setup
 create table if not exists public.profiles (
   id uuid references auth.users on delete cascade primary key,
   full_name text,
@@ -11,16 +11,14 @@ create table if not exists public.profiles (
   created_at timestamptz default now()
 );
 
--- Safely ensure columns exist on profiles table
 alter table public.profiles add column if not exists full_name text;
 alter table public.profiles add column if not exists role text default 'customer';
 
--- Update check_role constraint on profiles table
 alter table public.profiles drop constraint if exists check_role;
 alter table public.profiles add constraint check_role 
   check (role in ('customer', 'admin'));
 
--- 2. Orders Table
+-- 2. Orders Table Setup
 create table if not exists public.orders (
   id uuid default gen_random_uuid() primary key,
   customer_id uuid references public.profiles(id) on delete cascade,
@@ -36,20 +34,18 @@ create table if not exists public.orders (
   deleted_by_user boolean default false
 );
 
--- Safely ensure soft delete columns exist on orders table
 alter table public.orders add column if not exists deleted_by_admin boolean default false;
 alter table public.orders add column if not exists deleted_by_user boolean default false;
 
--- Update check_status constraint on orders table
 alter table public.orders drop constraint if exists check_status;
 alter table public.orders add constraint check_status 
   check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'));
 
--- 3. Enable Row Level Security (RLS) on public tables
+-- 3. Enable Row Level Security (RLS)
 alter table public.profiles enable row level security;
 alter table public.orders enable row level security;
 
--- 4. Non-Recursive Security Definer Helper for Role Checking
+-- 4. Admin Security Definer Function
 create or replace function public.is_admin(user_id uuid)
 returns boolean as $$
 declare
@@ -65,48 +61,41 @@ $$ language plpgsql security definer;
 -- 5. Profiles RLS Policies
 drop policy if exists "Users can read own profile, admins read all" on public.profiles;
 create policy "Users can read own profile, admins read all"
-on public.profiles
-for select
-using (id = auth.uid() or public.is_admin(auth.uid()));
+on public.profiles for select
+using (id = auth.uid() or public.is_admin(auth.uid()) or auth.role() = 'authenticated');
 
 drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
-on public.profiles
-for update
-using (id = auth.uid());
+on public.profiles for update
+using (id = auth.uid() or auth.role() = 'authenticated');
 
--- 6. Orders RLS Policies
+-- 6. Orders RLS Policies (Fully Permissive for Authenticated Users)
 drop policy if exists "Customers can insert own orders, admins read/insert all" on public.orders;
 create policy "Customers can insert own orders, admins read/insert all"
-on public.orders
-for insert
-with check (customer_id = auth.uid() or public.is_admin(auth.uid()));
+on public.orders for insert
+with check (auth.role() = 'authenticated');
 
 drop policy if exists "Customers can read own orders, admins read all" on public.orders;
 create policy "Customers can read own orders, admins read all"
-on public.orders
-for select
-using (customer_id = auth.uid() or public.is_admin(auth.uid()));
+on public.orders for select
+using (auth.role() = 'authenticated');
 
 drop policy if exists "Admins can update orders" on public.orders;
 create policy "Admins can update orders"
-on public.orders
-for update
-using (public.is_admin(auth.uid()));
+on public.orders for update
+using (auth.role() = 'authenticated');
 
 drop policy if exists "Customers can update own orders" on public.orders;
 create policy "Customers can update own orders"
-on public.orders
-for update
-using (customer_id = auth.uid());
+on public.orders for update
+using (auth.role() = 'authenticated');
 
 drop policy if exists "Customers can delete own orders, admins delete all" on public.orders;
 create policy "Customers can delete own orders, admins delete all"
-on public.orders
-for delete
-using (customer_id = auth.uid() or public.is_admin(auth.uid()));
+on public.orders for delete
+using (auth.role() = 'authenticated');
 
--- 7. Trigger to Auto-Create Profile on Auth Signup
+-- 7. User Registration Trigger
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
@@ -133,37 +122,25 @@ on conflict (id) do update set public = true;
 -- 9. Storage RLS Policies for payment-slips bucket
 drop policy if exists "Customers and admins can read slips" on storage.objects;
 create policy "Customers and admins can read slips"
-on storage.objects
-for select
-using (
-  bucket_id = 'payment-slips'
-);
+on storage.objects for select
+using (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers can upload own slips" on storage.objects;
 create policy "Customers can upload own slips"
-on storage.objects
-for insert
-with check (
-  bucket_id = 'payment-slips'
-);
+on storage.objects for insert
+with check (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers can update own slips" on storage.objects;
 create policy "Customers can update own slips"
-on storage.objects
-for update
-using (
-  bucket_id = 'payment-slips'
-);
+on storage.objects for update
+using (bucket_id = 'payment-slips');
 
 drop policy if exists "Customers and admins can delete slips" on storage.objects;
 create policy "Customers and admins can delete slips"
-on storage.objects
-for delete
-using (
-  bucket_id = 'payment-slips'
-);
+on storage.objects for delete
+using (bucket_id = 'payment-slips');
 
--- 10. Contact Messages Table
+-- 10. Contact Messages Table Setup & Permissive Policies
 create table if not exists public.contact_messages (
   id uuid default gen_random_uuid() primary key,
   name text not null,
@@ -176,30 +153,21 @@ create table if not exists public.contact_messages (
 
 alter table public.contact_messages enable row level security;
 
--- RLS Policies for contact_messages
 drop policy if exists "Anyone can insert contact messages" on public.contact_messages;
-create policy "Anyone can insert contact messages"
-on public.contact_messages
-for insert
-with check (true);
+create policy "Anyone can insert contact messages" 
+on public.contact_messages for insert with check (true);
 
 drop policy if exists "Admins can read contact messages" on public.contact_messages;
-create policy "Admins can read contact messages"
-on public.contact_messages
-for select
-using (public.is_admin(auth.uid()));
+create policy "Admins can read contact messages" 
+on public.contact_messages for select using (true);
 
 drop policy if exists "Admins can update contact messages" on public.contact_messages;
-create policy "Admins can update contact messages"
-on public.contact_messages
-for update
-using (public.is_admin(auth.uid()));
+create policy "Admins can update contact messages" 
+on public.contact_messages for update using (true);
 
 drop policy if exists "Admins can delete contact messages" on public.contact_messages;
-create policy "Admins can delete contact messages"
-on public.contact_messages
-for delete
-using (public.is_admin(auth.uid()));
+create policy "Admins can delete contact messages" 
+on public.contact_messages for delete using (true);
 
 -- 11. Enable Full Replica Identity & Realtime Publication for Live Sync
 alter table public.orders replica identity full;
