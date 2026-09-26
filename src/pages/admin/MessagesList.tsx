@@ -184,7 +184,7 @@ export default function MessagesList() {
                             ? 'border-cyan-500/50 bg-white dark:bg-slate-900/60 shadow-lg shadow-cyan-500/5'
                             : isUnread
                             ? 'border-cyan-500/30 bg-indigo-50/50 dark:bg-slate-900/40 hover:border-cyan-500/50 font-medium'
-                            : 'border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-slate-300 dark:hover:border-slate-700 opacity-90 hover:opacity-100'
+                            : 'border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 hover:border-slate-400 dark:hover:border-slate-600 opacity-90 hover:opacity-100'
                         }`}
                         hoverEffect={false}
                       >

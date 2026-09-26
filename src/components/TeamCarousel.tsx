@@ -220,7 +220,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                   hoverEffect={false}
                   className={`h-full flex flex-col justify-between items-center text-center p-6 sm:p-8 transition-all duration-300 border ${isCenter
                       ? 'border-primary/60 dark:border-accent/60 shadow-[0_12px_40px_-10px_rgba(99,102,241,0.35)] ring-2 ring-primary/20 dark:ring-accent/20 bg-white/95 dark:bg-slate-900/90'
-                      : 'border-slate-300 dark:border-white/10 bg-white/75 dark:bg-slate-900/40 shadow-lg'
+                      : 'border-slate-300 dark:border-slate-700/80 bg-white/75 dark:bg-slate-900/40 shadow-lg'
                     }`}
                 >
                   <div className="flex flex-col items-center text-center w-full">
@@ -239,7 +239,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-200 dark:via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 mx-auto flex-shrink-0 group hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300 block cursor-pointer"
                         title={`Visit ${member.name}'s LinkedIn profile`}
                       >
-                        <div className="w-full h-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950/90 flex items-center justify-center border border-slate-300 dark:border-white/10 relative">
+                        <div className="w-full h-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950/90 flex items-center justify-center border border-slate-300 dark:border-slate-700 relative">
                           {member.image ? (
                             <img
                               src={member.image}
@@ -262,7 +262,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                       </a>
                     ) : (
                       <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-br from-primary/40 via-slate-200 dark:via-slate-800 to-accent/40 shadow-xl shadow-primary/10 mb-6 mx-auto flex-shrink-0">
-                        <div className="w-full h-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950/90 flex items-center justify-center border border-slate-300 dark:border-white/10">
+                        <div className="w-full h-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950/90 flex items-center justify-center border border-slate-300 dark:border-slate-700">
                           {member.image ? (
                             <img
                               src={member.image}
@@ -323,7 +323,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                             setActiveIndex(i);
                           }
                         }}
-                        className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-950/60 hover:bg-primary/20 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-white/10 hover:border-primary/40 transition-all duration-200 shadow-sm"
+                        className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-950/60 hover:bg-primary/20 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-700 hover:border-primary/40 transition-all duration-200 shadow-sm"
                       >
                         <span>LinkedIn Profile</span>
                         <span>↗</span>
@@ -342,7 +342,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
             e.stopPropagation();
             prevMember();
           }}
-          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Previous team member"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -356,7 +356,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
             e.stopPropagation();
             nextMember();
           }}
-          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Next team member"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

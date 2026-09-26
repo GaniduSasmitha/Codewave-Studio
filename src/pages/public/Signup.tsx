@@ -94,7 +94,7 @@ export default function Signup() {
   return (
     <div className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
       {/* Single Unified Master Glass Card */}
-      <GlassCard className="p-0 border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-900/60 shadow-2xl backdrop-blur-2xl rounded-3xl overflow-hidden">
+      <GlassCard className="p-0 border border-slate-300 dark:border-slate-700/80 bg-white/90 dark:bg-slate-900/60 shadow-2xl backdrop-blur-2xl rounded-3xl overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[560px]">
           {/* Left/Top Column: Animated Mascots Stage */}
           <div className="lg:col-span-6 bg-slate-950/80 relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800/80 flex flex-col justify-center p-2 sm:p-4 lg:p-6">

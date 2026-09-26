@@ -88,7 +88,7 @@ export default function Services() {
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-12">
         {services.map((service, i) => (
           <ScrollReveal key={i} delay={i * 0.1}>
-            <GlassCard className="h-full flex flex-col justify-between p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/30">
+            <GlassCard className="h-full flex flex-col justify-between p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/30">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="text-4xl">{service.icon}</div>

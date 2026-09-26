@@ -77,7 +77,7 @@ export default function Pricing() {
             <GlassCard
               className={`h-full flex flex-col justify-between p-8 border relative ${tier.popular
                   ? 'border-primary/50 bg-indigo-50/50 dark:bg-slate-900/50 shadow-md'
-                  : 'border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/20'
+                  : 'border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/20'
                 }`}
             >
               {tier.popular && (
@@ -123,7 +123,7 @@ export default function Pricing() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          <div className="mt-8 bg-white/80 dark:bg-slate-950/20 backdrop-blur-lg border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-xl">
+          <div className="mt-8 bg-white/80 dark:bg-slate-950/20 backdrop-blur-lg border border-slate-300 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm text-slate-700 dark:text-slate-300">
                 <thead className="bg-slate-100 dark:bg-slate-950/60 text-xs uppercase text-slate-600 dark:text-slate-400 font-semibold">

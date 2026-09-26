@@ -139,7 +139,7 @@ export default function OrdersList() {
       </div>
 
       {/* Filters and Sorting Bar */}
-      <GlassCard className="p-4 flex flex-col md:flex-row justify-between gap-4 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+      <GlassCard className="p-4 flex flex-col md:flex-row justify-between gap-4 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-500 uppercase font-semibold">Status:</span>
@@ -202,7 +202,7 @@ export default function OrdersList() {
                       exit={{ opacity: 0, scale: 0.9, height: 0, overflow: 'hidden', transition: { duration: 0.35 } }}
                       layout
                     >
-                      <GlassCard className="p-5 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+                      <GlassCard className="p-5 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
@@ -252,7 +252,7 @@ export default function OrdersList() {
           </div>
 
           {/* Desktop Table View */}
-          <div className="hidden md:block bg-white/80 dark:bg-slate-950/20 backdrop-blur-lg border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-xl">
+          <div className="hidden md:block bg-white/80 dark:bg-slate-950/20 backdrop-blur-lg border border-slate-300 dark:border-slate-700/80 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm text-slate-700 dark:text-slate-300">
                 <thead className="bg-slate-100 dark:bg-slate-950/60 text-xs uppercase text-slate-600 dark:text-slate-400 font-semibold">

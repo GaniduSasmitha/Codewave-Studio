@@ -98,7 +98,7 @@ export default function OrderStatus() {
 
   if (errorMsg || !order) {
     return (
-      <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
+      <GlassCard className="p-12 text-center border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
         <div className="text-4xl mb-4">⚠️</div>
         <h3 className="text-xl font-bold text-slate-900 dark:text-white">Order not found</h3>
         <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">
@@ -142,14 +142,14 @@ export default function OrderStatus() {
               Receipt Rejected
             </span>
           )}
-          <span className="text-xs font-mono text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5 px-3 py-1 rounded">
+          <span className="text-xs font-mono text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-950/60 border border-slate-300 dark:border-slate-700/80 px-3 py-1 rounded">
             ID: {order.id.slice(0, 8)}...
           </span>
         </div>
       </div>
 
       {/* Visual Stepper */}
-      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+      <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
         <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-8">Project Timeline</h3>
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4">
           {/* Connector Line for Desktop */}
@@ -204,7 +204,7 @@ export default function OrderStatus() {
       </GlassCard>
 
       {/* Details Card */}
-      <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
+      <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
         <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
           <div>
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{requirements.businessName || "Project Order"}</h2>
@@ -229,7 +229,7 @@ export default function OrderStatus() {
 
         <div>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Project Description</span>
-          <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
+          <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-300 dark:border-slate-700/80 leading-relaxed whitespace-pre-wrap">
             {requirements.description}
           </p>
         </div>

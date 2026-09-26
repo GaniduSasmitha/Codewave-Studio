@@ -116,7 +116,7 @@ export default function NewOrder() {
       </div>
 
       {/* Progress Indicator */}
-      <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-200 dark:border-white/5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+      <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-300 dark:border-slate-700/80 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
         <span className={step === 1 ? "text-primary dark:text-accent font-extrabold" : step > 1 ? "text-primary" : ""}>1. Select Plan</span>
         <span className="text-slate-300 dark:text-slate-700">|</span>
         <span className={step === 2 ? "text-primary dark:text-accent font-extrabold" : step > 2 ? "text-primary" : ""}>2. Requirements</span>
@@ -137,7 +137,7 @@ export default function NewOrder() {
             <GlassCard
               key={pkg.id}
               onClick={() => handleSelectPackage(pkg.id, pkg.price)}
-              className="p-6 cursor-pointer border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+              className="p-6 cursor-pointer border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">{pkg.name}</h3>
@@ -154,10 +154,10 @@ export default function NewOrder() {
 
       {/* Step 2: Requirements */}
       {step === 2 && (
-        <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6" hoverEffect={false}>
+        <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-6" hoverEffect={false}>
           <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4 mb-2">
             <span className="text-sm font-semibold text-primary dark:text-accent uppercase tracking-wider">Selected plan:</span>
-            <span className="text-sm font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5 px-3 py-1 rounded">
+            <span className="text-sm font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950/60 border border-slate-300 dark:border-slate-700/80 px-3 py-1 rounded">
               {activePlan?.name} (${activePlan?.price})
             </span>
           </div>
@@ -216,7 +216,7 @@ export default function NewOrder() {
 
       {/* Step 3: Review & Confirm */}
       {step === 3 && (
-        <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
+        <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-6 animate-fade-in" hoverEffect={false}>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-4">Review Order Details</h2>
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
@@ -240,7 +240,7 @@ export default function NewOrder() {
 
           <div className="pt-2">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Design Notes & Scope</span>
-            <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
+            <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-300 dark:border-slate-700/80 leading-relaxed whitespace-pre-wrap">
               {description}
             </p>
           </div>

@@ -85,29 +85,29 @@ export default function AdminDashboard() {
         <>
           {/* Summary Stat Tiles */}
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Orders</h3>
               <p className="text-4xl font-extrabold text-slate-900 dark:text-white mt-3 font-mono">{stats.total}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Pending Verification</h3>
               <p className="text-4xl font-extrabold text-primary dark:text-accent mt-3 font-mono">{stats.pendingVerification}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Payments Verified</h3>
               <p className="text-4xl font-extrabold text-primary mt-3 font-mono">{stats.verified}</p>
             </GlassCard>
 
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</h3>
               <p className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3 font-mono">${stats.revenue}</p>
             </GlassCard>
           </div>
 
           {/* Recent Orders Showcase */}
-          <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
+          <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
             <div className="flex justify-between items-center mb-6">
               <SectionHeading
                 title="Recent Project"

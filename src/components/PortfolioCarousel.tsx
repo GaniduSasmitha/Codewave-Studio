@@ -227,7 +227,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                   hoverEffect={false}
                   className={`h-full flex flex-col justify-between overflow-hidden p-0 transition-all duration-300 border ${isCenter
                       ? 'border-primary/60 dark:border-accent/60 shadow-[0_12px_40px_-10px_rgba(99,102,241,0.35)] ring-2 ring-primary/20 dark:ring-accent/20 bg-white/95 dark:bg-slate-900/90'
-                      : 'border-slate-300 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 shadow-lg'
+                      : 'border-slate-300 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/40 shadow-lg'
                     }`}
                 >
                   {/* Image Header Area */}
@@ -291,7 +291,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                         {project.tags.map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/50 px-2 py-0.5 rounded border border-slate-200 dark:border-white/5"
+                            className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/50 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700/80"
                           >
                             {tag}
                           </span>
@@ -331,7 +331,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
             e.stopPropagation();
             prevCard();
           }}
-          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Previous project card"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -345,7 +345,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
             e.stopPropagation();
             nextCard();
           }}
-          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Next project card"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

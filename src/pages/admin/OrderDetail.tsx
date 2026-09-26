@@ -185,7 +185,7 @@ export default function OrderDetail() {
 
   if (errorMsg && !order) {
     return (
-      <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
+      <GlassCard className="p-12 text-center border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-12">
         <div className="text-4xl mb-4">⚠️</div>
         <h3 className="text-xl font-bold text-slate-900 dark:text-white">Order not found</h3>
         <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">{errorMsg}</p>
@@ -259,7 +259,7 @@ export default function OrderDetail() {
           {/* Left Columns - Client & Project Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Customer profile */}
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Customer Profile</h3>
               <div className="text-sm">
                 <p className="text-lg font-bold text-slate-900 dark:text-white">{clientProfile?.full_name || "Unknown Customer"}</p>
@@ -268,7 +268,7 @@ export default function OrderDetail() {
             </GlassCard>
 
             {/* Scope sheet details */}
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-6" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-6" hoverEffect={false}>
               <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">{requirements.businessName || "Project Details"}</h3>
@@ -293,7 +293,7 @@ export default function OrderDetail() {
 
               <div>
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Project Scope</span>
-                <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
+                <p className="text-slate-700 dark:text-slate-300 text-xs mt-2 bg-slate-100 dark:bg-slate-950/60 p-4 rounded border border-slate-300 dark:border-slate-700/80 leading-relaxed whitespace-pre-wrap">
                   {requirements.description}
                 </p>
               </div>
@@ -303,7 +303,7 @@ export default function OrderDetail() {
           {/* Right Column - Status Operations & Slip Viewer */}
           <div className="space-y-6">
             {/* Status transitions */}
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Verification Actions</h3>
               
               {/* Payment Verification Steps */}
@@ -363,7 +363,7 @@ export default function OrderDetail() {
             </GlassCard>
 
             {/* Receipt Preview */}
-            <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+            <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Payment Receipt</h3>
               {!order.slip_url ? (
                 <div className="py-12 border border-dashed border-slate-300 dark:border-slate-800 rounded-lg text-center text-xs text-slate-500">

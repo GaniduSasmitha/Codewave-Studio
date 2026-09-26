@@ -159,7 +159,7 @@ export default function Contact() {
 
       {/* Contact Details Card */}
       <ScrollReveal delay={0.1}>
-        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl shadow-xl shadow-slate-200/60 dark:shadow-2xl dark:shadow-black/50 space-y-6">
+        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl shadow-xl shadow-slate-200/60 dark:shadow-2xl dark:shadow-black/50 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             
             {/* Email Icon Block with Envelope Opening Hover Animation */}
@@ -275,7 +275,7 @@ export default function Contact() {
       {/* Inquiry Form */}
       <div className="max-w-xl mx-auto">
         <ScrollReveal delay={0.2}>
-          <GlassCard className="p-8 border border-slate-200/80 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 text-left">
+          <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 text-left">
             {/* Animated Character Mascot */}
             <ContactMascot focusedField={focusedField} isSuccess={isSuccess} />
 

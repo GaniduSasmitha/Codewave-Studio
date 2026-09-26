@@ -63,7 +63,7 @@ export default function About() {
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <GlassCard className="p-8 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 text-left">
+          <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 text-left">
             <h4 className="text-lg font-bold text-primary dark:text-accent mb-4">Core Numbers</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               <div>

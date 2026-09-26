@@ -406,7 +406,7 @@ export default function Home() {
               <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
             </div>
           ) : orders.length === 0 ? (
-            <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-8">
+            <GlassCard className="p-12 text-center border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-8">
               <div className="text-4xl mb-4">📂</div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active orders</h3>
               <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-sm mx-auto">
@@ -438,7 +438,7 @@ export default function Home() {
                       className={isExpanded ? "md:col-span-2 lg:col-span-3" : ""}
                     >
                       <GlassCard
-                        className={`flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${isExpanded ? "border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
+                        className={`flex flex-col justify-between border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300 ${isExpanded ? "border-primary/30 dark:border-primary/20 bg-slate-50 dark:bg-slate-950/40" : ""
                           }`}
                       >
                         <div className="space-y-4">
@@ -467,7 +467,7 @@ export default function Home() {
                         {isExpanded && (
                           <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800/80 space-y-6 animate-fade-in text-left">
                             {/* Timeline */}
-                            <div className="bg-slate-100 dark:bg-slate-950/40 p-6 rounded-xl border border-slate-200 dark:border-white/5">
+                            <div className="bg-slate-100 dark:bg-slate-950/40 p-6 rounded-xl border border-slate-300 dark:border-slate-700/80">
                               <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Project Timeline</h4>
                               <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4">
                                 {/* Connector Line for Desktop */}
@@ -511,7 +511,7 @@ export default function Home() {
                               </div>
                               <div>
                                 <span className="text-slate-500 font-semibold uppercase tracking-wider block">Project Description</span>
-                                <p className="text-slate-700 dark:text-slate-300 mt-1.5 p-3 bg-slate-100 dark:bg-slate-950/60 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap">
+                                <p className="text-slate-700 dark:text-slate-300 mt-1.5 p-3 bg-slate-100 dark:bg-slate-950/60 rounded border border-slate-300 dark:border-slate-700/80 leading-relaxed whitespace-pre-wrap">
                                   {requirements.description}
                                 </p>
                               </div>
@@ -583,7 +583,7 @@ export default function Home() {
                   </div>
 
                   {/* Progress Indicator */}
-                  <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">
+                  <div className="flex items-center gap-4 bg-slate-100 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-300 dark:border-slate-700/80 text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">
                     <span className={newOrderStep === 1 ? "text-primary dark:text-accent font-extrabold" : newOrderStep > 1 ? "text-primary" : ""}>1. Select Plan</span>
                     <span className="text-slate-300 dark:text-slate-700">|</span>
                     <span className={newOrderStep === 2 ? "text-primary dark:text-accent font-extrabold" : newOrderStep > 2 ? "text-primary" : ""}>2. Requirements</span>
@@ -604,7 +604,7 @@ export default function Home() {
                         <GlassCard
                           key={pkg.id}
                           onClick={() => handleSelectPackage(pkg.id, pkg.price)}
-                          className="p-5 cursor-pointer border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-950/20 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+                          className="p-5 cursor-pointer border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-950/20 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
                         >
                           <div>
                             <h4 className="text-base font-bold text-slate-900 dark:text-white">{pkg.name}</h4>
@@ -624,7 +624,7 @@ export default function Home() {
                     <div className="space-y-4">
                       <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3 mb-1">
                         <span className="text-xs font-semibold text-primary dark:text-accent uppercase tracking-wider">Selected plan:</span>
-                        <span className="text-xs font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5 px-2.5 py-1 rounded">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950/60 border border-slate-300 dark:border-slate-700/80 px-2.5 py-1 rounded">
                           {packages.find(p => p.id === selectedPackage)?.name} (${selectedPrice})
                         </span>
                       </div>
@@ -707,7 +707,7 @@ export default function Home() {
 
                       <div className="pt-1">
                         <span className="text-slate-500 font-semibold uppercase tracking-wider block text-xs">Design Notes & Scope</span>
-                        <p className="text-slate-700 dark:text-slate-300 text-xs mt-1.5 bg-slate-100 dark:bg-slate-950/60 p-3 rounded border border-slate-200 dark:border-white/5 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
+                        <p className="text-slate-700 dark:text-slate-300 text-xs mt-1.5 bg-slate-100 dark:bg-slate-950/60 p-3 rounded border border-slate-300 dark:border-slate-700/80 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
                           {description}
                         </p>
                       </div>
@@ -781,7 +781,7 @@ export default function Home() {
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
           {previewProjects.map((project, i) => (
             <ScrollReveal key={i} delay={i * 0.15}>
-              <GlassCard hoverEffect={false} className="group overflow-hidden p-0 relative rounded-2xl border border-slate-200 dark:border-white/5 bg-slate-100/50 dark:bg-slate-950/20">
+              <GlassCard hoverEffect={false} className="group overflow-hidden p-0 relative rounded-2xl border border-slate-300 dark:border-slate-700/80 bg-slate-100/50 dark:bg-slate-950/20">
                 <div className="aspect-video w-full overflow-hidden relative border-b border-slate-200 dark:border-slate-800">
                   {project.image ? (
                     <img
@@ -799,7 +799,7 @@ export default function Home() {
                     </>
                   )}
                 </div>
-                <div className="p-6 bg-white/90 dark:bg-slate-950/40 backdrop-blur border-t border-slate-200 dark:border-white/5 relative z-20">
+                <div className="p-6 bg-white/90 dark:bg-slate-950/40 backdrop-blur border-t border-slate-300 dark:border-slate-700/80 relative z-20">
                   <span className="text-xs font-semibold text-primary dark:text-accent uppercase tracking-wider">{project.category}</span>
                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-2 group-hover:text-primary transition-colors duration-300">
                     {project.title}

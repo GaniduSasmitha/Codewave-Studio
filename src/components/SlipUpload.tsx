@@ -275,13 +275,13 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   if (orderStatus === 'pending_verification' && !isReplacing) {
     const fileName = slipUrl ? slipUrl.split('/').pop() : "receipt-document";
     return (
-      <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/5 text-left" hoverEffect={false}>
+      <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/5 text-left" hoverEffect={false}>
         <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 font-semibold mb-2">
           <span className="text-xl">✅</span>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">Slip submitted — awaiting verification</h3>
         </div>
         <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">
-          Document: <span className="font-mono text-slate-800 dark:text-slate-300 bg-slate-100 dark:bg-slate-950/60 px-2 py-0.5 rounded border border-slate-200 dark:border-white/5">{fileName}</span>
+          Document: <span className="font-mono text-slate-800 dark:text-slate-300 bg-slate-100 dark:bg-slate-950/60 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700/80">{fileName}</span>
         </p>
 
         <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-3">
@@ -303,7 +303,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   }
 
   return (
-    <GlassCard className="p-6 border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/5 text-left space-y-4" hoverEffect={false}>
+    <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/5 text-left space-y-4" hoverEffect={false}>
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
@@ -378,10 +378,10 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                   src={filePreview}
                   alt="Receipt Preview"
                   onError={() => setPreviewFailed(true)}
-                  className="w-16 h-16 object-cover rounded-lg border border-slate-300 dark:border-white/10 shrink-0 bg-white dark:bg-slate-900"
+                  className="w-16 h-16 object-cover rounded-lg border border-slate-300 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-900"
                 />
               ) : (
-                <div className="w-16 h-16 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 flex items-center justify-center text-3xl shrink-0">
+                <div className="w-16 h-16 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-3xl shrink-0">
                   📑
                 </div>
               )}

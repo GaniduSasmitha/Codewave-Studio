@@ -81,7 +81,7 @@ export default function CustomerDashboard() {
           <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : orders.length === 0 ? (
-        <GlassCard className="p-12 text-center border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-8">
+        <GlassCard className="p-12 text-center border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 max-w-xl mx-auto mt-8">
           <div className="text-4xl mb-4">📂</div>
           <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active orders</h3>
           <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-sm mx-auto">
@@ -96,7 +96,7 @@ export default function CustomerDashboard() {
           {orders.map((order) => (
             <GlassCard
               key={order.id}
-              className="flex flex-col justify-between border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300"
+              className="flex flex-col justify-between border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 hover:border-primary/40 transition-all duration-300"
             >
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
