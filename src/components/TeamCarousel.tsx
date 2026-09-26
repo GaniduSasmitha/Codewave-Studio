@@ -24,6 +24,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
 
   // Screen size check for mobile responsiveness
   useEffect(() => {
@@ -57,20 +58,24 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [prevMember, nextMember]);
 
-  // Parallax mouse tilt calculation
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || !containerRef.current) return;
+  // Parallax mouse and touch cursor tilt calculation
+  const updateTilt = (clientX: number, clientY: number) => {
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = (e.clientX - rect.left) / rect.width - 0.5;
-    const mouseY = (e.clientY - rect.top) / rect.height - 0.5;
+    const mouseX = (clientX - rect.left) / rect.width - 0.5;
+    const mouseY = (clientY - rect.top) / rect.height - 0.5;
     setTilt({
-      x: mouseX * 16,
-      y: -mouseY * 12
+      x: mouseX * 20,
+      y: -mouseY * 14
     });
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    updateTilt(e.clientX, e.clientY);
+  };
+
   const handleMouseEnter = () => {
-    if (!isMobile) setIsHovered(true);
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
@@ -78,21 +83,62 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
     setTilt({ x: 0, y: 0 });
   };
 
+  // Touch events for mobile 3D tilt response
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length > 0) {
+      setIsHovered(true);
+      updateTilt(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length > 0) {
+      setIsHovered(true);
+      updateTilt(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
   // Card click handler
   const handleCardClick = (index: number) => {
+    if (isDraggingRef.current) return;
     if (index !== activeIndex) {
       setActiveIndex(index);
     }
   };
 
-  // Handle Drag End for touch / swipe navigation
+  // Handle Drag for touch / swipe navigation
+  const handleDragStart = () => {
+    isDraggingRef.current = false;
+    setIsHovered(true);
+  };
+
+  const handleDrag = (_: any, info: { offset: { x: number; y: number } }) => {
+    if (Math.abs(info.offset.x) > 5 || Math.abs(info.offset.y) > 5) {
+      isDraggingRef.current = true;
+    }
+    setTilt({
+      x: info.offset.x * 0.08,
+      y: -info.offset.y * 0.08
+    });
+  };
+
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
-    const threshold = 40;
-    if (info.offset.x < -threshold || info.velocity.x < -200) {
+    const threshold = 30;
+    if (info.offset.x < -threshold || info.velocity.x < -150) {
       nextMember();
-    } else if (info.offset.x > threshold || info.velocity.x > 200) {
+    } else if (info.offset.x > threshold || info.velocity.x > 150) {
       prevMember();
     }
+    setTimeout(() => {
+      isDraggingRef.current = false;
+    }, 50);
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
   };
 
   return (
@@ -103,7 +149,11 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="w-full h-[520px] sm:h-[560px] md:h-[580px] flex items-center justify-center relative"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        className="w-full h-[520px] sm:h-[560px] md:h-[580px] flex items-center justify-center relative touch-pan-y"
         style={{
           perspective: '1200px',
         }}
@@ -113,10 +163,11 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
           className="w-full h-full flex items-center justify-center relative"
           style={{
             transformStyle: 'preserve-3d',
+            touchAction: 'pan-y',
           }}
           animate={{
-            rotateX: isHovered && !isMobile ? tilt.y : 0,
-            rotateY: isHovered && !isMobile ? tilt.x : 0,
+            rotateX: isHovered ? tilt.y : 0,
+            rotateY: isHovered ? tilt.x : 0,
           }}
           transition={{
             type: 'spring',
@@ -124,9 +175,11 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
             damping: 18,
             mass: 0.5
           }}
-          drag={isMobile ? 'x' : false}
+          drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
+          onDragStart={handleDragStart}
+          onDrag={handleDrag}
           onDragEnd={handleDragEnd}
         >
           {members.map((member, i) => {
@@ -194,6 +247,10 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isDraggingRef.current) {
+                            e.preventDefault();
+                            return;
+                          }
                           if (!isCenter) {
                             e.preventDefault();
                             setActiveIndex(i);
@@ -248,6 +305,10 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isDraggingRef.current) {
+                            e.preventDefault();
+                            return;
+                          }
                           if (!isCenter) {
                             e.preventDefault();
                             setActiveIndex(i);
@@ -281,6 +342,10 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isDraggingRef.current) {
+                            e.preventDefault();
+                            return;
+                          }
                           if (!isCenter) {
                             e.preventDefault();
                             setActiveIndex(i);
@@ -299,13 +364,13 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
           })}
         </motion.div>
 
-        {/* Left Arrow Button */}
+        {/* Left Arrow Button - Hidden on Mobile View, visible on Desktop (md+) */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             prevMember();
           }}
-          className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Previous team member"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -313,13 +378,13 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
           </svg>
         </button>
 
-        {/* Right Arrow Button */}
+        {/* Right Arrow Button - Hidden on Mobile View, visible on Desktop (md+) */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             nextMember();
           }}
-          className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Next team member"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
