@@ -101,7 +101,7 @@ export default function Hero3D() {
 
   useEffect(() => {
     setWebGLAvailable(checkWebGL());
-    
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };

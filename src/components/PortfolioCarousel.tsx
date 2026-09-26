@@ -24,7 +24,6 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
   const [isHovered, setIsHovered] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDraggingRef = useRef(false);
 
   // Screen size check for mobile responsiveness
   useEffect(() => {
@@ -58,24 +57,20 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [prevCard, nextCard]);
 
-  // Parallax tilt calculation for mouse and touch cursor interaction
-  const updateTilt = (clientX: number, clientY: number) => {
-    if (!containerRef.current) return;
+  // Parallax tilt calculation on mouse move
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = (clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-    const mouseY = (clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
+    const mouseX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+    const mouseY = (e.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
     setTilt({
-      x: mouseX * 20, // rotateY angle shift
-      y: -mouseY * 14  // rotateX angle shift
+      x: mouseX * 16, // rotateY angle shift
+      y: -mouseY * 12 // rotateX angle shift
     });
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    updateTilt(e.clientX, e.clientY);
-  };
-
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (!isMobile) setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
@@ -83,29 +78,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
     setTilt({ x: 0, y: 0 });
   };
 
-  // Touch events for mobile 3D tilt response
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length > 0) {
-      setIsHovered(true);
-      updateTilt(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length > 0) {
-      setIsHovered(true);
-      updateTilt(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
-  };
-
   // Card click handler
   const handleCardClick = (index: number, project: Project) => {
-    if (isDraggingRef.current) return;
     if (index === activeIndex) {
       if (project.link) {
         window.open(project.link, '_blank', 'noopener,noreferrer');
@@ -115,34 +89,14 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
     }
   };
 
-  // Handle Drag for touch / swipe navigation
-  const handleDragStart = () => {
-    isDraggingRef.current = false;
-    setIsHovered(true);
-  };
-
-  const handleDrag = (_: any, info: { offset: { x: number; y: number } }) => {
-    if (Math.abs(info.offset.x) > 5 || Math.abs(info.offset.y) > 5) {
-      isDraggingRef.current = true;
-    }
-    setTilt({
-      x: info.offset.x * 0.08,
-      y: -info.offset.y * 0.08
-    });
-  };
-
+  // Handle Drag End for touch / mouse swipe navigation
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
-    const threshold = 30;
-    if (info.offset.x < -threshold || info.velocity.x < -150) {
+    const threshold = 40;
+    if (info.offset.x < -threshold || info.velocity.x < -200) {
       nextCard();
-    } else if (info.offset.x > threshold || info.velocity.x > 150) {
+    } else if (info.offset.x > threshold || info.velocity.x > 200) {
       prevCard();
     }
-    setTimeout(() => {
-      isDraggingRef.current = false;
-    }, 50);
-    setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
   };
 
   return (
@@ -153,11 +107,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
-        className="w-full h-[520px] sm:h-[560px] md:h-[600px] flex items-center justify-center relative touch-pan-y"
+        className="w-full h-[520px] sm:h-[560px] md:h-[600px] flex items-center justify-center relative"
         style={{
           perspective: '1200px',
         }}
@@ -167,11 +117,10 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
           className="w-full h-full flex items-center justify-center relative"
           style={{
             transformStyle: 'preserve-3d',
-            touchAction: 'pan-y',
           }}
           animate={{
-            rotateX: isHovered ? tilt.y : 0,
-            rotateY: isHovered ? tilt.x : 0,
+            rotateX: isHovered && !isMobile ? tilt.y : 0,
+            rotateY: isHovered && !isMobile ? tilt.x : 0,
           }}
           transition={{
             type: 'spring',
@@ -179,11 +128,9 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
             damping: 18,
             mass: 0.5
           }}
-          drag="x"
+          drag={isMobile ? 'x' : false}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
-          onDragStart={handleDragStart}
-          onDrag={handleDrag}
           onDragEnd={handleDragEnd}
         >
           {projects.map((project, i) => {
@@ -233,18 +180,16 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                   zIndex,
                   pointerEvents: isVisible ? 'auto' : 'none',
                 }}
-                className={`w-[290px] xs:w-[330px] sm:w-[380px] md:w-[410px] ${
-                  isCenter ? 'cursor-pointer' : 'cursor-pointer hover:opacity-90'
-                }`}
+                className={`w-[290px] xs:w-[330px] sm:w-[380px] md:w-[410px] ${isCenter ? 'cursor-pointer' : 'cursor-pointer hover:opacity-90'
+                  }`}
                 onClick={() => handleCardClick(i, project)}
               >
                 <GlassCard
                   hoverEffect={false}
-                  className={`h-full flex flex-col justify-between overflow-hidden p-0 transition-all duration-300 border ${
-                    isCenter
+                  className={`h-full flex flex-col justify-between overflow-hidden p-0 transition-all duration-300 border ${isCenter
                       ? 'border-primary/60 dark:border-accent/60 shadow-[0_12px_40px_-10px_rgba(99,102,241,0.35)] ring-2 ring-primary/20 dark:ring-accent/20 bg-white/95 dark:bg-slate-900/90'
                       : 'border-slate-300 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 shadow-lg'
-                  }`}
+                    }`}
                 >
                   {/* Image Header Area */}
                   <div className="aspect-video w-full overflow-hidden relative border-b border-slate-200 dark:border-slate-800">
@@ -252,9 +197,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                       <img
                         src={project.image}
                         alt={project.title}
-                        className={`w-full h-full object-cover transition-transform duration-500 ${
-                          isCenter ? 'group-hover:scale-105' : ''
-                        }`}
+                        className={`w-full h-full object-cover transition-transform duration-500 ${isCenter ? 'group-hover:scale-105' : ''
+                          }`}
                       />
                     ) : (
                       <>
@@ -268,11 +212,10 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                     {/* Project Category / Type Badge */}
                     {project.badge && (
                       <span
-                        className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-950/80 backdrop-blur-md shadow-md border ${
-                          project.badge === 'Company Project'
+                        className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-950/80 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
                             ? 'text-cyan-600 dark:text-cyan-400 border-cyan-500/30'
                             : 'text-amber-600 dark:text-amber-400 border-amber-500/30'
-                        }`}
+                          }`}
                       >
                         {project.badge}
                       </span>
@@ -291,11 +234,10 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                         {project.category}
                       </span>
                       <h3
-                        className={`text-xl font-bold transition-colors duration-300 ${
-                          isCenter
+                        className={`text-xl font-bold transition-colors duration-300 ${isCenter
                             ? 'text-slate-900 dark:text-white'
                             : 'text-slate-700 dark:text-slate-200'
-                        }`}
+                          }`}
                       >
                         {project.title}
                       </h3>
@@ -344,13 +286,13 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
           })}
         </motion.div>
 
-        {/* Left Arrow Button - Hidden on Mobile View, visible on Desktop (md+) */}
+        {/* Left Arrow Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             prevCard();
           }}
-          className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Previous project card"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -358,13 +300,13 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
           </svg>
         </button>
 
-        {/* Right Arrow Button - Hidden on Mobile View, visible on Desktop (md+) */}
+        {/* Right Arrow Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             nextCard();
           }}
-          className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
+          className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 cursor-pointer"
           aria-label="Next project card"
         >
           <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -380,11 +322,10 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
             key={idx}
             onClick={() => setActiveIndex(idx)}
             aria-label={`Go to project ${idx + 1}`}
-            className={`transition-all duration-300 rounded-full focus:outline-none cursor-pointer ${
-              idx === activeIndex
+            className={`transition-all duration-300 rounded-full focus:outline-none cursor-pointer ${idx === activeIndex
                 ? 'w-8 h-2.5 bg-gradient-to-r from-primary to-accent shadow-md'
                 : 'w-2.5 h-2.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
-            }`}
+              }`}
           />
         ))}
       </div>
