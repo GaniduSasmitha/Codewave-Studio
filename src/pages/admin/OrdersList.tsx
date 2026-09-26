@@ -56,7 +56,7 @@ export default function OrdersList() {
         .select('*, profiles:customer_id (full_name, role)');
 
       if (error) throw error;
-      const visibleOrders = (data || []).filter((o: any) => !o.deleted_by_admin);
+      const visibleOrders = (data || []).filter((o: any) => o.deleted_by_admin !== true);
       setOrders(visibleOrders);
     } catch (err) {
       console.error('Error fetching admin orders list:', err);

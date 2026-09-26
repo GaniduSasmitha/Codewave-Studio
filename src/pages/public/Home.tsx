@@ -171,7 +171,7 @@ export default function Home() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      const visibleOrders = (data || []).filter((o: any) => !o.deleted_by_user);
+      const visibleOrders = (data || []).filter((o: any) => o.deleted_by_user !== true);
       setOrders(visibleOrders);
     } catch (err) {
       console.error('Error fetching orders:', err);

@@ -1,6 +1,6 @@
 -- ==========================================================
--- Supabase Schema Migration Script
--- Copy and paste this script directly into the Supabase SQL Editor
+-- Complete Codewave Studio Supabase Schema & Realtime Setup
+-- Copy and paste ALL lines directly into Supabase SQL Editor
 -- ==========================================================
 
 -- 1. Profiles Table Setup
@@ -37,6 +37,10 @@ create table if not exists public.orders (
 alter table public.orders add column if not exists deleted_by_admin boolean default false;
 alter table public.orders add column if not exists deleted_by_user boolean default false;
 
+-- Convert any existing NULL flags to false
+update public.orders set deleted_by_admin = false where deleted_by_admin is null;
+update public.orders set deleted_by_user = false where deleted_by_user is null;
+
 alter table public.orders drop constraint if exists check_status;
 alter table public.orders add constraint check_status 
   check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'));
@@ -67,7 +71,7 @@ drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
 on public.profiles for update using (true);
 
--- 6. Orders RLS Policies (100% Unrestricted for all operations)
+-- 6. Orders RLS Policies (Full Access for database operations)
 drop policy if exists "Customers can insert own orders, admins read/insert all" on public.orders;
 drop policy if exists "Customers can read own orders, admins read all" on public.orders;
 drop policy if exists "Admins can update orders" on public.orders;
@@ -121,7 +125,7 @@ drop policy if exists "Customers and admins can delete slips" on storage.objects
 create policy "Customers and admins can delete slips"
 on storage.objects for delete using (bucket_id = 'payment-slips');
 
--- 10. Contact Messages Table Setup & Permissive Policies
+-- 10. Contact Messages Table Setup
 create table if not exists public.contact_messages (
   id uuid default gen_random_uuid() primary key,
   name text not null,
