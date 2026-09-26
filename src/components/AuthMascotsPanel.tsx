@@ -4,29 +4,17 @@ import { motion, type Variants } from 'framer-motion';
 export default function AuthMascotsPanel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    const checkTouch = () => {
-      setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
-    };
-    checkTouch();
-    window.addEventListener('resize', checkTouch);
-    return () => window.removeEventListener('resize', checkTouch);
-  }, []);
-
-  useEffect(() => {
-    if (isTouchDevice) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (clientX: number, clientY: number) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
       // Normalized coordinates between -0.5 and 0.5
-      const normX = (e.clientX - centerX) / window.innerWidth;
-      const normY = (e.clientY - centerY) / window.innerHeight;
+      const normX = (clientX - centerX) / window.innerWidth;
+      const normY = (clientY - centerY) / window.innerHeight;
 
       setCursorPos({
         x: Math.max(-0.5, Math.min(0.5, normX)),
@@ -34,9 +22,23 @@ export default function AuthMascotsPanel() {
       });
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      handleMove(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isTouchDevice]);
+    window.addEventListener('touchmove', handleTouchMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
 
   // Head tilt & Eye offset formulas
   const headRotate = cursorPos.x * 16; // -8deg to +8deg
@@ -68,7 +70,7 @@ export default function AuthMascotsPanel() {
   return (
     <div
       ref={containerRef}
-      className="w-full flex flex-col items-center justify-between p-6 sm:p-10 rounded-3xl bg-slate-950/60 border border-slate-800/80 backdrop-blur-2xl relative overflow-hidden text-center select-none shadow-2xl min-h-[480px] lg:min-h-[540px]"
+      className="w-full h-full flex flex-col items-center justify-between p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl bg-slate-950/70 relative overflow-hidden text-center select-none shadow-2xl min-h-[300px] sm:min-h-[380px] lg:min-h-[480px]"
     >
       {/* Ambient Multi-Color Radial Background Glows */}
       <div className="absolute top-10 left-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
