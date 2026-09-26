@@ -49,6 +49,7 @@ export default function CustomerDashboard() {
           .from('orders')
           .select('*')
           .eq('customer_id', user.id)
+          .or('deleted_by_user.is.null,deleted_by_user.eq.false')
           .order('created_at', { ascending: false });
 
         if (error) throw error;

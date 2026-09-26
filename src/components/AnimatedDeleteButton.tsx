@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface AnimatedDeleteButtonProps {
@@ -108,21 +109,7 @@ export default function AnimatedDeleteButton({
   };
 
   return (
-    <div className="relative inline-block text-left">
-      {/* Local Error Alert Badge */}
-      {localError && (
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.95 }}
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 w-64 p-2.5 rounded-xl bg-rose-950/90 border border-rose-500/50 text-[11px] text-rose-200 font-semibold shadow-xl backdrop-blur-md text-center leading-tight pointer-events-none"
-          >
-            ⚠️ {localError}
-          </motion.div>
-        </AnimatePresence>
-      )}
-
+    <>
       {/* Main Animated Button */}
       <motion.button
         type="button"
@@ -149,7 +136,7 @@ export default function AnimatedDeleteButton({
               : {}
           }
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="relative z-10 flex items-center justify-center"
+          className="relative z-10 flex items-center justify-center pointer-events-none"
         >
           <svg
             className={`${iconSizes[size]} fill-none stroke-current`}
@@ -166,7 +153,7 @@ export default function AnimatedDeleteButton({
         </motion.div>
 
         {/* Flying Letters Container */}
-        <div className="relative flex items-center gap-[1px]">
+        <div className="relative flex items-center gap-[1px] pointer-events-none">
           {letters.map((char, index) => (
             <motion.span
               key={index}
@@ -205,61 +192,85 @@ export default function AnimatedDeleteButton({
         )}
       </motion.button>
 
-      {/* Confirmation Modal */}
-      <AnimatePresence>
-        {showConfirm && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowConfirm(false);
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 12 }}
-              transition={{ type: 'spring', damping: 22, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6 text-left relative overflow-hidden"
-            >
-              {/* Background Glow */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl flex-shrink-0">
-                  🗑️
+      {/* Global Body Portals for Confirmation Modal & Blocked Error Toast */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <>
+            {/* Blocked Error Banner Toast */}
+            <AnimatePresence>
+              {localError && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[99999] pointer-events-none px-4 w-full max-w-md">
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    className="p-4 rounded-2xl bg-slate-900/95 border border-rose-500/50 text-rose-200 text-xs sm:text-sm font-bold shadow-2xl backdrop-blur-xl flex items-center gap-3 pointer-events-auto"
+                  >
+                    <span className="text-xl">⚠️</span>
+                    <span className="leading-snug">{localError}</span>
+                  </motion.div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">{confirmTitle}</h3>
-                  <p className="text-xs text-slate-400 mt-1">Action confirmation</p>
+              )}
+            </AnimatePresence>
+
+            {/* Confirmation Modal */}
+            <AnimatePresence>
+              {showConfirm && (
+                <div
+                  className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto min-h-screen"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowConfirm(false);
+                  }}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 12 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: 12 }}
+                    transition={{ type: 'spring', damping: 24, stiffness: 300 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full max-w-md p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6 text-left relative overflow-hidden my-auto"
+                  >
+                    {/* Ambient Glow */}
+                    <div className="absolute top-0 right-0 w-36 h-36 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl flex-shrink-0">
+                        🗑️
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white tracking-tight">{confirmTitle}</h3>
+                        <p className="text-xs text-slate-400 mt-1">Action confirmation</p>
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
+                      {confirmMessage}
+                    </p>
+
+                    <div className="flex items-center justify-end gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirm(false)}
+                        className="px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleConfirm}
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition-all cursor-pointer"
+                      >
+                        Delete Permanently
+                      </button>
+                    </div>
+                  </motion.div>
                 </div>
-              </div>
-
-              <p className="text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
-                {confirmMessage}
-              </p>
-
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleConfirm}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition-all cursor-pointer"
-                >
-                  Delete Permanently
-                </button>
-              </div>
-            </motion.div>
-          </div>
+              )}
+            </AnimatePresence>
+          </>,
+          document.body
         )}
-      </AnimatePresence>
-    </div>
+    </>
   );
 }

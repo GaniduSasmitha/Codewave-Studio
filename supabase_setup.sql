@@ -23,8 +23,14 @@ create table if not exists public.orders (
   slip_url text,
   created_at timestamptz default now(),
   verified_at timestamptz,
-  verified_by uuid references public.profiles(id)
+  verified_by uuid references public.profiles(id),
+  deleted_by_admin boolean default false,
+  deleted_by_user boolean default false
 );
+
+-- Add soft delete columns if table already exists
+alter table public.orders add column if not exists deleted_by_admin boolean default false;
+alter table public.orders add column if not exists deleted_by_user boolean default false;
 
 -- Update check_status constraint on existing orders table
 alter table public.orders drop constraint if exists check_status;
@@ -89,14 +95,7 @@ drop policy if exists "Customers can update own orders" on public.orders;
 create policy "Customers can update own orders"
 on public.orders
 for update
-using (
-  customer_id = auth.uid() 
-  and (status = 'pending_payment' or status = 'pending_verification' or status = 'rejected')
-)
-with check (
-  customer_id = auth.uid() 
-  and status = 'pending_verification'
-);
+using (customer_id = auth.uid());
 
 drop policy if exists "Customers can delete own orders, admins delete all" on public.orders;
 create policy "Customers can delete own orders, admins delete all"
@@ -201,3 +200,25 @@ on public.contact_messages
 for delete
 using (public.is_admin(auth.uid()));
 
+-- 11. Enable Full Replica Identity & Realtime Publication for Live Sync
+alter table public.orders replica identity full;
+alter table public.contact_messages replica identity full;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables 
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'orders'
+  ) then
+    alter publication supabase_realtime add table public.orders;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables 
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'contact_messages'
+  ) then
+    alter publication supabase_realtime add table public.contact_messages;
+  end if;
+exception
+  when undefined_object then
+    null;
+end $$;
