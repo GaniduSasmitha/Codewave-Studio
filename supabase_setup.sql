@@ -45,7 +45,7 @@ alter table public.orders drop constraint if exists check_status;
 alter table public.orders add constraint check_status 
   check (status in ('pending_payment', 'pending_verification', 'verified', 'in_progress', 'completed', 'cancelled', 'rejected'));
 
--- 3. Enable Row Level Security (RLS)
+-- 3. Enable Row Level Security (RLS) on public tables
 alter table public.profiles enable row level security;
 alter table public.orders enable row level security;
 
@@ -130,9 +130,7 @@ insert into storage.buckets (id, name, public)
 values ('payment-slips', 'payment-slips', true)
 on conflict (id) do update set public = true;
 
-alter table storage.objects enable row level security;
-
--- 9. Storage RLS Policies
+-- 9. Storage RLS Policies for payment-slips bucket
 drop policy if exists "Customers and admins can read slips" on storage.objects;
 create policy "Customers and admins can read slips"
 on storage.objects
