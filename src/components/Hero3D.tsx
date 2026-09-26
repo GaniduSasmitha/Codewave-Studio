@@ -26,10 +26,10 @@ function Scene3D({ isMobile }: { isMobile: boolean }) {
     const { pointer, clock } = state;
     const elapsedTime = clock.getElapsedTime();
 
-    // Parallax mouse movements
+    // Parallax mouse and touch tilt movements
     if (groupRef.current) {
-      groupRef.current.rotation.y = MathUtils.lerp(groupRef.current.rotation.y, pointer.x * 0.4, 0.05);
-      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, -pointer.y * 0.4, 0.05);
+      groupRef.current.rotation.y = MathUtils.lerp(groupRef.current.rotation.y, pointer.x * (isMobile ? 0.65 : 0.4), 0.06);
+      groupRef.current.rotation.x = MathUtils.lerp(groupRef.current.rotation.x, -pointer.y * (isMobile ? 0.65 : 0.4), 0.06);
     }
 
     // Centered distorted mesh slow rotation
