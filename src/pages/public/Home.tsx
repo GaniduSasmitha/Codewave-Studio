@@ -171,7 +171,8 @@ export default function Home() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      const visibleOrders = (data || []).filter((o: any) => !o.deleted_by_user);
+      setOrders(visibleOrders);
     } catch (err) {
       console.error('Error fetching orders:', err);
     } finally {
@@ -301,17 +302,9 @@ export default function Home() {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
-    if (order.slip_url) {
-      try {
-        await supabase.storage.from('payment-slips').remove([order.slip_url]);
-      } catch (err) {
-        console.warn('Error removing slip file:', err);
-      }
-    }
-
     const { data, error } = await supabase
       .from('orders')
-      .delete()
+      .update({ deleted_by_user: true })
       .eq('id', order.id)
       .select();
 

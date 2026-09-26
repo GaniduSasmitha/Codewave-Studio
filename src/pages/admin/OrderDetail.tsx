@@ -161,17 +161,9 @@ export default function OrderDetail() {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
-    if (order.slip_url) {
-      try {
-        await supabase.storage.from('payment-slips').remove([order.slip_url]);
-      } catch (err) {
-        console.warn('Error removing slip file:', err);
-      }
-    }
-
     const { data, error } = await supabase
       .from('orders')
-      .delete()
+      .update({ deleted_by_admin: true })
       .eq('id', order.id)
       .select();
 
