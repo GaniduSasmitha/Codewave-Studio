@@ -18,5 +18,5 @@
 
   <!-- Brand Typography -->
   <text x="66" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">Codewave</text>
-  <text x="66" y="47" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#22D3EE" letter-spacing="2">STUDIO</text>
+  <text x="66" y="47" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#A33715" letter-spacing="2">STUDIO</text>
 </svg>

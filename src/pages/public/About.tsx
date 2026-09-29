@@ -63,8 +63,8 @@ export default function About() {
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <GlassCard className="p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 text-left">
-            <h4 className="text-lg font-bold text-primary dark:text-accent mb-4">Core Numbers</h4>
+          <GlassCard className="p-8 border border-[#394045]/40 dark:border-[#394045] bg-white/90 dark:bg-[#20292D] text-left">
+            <h4 className="text-lg font-bold text-primary dark:text-primary mb-4">Core Numbers</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               <div>
                 <p className="text-3xl font-black text-slate-900 dark:text-white">40+</p>

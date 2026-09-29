@@ -222,12 +222,12 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                 <GlassCard
                   hoverEffect={false}
                   className={`h-full flex flex-col justify-between overflow-hidden p-0 transition-all duration-300 border ${isCenter
-                      ? 'border-primary/60 dark:border-accent/60 shadow-[0_12px_40px_-10px_rgba(99,102,241,0.35)] ring-2 ring-primary/20 dark:ring-accent/20 bg-white/95 dark:bg-slate-900/90'
-                      : 'border-slate-300 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/40 shadow-lg'
+                      ? 'border-primary/60 dark:border-primary/60 shadow-[0_12px_40px_-10px_rgba(163,55,21,0.35)] ring-2 ring-primary/20 dark:ring-primary/20 bg-white/95 dark:bg-[#20292D]'
+                      : 'border-[#394045]/40 dark:border-[#394045] bg-white/70 dark:bg-[#20292D]/70 shadow-lg'
                     }`}
                 >
                   {/* Image Header Area */}
-                  <div className="aspect-video w-full overflow-hidden relative border-b border-slate-200 dark:border-slate-800">
+                  <div className="aspect-video w-full overflow-hidden relative border-b border-slate-200 dark:border-[#394045]">
                     {project.image ? (
                       <img
                         src={project.image}
@@ -237,7 +237,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                       />
                     ) : (
                       <>
-                        <div className="absolute inset-0 bg-gradient-to-tr from-slate-200 dark:from-slate-950 to-primary/10 z-0"></div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-[#F4F0EC] dark:from-[#0A0F12] to-primary/10 z-0"></div>
                         <div className="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-700 font-black text-3xl sm:text-4xl tracking-widest select-none z-0 opacity-15">
                           CODEWAVE
                         </div>
@@ -247,7 +247,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                     {/* Project Category / Type Badge */}
                     {project.badge && (
                       <span
-                        className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-950/80 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
+                        className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-[#0A0F12]/80 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
                             ? 'text-[#A33715] dark:text-[#A33715] border-[#A33715]/30'
                             : 'text-amber-600 dark:text-amber-400 border-amber-500/30'
                           }`}
@@ -265,7 +265,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                   {/* Body Content */}
                   <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
-                      <span className="text-xs font-semibold text-primary dark:text-accent uppercase tracking-wider block">
+                      <span className="text-xs font-semibold text-primary dark:text-primary uppercase tracking-wider block">
                         {project.category}
                       </span>
                       <h3
@@ -276,7 +276,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                       >
                         {project.title}
                       </h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed line-clamp-3">
+                      <p className="text-[#565A5C] dark:text-[#565A5C] text-xs leading-relaxed line-clamp-3">
                         {project.description}
                       </p>
                     </div>
@@ -287,7 +287,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                         {project.tags.map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/50 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700/80"
+                            className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-[#F4F0EC] dark:bg-[#0A0F12] px-2 py-0.5 rounded border border-[#394045]/40 dark:border-[#394045]"
                           >
                             {tag}
                           </span>
@@ -296,7 +296,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
 
                       {/* Action Link section hidden for now for users */}
                       {!isCenter && (
-                        <div className="pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-end">
+                        <div className="pt-3 border-t border-slate-200 dark:border-[#394045] flex items-center justify-end">
                           <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 italic">
                             Click to inspect
                           </span>

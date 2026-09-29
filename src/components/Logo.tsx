@@ -51,7 +51,7 @@ export default function Logo({
         <div className="flex flex-col text-left">
           <span className={`${textSizes[size]} font-extrabold tracking-tight text-slate-900 dark:text-white leading-none flex items-center gap-1.5`}>
             Codewave
-            <span className="text-[#6366F1] dark:text-[#22D3EE] font-semibold text-[0.85em]">Studio</span>
+            <span className="text-primary dark:text-primary font-semibold text-[0.85em]">Studio</span>
           </span>
           {subtitle && (
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">
