@@ -248,7 +248,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                     {project.badge && (
                       <span
                         className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-950/80 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
-                            ? 'text-cyan-600 dark:text-cyan-400 border-cyan-500/30'
+                            ? 'text-[#A33715] dark:text-[#A33715] border-[#A33715]/30'
                             : 'text-amber-600 dark:text-amber-400 border-amber-500/30'
                           }`}
                       >

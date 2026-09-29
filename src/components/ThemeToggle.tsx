@@ -18,8 +18,8 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
       type="button"
       className={`relative flex items-center gap-2 p-2 rounded-xl border transition-colors cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-primary/50 ${
         isDark
-          ? 'bg-slate-800/90 hover:bg-slate-700/90 text-cyan-300 border-slate-700/80 shadow-inner'
-          : 'bg-slate-100 hover:bg-slate-200 text-amber-600 border-slate-200 shadow-sm'
+          ? 'bg-[#20292D] hover:bg-[#394045]/60 text-[#A33715] border-[#394045] shadow-inner'
+          : 'bg-[#B5A295]/20 hover:bg-[#B5A295]/30 text-[#A33715] border-[#394045]/30 shadow-sm'
       } ${className}`}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}

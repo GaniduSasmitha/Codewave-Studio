@@ -28,11 +28,11 @@ export default function Logo({
       {/* Code Emblem Icon */}
       <div className={`${iconSizes[size]} rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700/80 shadow-sm dark:shadow-lg flex items-center justify-center relative overflow-hidden group flex-shrink-0`}>
         {/* Glow background */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent opacity-20 group-hover:opacity-40 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#6366F1] to-[#22D3EE] opacity-20 group-hover:opacity-40 transition-opacity" />
         
         {/* Code Brackets Icon */}
         <svg
-          className="w-5 h-5 relative z-10 text-primary dark:text-accent"
+          className="w-5 h-5 relative z-10 text-[#6366F1] dark:text-[#22D3EE]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -51,7 +51,7 @@ export default function Logo({
         <div className="flex flex-col text-left">
           <span className={`${textSizes[size]} font-extrabold tracking-tight text-slate-900 dark:text-white leading-none flex items-center gap-1.5`}>
             Codewave
-            <span className="text-primary dark:text-accent font-semibold text-[0.85em]">Studio</span>
+            <span className="text-[#6366F1] dark:text-[#22D3EE] font-semibold text-[0.85em]">Studio</span>
           </span>
           {subtitle && (
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">

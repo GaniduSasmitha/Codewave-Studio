@@ -29,7 +29,7 @@ interface Order {
 const statusColors: Record<string, string> = {
   pending_payment: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
   pending_verification: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
-  verified: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20",
+  verified: "bg-[#A33715]/10 text-[#A33715] dark:text-[#A33715] border border-[#A33715]/20",
   in_progress: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
   completed: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
   cancelled: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
@@ -867,7 +867,7 @@ export default function Home() {
       {/* Final CTA Section */}
       <section className="max-w-5xl mx-auto px-4">
         <ScrollReveal>
-          <GlassCard className="relative overflow-hidden p-12 text-center border border-primary/30 dark:border-primary/20 bg-gradient-to-tr from-indigo-50 dark:from-slate-950 via-white dark:via-slate-900 to-cyan-50 dark:to-primary/10">
+          <GlassCard className="relative overflow-hidden p-12 text-center border border-primary/30 dark:border-primary/20 bg-gradient-to-tr from-[#A33715]/10 dark:from-[#20292D] via-white dark:via-[#0A0F12] to-[#907768]/20 dark:to-primary/10">
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">Ready to Start Your Project?</h2>

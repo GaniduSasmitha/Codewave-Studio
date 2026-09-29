@@ -54,12 +54,12 @@ export default function PublicLayout() {
                   <motion.span
                     className={`inline-block transition-colors duration-250 ${
                       isActive
-                        ? 'text-primary dark:text-accent font-bold'
-                        : 'text-slate-700 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-accent'
+                        ? 'text-primary dark:text-primary font-bold'
+                        : 'text-slate-700 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-primary'
                     }`}
                     style={{
                       textShadow: isActive
-                        ? '0 0 10px rgba(99, 102, 241, 0.75), 0 0 22px rgba(34, 211, 238, 0.55)'
+                        ? '0 0 10px rgba(163, 55, 21, 0.75), 0 0 22px rgba(144, 119, 104, 0.55)'
                         : undefined,
                     }}
                     whileHover={{
@@ -67,8 +67,8 @@ export default function PublicLayout() {
                       scale: 1.06,
                       y: -1,
                       textShadow: isActive
-                        ? '0 0 14px rgba(99, 102, 241, 0.95), 0 0 26px rgba(34, 211, 238, 0.75)'
-                        : '0 0 8px rgba(99, 102, 241, 0.6), 0 0 18px rgba(34, 211, 238, 0.45)',
+                        ? '0 0 14px rgba(163, 55, 21, 0.95), 0 0 26px rgba(144, 119, 104, 0.75)'
+                        : '0 0 8px rgba(163, 55, 21, 0.6), 0 0 18px rgba(144, 119, 104, 0.45)',
                     }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
@@ -79,7 +79,7 @@ export default function PublicLayout() {
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_12px_rgba(99,102,241,0.8)]"
+                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_12px_rgba(163,55,21,0.8)]"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -152,7 +152,7 @@ export default function PublicLayout() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-background/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
+              className="md:hidden border-b border-[#394045] bg-white/95 dark:bg-[#0A0F12]/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
             >
               <div className="flex flex-col space-y-1.5">
                 {navItems.map((item) => {
@@ -165,18 +165,18 @@ export default function PublicLayout() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`relative px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between active:scale-[0.98] ${
                         isActive
-                          ? 'bg-gradient-to-r from-primary/15 to-accent/15 border-l-4 border-primary dark:border-accent text-primary dark:text-accent font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.15)]'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-primary dark:hover:text-accent'
+                          ? 'bg-gradient-to-r from-primary/15 to-accent/15 border-l-4 border-primary dark:border-primary text-primary dark:text-primary font-bold shadow-[inset_0_0_20px_rgba(163,55,21,0.15)]'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#20292D] hover:text-primary dark:hover:text-primary'
                       }`}
                       style={{
                         textShadow: isActive
-                          ? '0 0 10px rgba(99, 102, 241, 0.6), 0 0 18px rgba(34, 211, 238, 0.4)'
+                          ? '0 0 10px rgba(163, 55, 21, 0.6), 0 0 18px rgba(144, 119, 104, 0.4)'
                           : undefined,
                       }}
                     >
                       <span>{item.label}</span>
                       {isActive && (
-                        <span className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_#22D3EE]" />
+                        <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#A33715]" />
                       )}
                     </Link>
                   );

@@ -19,7 +19,7 @@ interface Order {
 const statusColors: Record<string, string> = {
   pending_payment: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
   pending_verification: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
-  verified: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20",
+  verified: "bg-[#A33715]/10 text-[#A33715] dark:text-[#A33715] border border-[#A33715]/20",
   in_progress: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
   completed: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
   cancelled: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
