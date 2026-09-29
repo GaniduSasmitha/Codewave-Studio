@@ -119,11 +119,11 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -6, scale: 0.92 }}
           transition={{ duration: 0.22, ease: "easeOut" }}
-          className="mb-3 px-4 py-2 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-cyan-500/30 dark:border-cyan-400/30 backdrop-blur-md shadow-lg shadow-cyan-500/10 text-xs font-semibold text-slate-800 dark:text-slate-200 text-center relative max-w-xs"
+          className="mb-3 px-4 py-2 rounded-2xl bg-white/90 dark:bg-[#20292D]/90 border border-primary/30 dark:border-primary/40 backdrop-blur-md shadow-lg shadow-primary/10 text-xs font-semibold text-slate-800 dark:text-slate-200 text-center relative max-w-xs"
         >
           <span>{speechText}</span>
           {/* Bubble Pointer Arrow */}
-          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 dark:bg-slate-900/90 border-r border-b border-cyan-500/30 dark:border-cyan-400/30 rotate-45" />
+          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 dark:bg-[#20292D]/90 border-r border-b border-primary/30 dark:border-primary/40 rotate-45" />
         </motion.div>
       </AnimatePresence>
 
@@ -154,14 +154,14 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
               scale: isSuccess ? [1, 1.5, 1.2, 1.5, 1] : [1, 1.25, 1],
               boxShadow: isSuccess
                 ? [
-                    "0 0 8px #22D3EE",
-                    "0 0 24px #22D3EE, 0 0 36px #6366F1",
-                    "0 0 12px #22D3EE",
+                    "0 0 8px #A33715",
+                    "0 0 24px #A33715, 0 0 36px #907768",
+                    "0 0 12px #A33715",
                   ]
                 : [
-                    "0 0 6px #22D3EE",
-                    "0 0 16px #22D3EE",
-                    "0 0 6px #22D3EE",
+                    "0 0 6px #A33715",
+                    "0 0 16px #A33715",
+                    "0 0 6px #A33715",
                   ],
             }}
             transition={{
@@ -175,7 +175,7 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
           <motion.div
             animate={{ rotate: [0, 4, -4, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1 h-3.5 bg-gradient-to-b from-cyan-400 to-slate-700 rounded-full -mt-0.5"
+            className="w-1 h-3.5 bg-gradient-to-b from-[#A33715] to-[#394045] rounded-full -mt-0.5"
           />
         </div>
 
@@ -184,16 +184,16 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
           ref={headRef}
           animate={headTransform}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border-2 border-primary/50 dark:border-accent/50 shadow-xl shadow-cyan-500/15 flex items-center justify-center overflow-visible"
+          className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-2xl bg-gradient-to-b from-[#0A0F12] via-[#20292D] to-[#0A0F12] border-2 border-primary/50 dark:border-primary/50 shadow-xl shadow-primary/15 flex items-center justify-center overflow-visible"
         >
           {/* Ear Nubs */}
-          <div className="absolute -left-2 w-2 h-4 rounded-l-md bg-slate-800 border-l border-y border-primary/40" />
-          <div className="absolute -right-2 w-2 h-4 rounded-r-md bg-slate-800 border-r border-y border-primary/40" />
+          <div className="absolute -left-2 w-2 h-4 rounded-l-md bg-[#20292D] border-l border-y border-primary/40" />
+          <div className="absolute -right-2 w-2 h-4 rounded-r-md bg-[#20292D] border-r border-y border-primary/40" />
 
           {/* Visor / Face Screen */}
-          <div className="w-[82%] h-[75%] rounded-xl bg-slate-950 border border-slate-800/80 flex items-center justify-center px-3 relative overflow-hidden shadow-inner">
+          <div className="w-[82%] h-[75%] rounded-xl bg-[#0A0F12] border border-[#394045] flex items-center justify-center px-3 relative overflow-hidden shadow-inner">
             {/* Ambient Visor Grid Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-primary/10 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#A33715]/10 via-transparent to-[#907768]/10 pointer-events-none" />
 
             {/* Eyes & Face Container */}
             <motion.div
@@ -214,13 +214,13 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
                   repeat: isSuccess ? 2 : Infinity,
                   repeatDelay: isSuccess ? 0 : 3.5,
                 }}
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-cyan-400 shadow-[0_0_10px_#22D3EE] flex items-center justify-center"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#A33715] shadow-[0_0_10px_#A33715] flex items-center justify-center"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-white font-bold" />
               </motion.div>
 
               {/* Mouth Curve */}
-              <div className="w-2.5 h-1 border-b-2 border-cyan-400/80 rounded-full" />
+              <div className="w-2.5 h-1 border-b-2 border-[#A33715]/80 rounded-full" />
 
               {/* Right Eye */}
               <motion.div
@@ -232,7 +232,7 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
                   repeat: isSuccess ? 2 : Infinity,
                   repeatDelay: isSuccess ? 0 : 3.5,
                 }}
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-cyan-400 shadow-[0_0_10px_#22D3EE] flex items-center justify-center"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#A33715] shadow-[0_0_10px_#A33715] flex items-center justify-center"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-white font-bold" />
               </motion.div>

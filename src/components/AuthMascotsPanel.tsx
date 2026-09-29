@@ -117,7 +117,7 @@ export default function AuthMascotsPanel() {
         animate="visible"
         className="w-full flex items-end justify-center gap-2 sm:gap-4 lg:gap-5 relative z-10 mt-6 pb-2"
       >
-        {/* ================= CHARACTER 1: BLUE ROBOT ("BOTTY") ================= */}
+        {/* ================= CHARACTER 1: ROBOT ("BOTTY") ================= */}
         <motion.div
           variants={characterVariants}
           animate={{ y: [0, -8, 0] }}
@@ -138,52 +138,52 @@ export default function AuthMascotsPanel() {
               <motion.div
                 animate={{
                   scale: [1, 1.3, 1],
-                  boxShadow: ['0 0 8px #22D3EE', '0 0 20px #22D3EE', '0 0 8px #22D3EE'],
+                  boxShadow: ['0 0 8px #A33715', '0 0 20px #A33715', '0 0 8px #A33715'],
                 }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-3.5 h-3.5 rounded-full bg-accent border border-white/50"
+                className="w-3.5 h-3.5 rounded-full bg-primary border border-white/50"
               />
-              <div className="w-1 h-3 bg-slate-700" />
+              <div className="w-1 h-3 bg-[#394045]" />
             </div>
 
             {/* Robot Head & Torso */}
-            <div className="w-16 h-20 sm:w-20 sm:h-24 rounded-2xl bg-gradient-to-b from-indigo-600 via-indigo-700 to-cyan-700 border-2 border-cyan-400/60 shadow-lg shadow-cyan-500/30 flex flex-col items-center justify-between p-2 relative">
+            <div className="w-16 h-20 sm:w-20 sm:h-24 rounded-2xl bg-gradient-to-b from-[#A33715] via-[#907768] to-[#20292D] border-2 border-[#A33715]/60 shadow-lg shadow-[#A33715]/30 flex flex-col items-center justify-between p-2 relative">
               {/* Visor Screen */}
-              <div className="w-full h-11 sm:h-13 rounded-xl bg-slate-950 border border-cyan-500/40 flex items-center justify-between px-2.5 relative overflow-hidden shadow-inner">
+              <div className="w-full h-11 sm:h-13 rounded-xl bg-[#0A0F12] border border-[#A33715]/40 flex items-center justify-between px-2.5 relative overflow-hidden shadow-inner">
                 {/* Eyes follow cursor */}
                 <motion.div
                   animate={{ x: eyeX, y: eyeY }}
                   transition={{ duration: 0.12, ease: 'easeOut' }}
                   className="flex items-center justify-between w-full"
                 >
-                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-cyan-300 shadow-[0_0_10px_#22D3EE] flex items-center justify-center">
+                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#A33715] shadow-[0_0_10px_#A33715] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-white font-bold" />
                   </div>
-                  <div className="w-2 h-0.5 border-b-2 border-cyan-300 rounded-full" />
-                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-cyan-300 shadow-[0_0_10px_#22D3EE] flex items-center justify-center">
+                  <div className="w-2 h-0.5 border-b-2 border-[#A33715] rounded-full" />
+                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#A33715] shadow-[0_0_10px_#A33715] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-white font-bold" />
                   </div>
                 </motion.div>
               </div>
 
               {/* Chest Badge */}
-              <div className="w-6 h-2 rounded-full bg-cyan-400/30 border border-cyan-300/40" />
+              <div className="w-6 h-2 rounded-full bg-[#A33715]/30 border border-[#A33715]/40" />
             </div>
 
             {/* Waving Arm (Left) */}
             <motion.div
               animate={{ rotate: [0, 25, 0, 25, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -left-3 top-8 w-3 h-8 rounded-full bg-indigo-600 border border-cyan-400/40 origin-top"
+              className="absolute -left-3 top-8 w-3 h-8 rounded-full bg-[#A33715] border border-[#907768]/40 origin-top"
             />
             {/* Arm (Right) */}
-            <div className="absolute -right-3 top-10 w-3 h-7 rounded-full bg-indigo-600 border border-cyan-400/40" />
+            <div className="absolute -right-3 top-10 w-3 h-7 rounded-full bg-[#A33715] border border-[#907768]/40" />
           </motion.div>
 
           {/* Legs */}
           <div className="flex gap-3 -mt-1 z-0">
-            <div className="w-2.5 h-5 bg-slate-800 rounded-b-md border-b-2 border-cyan-400" />
-            <div className="w-2.5 h-5 bg-slate-800 rounded-b-md border-b-2 border-cyan-400" />
+            <div className="w-2.5 h-5 bg-[#20292D] rounded-b-md border-b-2 border-[#A33715]" />
+            <div className="w-2.5 h-5 bg-[#20292D] rounded-b-md border-b-2 border-[#A33715]" />
           </div>
         </motion.div>
 
@@ -424,7 +424,7 @@ export default function AuthMascotsPanel() {
             </div>
 
             {/* Bottom Triangle/Cone Buddy */}
-            <div className="w-14 h-12 -mt-3 rounded-b-xl bg-gradient-to-b from-purple-600 to-indigo-800 border-2 border-purple-400 flex flex-col items-center justify-center p-1">
+            <div className="w-14 h-12 -mt-3 rounded-b-xl bg-gradient-to-b from-purple-600 to-[#A33715] border-2 border-purple-400 flex flex-col items-center justify-center p-1">
               <div className="flex gap-1.5 mt-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-purple-300 shadow-[0_0_6px_#A855F7]" />
                 <div className="w-2.5 h-2.5 rounded-full bg-purple-300 shadow-[0_0_6px_#A855F7]" />
@@ -443,10 +443,10 @@ export default function AuthMascotsPanel() {
       {/* Bottom Features Pill List */}
       <div className="mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-3 text-[11px] font-mono text-slate-400 z-10 w-full max-w-xs">
         <div className="flex items-center gap-1.5 justify-center bg-slate-900/60 py-1.5 px-3 rounded-lg border border-slate-800">
-          <span className="text-cyan-400">✓</span> 3D Web Systems
+          <span className="text-[#A33715]">✓</span> 3D Web Systems
         </div>
         <div className="flex items-center gap-1.5 justify-center bg-slate-900/60 py-1.5 px-3 rounded-lg border border-slate-800">
-          <span className="text-cyan-400">✓</span> Live Tracking
+          <span className="text-[#A33715]">✓</span> Live Tracking
         </div>
       </div>
     </div>

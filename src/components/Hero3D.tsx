@@ -58,7 +58,7 @@ function Scene3D({ isMobile }: { isMobile: boolean }) {
       <mesh ref={mainMeshRef}>
         <icosahedronGeometry args={[1.4, isMobile ? 0 : 1]} />
         <MeshDistortMaterial
-          color="#6366F1"
+          color="#A33715"
           distort={0.25}
           speed={1.5}
           roughness={0.1}
@@ -69,13 +69,13 @@ function Scene3D({ isMobile }: { isMobile: boolean }) {
       {/* Orbiting Sphere 1 */}
       <mesh ref={satellite1Ref}>
         <sphereGeometry args={[0.15, isMobile ? 8 : 16, isMobile ? 8 : 16]} />
-        <meshStandardMaterial color="#22D3EE" roughness={0.1} metalness={0.9} />
+        <meshStandardMaterial color="#907768" roughness={0.1} metalness={0.9} />
       </mesh>
 
       {/* Orbiting Sphere 2 */}
       <mesh ref={satellite2Ref}>
         <sphereGeometry args={[0.2, isMobile ? 8 : 16, isMobile ? 8 : 16]} />
-        <meshStandardMaterial color="#A5B4FC" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#B5A295" roughness={0.2} metalness={0.6} />
       </mesh>
 
       {/* Floating abstract code/design glass panel */}
@@ -83,7 +83,7 @@ function Scene3D({ isMobile }: { isMobile: boolean }) {
         <mesh position={[0, -1.8, 0.5]} rotation={[-0.2, 0.2, 0.05]}>
           <boxGeometry args={[2.5, 0.5, 0.05]} />
           <meshPhysicalMaterial
-            color="#0A0A0F"
+            color="#0A0F12"
             roughness={0.2}
             metalness={0.8}
             transmission={0.4}
@@ -126,8 +126,8 @@ export default function Hero3D() {
     <div className="w-full h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px] relative">
       <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
         <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 10, 5]} intensity={1.5} color="#22D3EE" />
-        <pointLight position={[-5, -5, -5]} intensity={1.0} color="#6366F1" />
+        <directionalLight position={[5, 10, 5]} intensity={1.5} color="#907768" />
+        <pointLight position={[-5, -5, -5]} intensity={1.0} color="#A33715" />
         <Scene3D isMobile={isMobile} />
       </Canvas>
     </div>

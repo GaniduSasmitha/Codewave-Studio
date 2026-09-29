@@ -17,9 +17,9 @@ export default function AnimatedButton({
   const baseStyles = 'relative px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 overflow-hidden';
 
   const variants = {
-    primary: 'bg-primary text-white hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]',
-    secondary: 'border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-transparent dark:hover:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-700',
-    glass: 'bg-slate-900/5 dark:bg-white/5 backdrop-blur-md border border-slate-900/10 dark:border-white/10 hover:bg-slate-900/10 dark:hover:bg-white/10 text-slate-900 dark:text-white shadow-sm dark:shadow-lg'
+    primary: 'gradient-brand text-white hover:shadow-[0_0_20px_rgba(163,55,21,0.5)] font-semibold',
+    secondary: 'border border-[#394045] bg-[#B5A295]/20 hover:bg-[#B5A295]/30 text-[#0A0F12] dark:bg-transparent dark:hover:bg-[#20292D] dark:text-slate-100 dark:hover:border-[#394045]',
+    glass: 'bg-slate-900/5 dark:bg-white/5 backdrop-blur-md border border-[#394045]/30 hover:bg-slate-900/10 dark:hover:bg-white/10 text-[#0A0F12] dark:text-white shadow-sm dark:shadow-lg'
   };
 
   return (
