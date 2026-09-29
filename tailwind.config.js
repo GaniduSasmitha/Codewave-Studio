@@ -8,15 +8,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#0A0F12",
-        surface: "#20292D",
-        border: "#394045",
-        muted: "#565A5C",
-        grapple: "#907768",
-        primary: "#A33715",
-        accent: "#907768",
-        salsa: "#A33715",
-        networker: "#B5A295",
+        background: "#150C0C", // Balsamico
+        balsamico: "#150C0C",
+        surface: "#34150F",    // Burnt Coffee
+        coffee: "#34150F",
+        border: "#54281B",     // Warm Coffee Border
+        muted: "#B58E78",      // Muted Warm Text
+        primary: "#85431E",    // Honey Garlic
+        accent: "#D39858",     // Whiskey Sour
+        champagne: "#EACEAA",  // Champagne
       },
     },
   },

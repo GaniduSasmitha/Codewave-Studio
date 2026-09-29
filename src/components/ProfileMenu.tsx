@@ -6,14 +6,11 @@ import { useAuth } from '../hooks/useAuth';
 // A stable set of vivid background colors for avatars, deterministically picked
 // from the first char of the display name so the same user always gets the same color.
 const AVATAR_COLORS = [
-  '#A33715', // Salsa Mexicana
-  '#907768', // Grapple
-  '#F59E0B', // amber
-  '#10B981', // emerald
-  '#EC4899', // pink
-  '#8B5CF6', // violet
-  '#F97316', // orange
-  '#14B8A6', // teal
+  '#85431E', // Honey Garlic
+  '#D39858', // Whiskey Sour
+  '#34150F', // Burnt Coffee
+  '#54281B', // Warm Coffee
+  '#85431E', 
 ];
 
 function getAvatarColor(str: string): string {
@@ -43,7 +40,7 @@ function UserAvatar({
   initial,
   bgColor,
   sizeClass = 'w-8 h-8 text-sm',
-  ringClass = 'ring-2 ring-slate-300 dark:ring-slate-700/80',
+  ringClass = 'ring-2 ring-[#E3D5C5] dark:ring-[#54281B]',
 }: UserAvatarProps) {
   const [imgError, setImgError] = useState(false);
 
@@ -55,7 +52,7 @@ function UserAvatar({
 
   return (
     <span
-      className={`${sizeClass} ${ringClass} rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 overflow-hidden relative transition-all duration-200`}
+      className={`${sizeClass} ${ringClass} rounded-full flex items-center justify-center font-bold text-[#EACEAA] flex-shrink-0 overflow-hidden relative transition-all duration-200`}
       style={{ backgroundColor: bgColor }}
       aria-hidden="true"
     >
@@ -133,7 +130,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
     return (
       <div className={`flex flex-col gap-3 ${className}`}>
         {/* User Info Header Block */}
-        <div className="p-3.5 rounded-xl border border-slate-200 dark:border-[#394045] bg-white/90 dark:bg-[#20292D] backdrop-blur-sm flex items-center justify-between gap-3 shadow-sm">
+        <div className="p-3.5 rounded-xl border border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/90 dark:bg-[#34150F] backdrop-blur-sm flex items-center justify-between gap-3 shadow-sm">
           <div className="flex items-center gap-3 min-w-0">
             <UserAvatar
               src={avatarSrc}
@@ -141,32 +138,32 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
               initial={avatarInitial}
               bgColor={avatarBg}
               sizeClass="w-10 h-10 text-base"
-              ringClass="ring-2 ring-slate-300 dark:ring-slate-700/80"
+              ringClass="ring-2 ring-[#E3D5C5] dark:ring-[#54281B]"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+              <p className="text-sm font-semibold text-[#34150F] dark:text-[#EACEAA] truncate">
                 {displayName}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{email}</p>
+              <p className="text-xs text-[#85431E]/80 dark:text-[#B58E78] truncate mt-0.5">{email}</p>
             </div>
           </div>
           {/* Role badge */}
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide flex-shrink-0 ${
               role === 'admin'
-                ? 'bg-[#A33715]/15 text-[#A33715] dark:text-[#A33715] ring-1 ring-[#A33715]/30'
-                : 'bg-[#907768]/15 text-[#907768] dark:text-[#907768] ring-1 ring-[#907768]/30'
+                ? 'bg-[#85431E]/20 text-[#85431E] dark:text-[#D39858] ring-1 ring-[#85431E]/40'
+                : 'bg-[#D39858]/20 text-[#85431E] dark:text-[#EACEAA] ring-1 ring-[#D39858]/40'
             }`}
           >
             <span
-              className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#A33715]' : 'bg-[#907768]'}`}
+              className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#85431E]' : 'bg-[#D39858]'}`}
               aria-hidden="true"
             />
             {roleLabel}
           </span>
         </div>
 
-        {/* Sign Out Button (min 44px tap target) */}
+        {/* Sign Out Button */}
         <button
           id="profile-menu-signout"
           onClick={handleSignOut}
@@ -213,13 +210,13 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         />
 
         {/* Name — hidden on mobile */}
-        <span className="hidden sm:block text-sm font-medium text-slate-700 dark:text-slate-200 max-w-[140px] truncate group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+        <span className="hidden sm:block text-sm font-medium text-[#54281B] dark:text-[#EACEAA] max-w-[140px] truncate group-hover:text-primary dark:group-hover:text-accent transition-colors">
           {profile?.full_name || email}
         </span>
 
         {/* Chevron */}
         <svg
-          className={`hidden sm:block w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`hidden sm:block w-3.5 h-3.5 text-[#B58E78] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           viewBox="0 0 16 16"
           fill="currentColor"
           aria-hidden="true"
@@ -239,10 +236,10 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -8 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="absolute right-0 top-full mt-2.5 w-64 origin-top-right rounded-xl border border-slate-200 dark:border-[#394045] bg-white/95 dark:bg-[#20292D] backdrop-blur-xl shadow-xl shadow-slate-300/50 dark:shadow-black/40 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2.5 w-64 origin-top-right rounded-xl border border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/95 dark:bg-[#34150F] backdrop-blur-xl shadow-xl shadow-black/40 overflow-hidden z-50"
           >
             {/* User info header */}
-            <div className="px-4 py-4 border-b border-slate-100 dark:border-[#394045]">
+            <div className="px-4 py-4 border-b border-[#E3D5C5] dark:border-[#54281B]">
               <div className="flex items-center gap-3">
                 <UserAvatar
                   src={avatarSrc}
@@ -250,13 +247,13 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
                   initial={avatarInitial}
                   bgColor={avatarBg}
                   sizeClass="w-10 h-10 text-base"
-                  ringClass="ring-2 ring-slate-300 dark:ring-slate-700"
+                  ringClass="ring-2 ring-[#E3D5C5] dark:ring-[#54281B]"
                 />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                  <p className="text-sm font-semibold text-[#34150F] dark:text-[#EACEAA] truncate">
                     {profile?.full_name || 'User'}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{email}</p>
+                  <p className="text-xs text-[#85431E]/80 dark:text-[#B58E78] truncate mt-0.5">{email}</p>
                 </div>
               </div>
 
@@ -265,12 +262,12 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
                 <span
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide ${
                     role === 'admin'
-                      ? 'bg-[#A33715]/15 text-[#A33715] dark:text-[#A33715] ring-1 ring-[#A33715]/30'
-                      : 'bg-[#907768]/15 text-[#907768] dark:text-[#907768] ring-1 ring-[#907768]/30'
+                      ? 'bg-[#85431E]/20 text-[#85431E] dark:text-[#D39858] ring-1 ring-[#85431E]/40'
+                      : 'bg-[#D39858]/20 text-[#85431E] dark:text-[#EACEAA] ring-1 ring-[#D39858]/40'
                   }`}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#A33715]' : 'bg-[#907768]'}`}
+                    className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#85431E]' : 'bg-[#D39858]'}`}
                     aria-hidden="true"
                   />
                   {roleLabel}

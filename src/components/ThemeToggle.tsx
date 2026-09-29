@@ -16,10 +16,10 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
       whileTap={{ scale: 0.92 }}
       onClick={toggleTheme}
       type="button"
-      className={`relative flex items-center gap-2 p-2 rounded-xl border transition-colors cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+      className={`relative flex items-center gap-2 p-2 rounded-xl border transition-colors cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-[#85431E]/50 ${
         isDark
-          ? 'bg-[#20292D] hover:bg-[#394045]/60 text-[#A33715] border-[#394045] shadow-inner'
-          : 'bg-[#B5A295]/20 hover:bg-[#B5A295]/30 text-[#A33715] border-[#394045]/30 shadow-sm'
+          ? 'bg-[#34150F] hover:bg-[#54281B] text-[#D39858] border-[#54281B] shadow-inner'
+          : 'bg-[#E3D5C5] hover:bg-[#D4BEAD] text-[#85431E] border-[#54281B]/30 shadow-sm'
       } ${className}`}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}

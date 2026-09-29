@@ -76,25 +76,25 @@ export default function Pricing() {
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard
               className={`h-full flex flex-col justify-between p-8 border relative ${tier.popular
-                  ? 'border-primary/50 bg-[#A33715]/10 dark:bg-[#20292D] shadow-md'
-                  : 'border-[#394045]/30 dark:border-[#394045] bg-white/90 dark:bg-[#20292D]'
+                  ? 'border-[#85431E]/60 bg-[#85431E]/10 dark:bg-[#34150F] shadow-md'
+                  : 'border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#34150F]'
                 }`}
             >
               {tier.popular && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] uppercase font-extrabold tracking-widest px-3 py-1 rounded-full border border-primary/20 shadow-sm">
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#85431E] text-[#EACEAA] text-[10px] uppercase font-extrabold tracking-widest px-3 py-1 rounded-full border border-[#85431E]/40 shadow-sm">
                   Most Popular
                 </span>
               )}
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{tier.name}</h3>
-                  <p className="text-[#565A5C] dark:text-[#565A5C] text-xs mt-2 leading-relaxed">{tier.desc}</p>
+                  <h3 className="text-xl font-bold text-[#34150F] dark:text-[#EACEAA]">{tier.name}</h3>
+                  <p className="text-[#54281B] dark:text-[#B58E78] text-xs mt-2 leading-relaxed">{tier.desc}</p>
                 </div>
 
-                <div className="pt-4 border-t border-[#394045]/40">
-                  <span className="text-4xl font-black text-slate-900 dark:text-white">{tier.price}</span>
-                  <span className="text-[#565A5C] text-xs block mt-1">{tier.billing}</span>
+                <div className="pt-4 border-t border-[#E3D5C5] dark:border-[#54281B]">
+                  <span className="text-4xl font-black text-[#34150F] dark:text-[#EACEAA]">{tier.price}</span>
+                  <span className="text-[#85431E] dark:text-[#B58E78] text-xs block mt-1">{tier.billing}</span>
                 </div>
               </div>
 
@@ -123,10 +123,10 @@ export default function Pricing() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          <div className="mt-8 bg-white/90 dark:bg-[#20292D] backdrop-blur-lg border border-[#394045]/40 dark:border-[#394045] rounded-2xl overflow-hidden shadow-xl">
+          <div className="mt-8 bg-white/90 dark:bg-[#34150F] backdrop-blur-lg border border-[#E3D5C5] dark:border-[#54281B] rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-[#394045]/40 text-left text-sm text-slate-700 dark:text-slate-300">
-                <thead className="bg-[#F4F0EC] dark:bg-[#0A0F12] text-xs uppercase text-[#565A5C] font-semibold">
+              <table className="min-w-full divide-y divide-[#E3D5C5] dark:divide-[#54281B] text-left text-sm text-[#54281B] dark:text-[#EACEAA]">
+                <thead className="bg-[#F8F3ED] dark:bg-[#150C0C] text-xs uppercase text-[#85431E] dark:text-[#D39858] font-semibold">
                   <tr>
                     <th className="px-6 py-4">Features</th>
                     <th className="px-6 py-4">Starter</th>
@@ -134,27 +134,27 @@ export default function Pricing() {
                     <th className="px-6 py-4">Custom</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#394045]/40">
+                <tbody className="divide-y divide-[#E3D5C5] dark:divide-[#54281B]">
                   {featuresList.map((feature, idx) => (
-                    <tr key={idx} className="hover:bg-slate-100/60 dark:hover:bg-[#394045]/30 transition-colors">
-                      <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{feature.name}</td>
+                    <tr key={idx} className="hover:bg-[#E3D5C5]/30 dark:hover:bg-[#54281B]/40 transition-colors">
+                      <td className="px-6 py-4 font-medium text-[#34150F] dark:text-[#EACEAA]">{feature.name}</td>
                       <td className="px-6 py-4">
                         {typeof feature.starter === 'boolean' ? (
-                          feature.starter ? <span className="text-primary dark:text-primary text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.starter ? <span className="text-[#85431E] dark:text-[#D39858] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.starter
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.business === 'boolean' ? (
-                          feature.business ? <span className="text-primary dark:text-primary text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.business ? <span className="text-[#85431E] dark:text-[#D39858] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.business
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.custom === 'boolean' ? (
-                          feature.custom ? <span className="text-primary dark:text-primary text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.custom ? <span className="text-[#85431E] dark:text-[#D39858] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.custom
                         )}

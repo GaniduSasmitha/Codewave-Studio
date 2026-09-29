@@ -11,13 +11,13 @@
     color-scheme: light;
   }
   body {
-    @apply bg-[#F4F0EC] text-[#0A0F12] dark:bg-background dark:text-slate-100 transition-colors duration-300;
+    @apply bg-[#F8F3ED] text-[#150C0C] dark:bg-[#150C0C] dark:text-[#EACEAA] transition-colors duration-300;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer utilities {
   .gradient-brand {
-    background-image: linear-gradient(to right, #A33715, #907768);
+    background-image: linear-gradient(to right, #85431E, #D39858);
   }
 }

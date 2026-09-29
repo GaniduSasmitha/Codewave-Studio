@@ -52,7 +52,7 @@ export default function SocialLinks({ className = '' }: { className?: string }) 
           rel="noopener noreferrer"
           aria-label={item.name}
           title={item.name}
-          className={`w-12 h-12 rounded-2xl border border-[#394045]/30 dark:border-[#394045] bg-white/90 dark:bg-[#20292D] flex items-center justify-center transition-all duration-200 hover:-translate-y-1 shadow-sm dark:shadow-lg dark:shadow-black/40 ${item.borderHover}`}
+          className={`w-12 h-12 rounded-2xl border border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#34150F] flex items-center justify-center transition-all duration-200 hover:-translate-y-1 shadow-sm dark:shadow-lg dark:shadow-black/40 ${item.borderHover}`}
         >
           {item.icon}
         </a>

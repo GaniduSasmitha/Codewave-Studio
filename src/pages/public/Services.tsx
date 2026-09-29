@@ -88,25 +88,25 @@ export default function Services() {
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-12">
         {services.map((service, i) => (
           <ScrollReveal key={i} delay={i * 0.1}>
-            <GlassCard className="h-full flex flex-col justify-between p-8 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/30">
+            <GlassCard className="h-full flex flex-col justify-between p-8 border border-[#E3D5C5] dark:border-[#54281B] bg-white/80 dark:bg-[#34150F]/70">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="text-4xl">{service.icon}</div>
                   <div className="text-right">
-                    <span className="text-xs text-slate-500 block uppercase tracking-wider font-semibold">Starting from</span>
-                    <span className="text-2xl font-black text-slate-900 dark:text-white">{service.price}</span>
+                    <span className="text-xs text-[#85431E] dark:text-[#B58E78] block uppercase tracking-wider font-semibold">Starting from</span>
+                    <span className="text-2xl font-black text-[#34150F] dark:text-[#EACEAA]">{service.price}</span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">{service.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{service.desc}</p>
+                  <h3 className="text-2xl font-bold text-[#34150F] dark:text-[#EACEAA] group-hover:text-[#85431E] dark:group-hover:text-[#D39858] transition-colors">{service.title}</h3>
+                  <p className="text-[#54281B] dark:text-[#B58E78] text-sm leading-relaxed">{service.desc}</p>
                 </div>
 
-                <ul className="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-800/60">
+                <ul className="space-y-2.5 pt-4 border-t border-[#E3D5C5] dark:border-[#54281B]">
                   {service.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                      <span className="text-primary dark:text-accent">✔</span> {feature}
+                    <li key={fIdx} className="flex items-center gap-2 text-sm text-[#54281B] dark:text-[#EACEAA]">
+                      <span className="text-[#85431E] dark:text-[#D39858]">✔</span> {feature}
                     </li>
                   ))}
                 </ul>
