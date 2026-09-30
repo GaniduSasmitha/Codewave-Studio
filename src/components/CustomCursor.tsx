@@ -17,6 +17,8 @@ export default function CustomCursor() {
       return;
     }
 
+    document.documentElement.classList.add('custom-cursor-active');
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
       if (!isVisible) setIsVisible(true);
@@ -59,6 +61,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
+      document.documentElement.classList.remove('custom-cursor-active');
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);

@@ -16,6 +16,13 @@
   }
 }
 
+/* Hide native default browser cursor on desktop/mouse devices so only the custom cursor is visible */
+@media (pointer: fine) {
+  html, body, body *, a, button, input, textarea, select, label, [role="button"] {
+    cursor: none !important;
+  }
+}
+
 @layer utilities {
   .gradient-brand {
     background-image: linear-gradient(135deg, #D4AF37 0%, #F3C623 50%, #AA7C11 100%);
