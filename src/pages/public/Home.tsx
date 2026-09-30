@@ -317,7 +317,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="dark relative isolate overflow-hidden bg-[#0A0F12]">
+    <div className="relative isolate overflow-hidden bg-[#F0F4F9] dark:bg-[#0A0F12]">
       <Hero3D />
       <div className="relative z-10 space-y-32 pb-24">
       {/* Hero Section */}

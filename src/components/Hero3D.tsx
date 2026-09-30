@@ -4,13 +4,14 @@ import { Effects, Instance, Instances, RoundedBox, Sparkles } from '@react-three
 import { CanvasTexture, MathUtils, SRGBColorSpace, Vector2 } from 'three';
 import type { Group } from 'three';
 import { UnrealBloomPass } from 'three-stdlib';
+import { useTheme } from '../context/ThemeContext';
 
 const BloomPass = extend(UnrealBloomPass);
 
 const COLORS = {
   background: '#0A0F12',
-  body: '#131B2E',
-  bodyHighlight: '#1E3A5F',
+  body: '#1E3A5F',
+  bodyHighlight: '#405678',
   accent: '#D4AF37',
   accentBright: '#F3C623',
   cream: '#F9E79F',
@@ -31,6 +32,7 @@ type SceneProps = {
   isMobile: boolean;
   lowPower: boolean;
   reducedMotion: boolean;
+  isDark: boolean;
   scrollProgress: React.MutableRefObject<number>;
   interaction: React.MutableRefObject<InteractionState>;
 };
@@ -140,27 +142,27 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     if (!laptopRef.current || !lidRef.current) return;
 
     if (reducedMotion) {
-      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -2 : -0.05, 0);
-      laptopRef.current.rotation.set(0.05, -0.2, 0.015);
-      laptopRef.current.scale.setScalar(isMobile ? 0.55 : 1);
+      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -1.78 : -0.05, 0);
+      laptopRef.current.rotation.set(0.05, isMobile ? -0.08 : -0.2, 0.015);
+      laptopRef.current.scale.setScalar(isMobile ? 0.52 : 1);
       lidRef.current.rotation.x = restingLidAngle;
       return;
     }
 
     const elapsed = clock.getElapsedTime();
     const entrance = MathUtils.smoothstep(Math.min(elapsed / 1.55, 1), 0, 1);
-    const progress = lowPower ? scrollProgress.current * 0.45 : scrollProgress.current;
+    const progress = scrollProgress.current;
     const input = interaction.current;
     const targetX = isMobile
-      ? MathUtils.lerp(0, 0.38, progress)
+      ? 0
       : MathUtils.lerp(1.85, 1.55, progress);
     const targetY = isMobile
-      ? MathUtils.lerp(-2, -1.35, progress)
+      ? MathUtils.lerp(-1.78, -1.58, progress)
       : MathUtils.lerp(-0.05, 0.22, progress);
-    const targetScale = (isMobile ? MathUtils.lerp(0.55, 0.46, progress) : MathUtils.lerp(0.94, 0.82, progress))
+    const targetScale = (isMobile ? MathUtils.lerp(0.52, 0.47, progress) : MathUtils.lerp(0.94, 0.82, progress))
       * MathUtils.lerp(0.72, 1, entrance);
-    const targetRotationY = -0.2 + progress * (isMobile ? 0.48 : 0.62) + input.pointerX * 0.11 + input.dragX;
-    const targetRotationX = 0.05 + progress * 0.08 - input.pointerY * 0.075 + input.dragY;
+    const targetRotationY = (isMobile ? -0.08 : -0.2) + progress * (isMobile ? 0.2 : 0.62) + input.pointerX * 0.11 + input.dragX;
+    const targetRotationX = 0.05 + progress * (isMobile ? 0.025 : 0.08) - input.pointerY * 0.075 + input.dragY;
 
     laptopRef.current.position.x = MathUtils.damp(laptopRef.current.position.x, targetX, 3.2, delta);
     laptopRef.current.position.y = MathUtils.damp(laptopRef.current.position.y, targetY, 3.2, delta);
@@ -176,8 +178,8 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
   return (
     <group
       ref={laptopRef}
-      position={[isMobile ? 0 : 1.85, isMobile ? -2 : -0.05, 0]}
-      rotation={[0.05, -0.2, 0.015]}
+      position={[isMobile ? 0 : 1.85, isMobile ? -1.78 : -0.05, 0]}
+      rotation={[0.05, isMobile ? -0.08 : -0.2, 0.015]}
       scale={isMobile ? 0.4 : 0.68}
     >
       <RoundedBox args={[4, 0.18, 2.45]} radius={0.1} smoothness={3} position={[0, -0.86, 0.08]} castShadow receiveShadow>
@@ -262,11 +264,13 @@ function Scene(props: SceneProps) {
 }
 
 export default function Hero3D() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [webGLAvailable, setWebGLAvailable] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [lowPower, setLowPower] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [heroOpacity, setHeroOpacity] = useState(1);
+  const heroRef = useRef<HTMLDivElement>(null);
   const scrollProgress = useRef(0);
   const interaction = useRef<InteractionState>({ pointerX: 0, pointerY: 0, dragX: 0, dragY: 0 });
 
@@ -292,7 +296,9 @@ export default function Hero3D() {
     const updateScroll = () => {
       const progress = MathUtils.clamp(window.scrollY / Math.max(window.innerHeight * 0.88, 1), 0, 1);
       scrollProgress.current = progress;
-      setHeroOpacity(1 - MathUtils.smoothstep(progress, 0.5, 0.96));
+      if (heroRef.current) {
+        heroRef.current.style.opacity = String(1 - MathUtils.smoothstep(progress, 0.5, 0.96));
+      }
     };
     updateScroll();
     window.addEventListener('scroll', updateScroll, { passive: true });
@@ -300,7 +306,10 @@ export default function Hero3D() {
   }, []);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isMobile) {
+      interaction.current = { pointerX: 0, pointerY: 0, dragX: 0, dragY: 0 };
+      return;
+    }
 
     let dragging = false;
     let startX = 0;
@@ -309,7 +318,7 @@ export default function Hero3D() {
     let startDragY = 0;
 
     const handlePointerDown = (event: PointerEvent) => {
-      const isLaptopArea = isMobile || event.clientX > window.innerWidth * 0.46;
+      const isLaptopArea = event.clientX > window.innerWidth * 0.46;
       if (event.button !== 0 || scrollProgress.current > 0.9 || !isLaptopArea) return;
       dragging = true;
       startX = event.clientX;
@@ -357,18 +366,25 @@ export default function Hero3D() {
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 pointer-events-none"
-        style={{ background: `radial-gradient(circle at 55% 35%, ${COLORS.body}, ${COLORS.background} 68%)` }}
+        style={{
+          background: isDark
+            ? `radial-gradient(circle at 55% 35%, ${COLORS.body}, ${COLORS.background} 68%)`
+            : 'radial-gradient(circle at 55% 35%, rgba(212, 175, 55, 0.18), #F0F4F9 68%)',
+        }}
       />
     );
   }
 
   return (
     <div
+      ref={heroRef}
       aria-hidden="true"
-      className="fixed inset-0 z-0 pointer-events-none bg-[#0A0F12]"
+      className="fixed inset-0 z-0 pointer-events-none"
       style={{
-        background: 'radial-gradient(circle at 70% 34%, rgba(212, 175, 55, 0.12) 0%, rgba(19, 27, 46, 0.7) 30%, #0A0F12 68%)',
-        opacity: heroOpacity,
+        background: isDark
+          ? 'radial-gradient(circle at 70% 34%, rgba(212, 175, 55, 0.12) 0%, rgba(19, 27, 46, 0.7) 30%, #0A0F12 68%)'
+          : 'radial-gradient(circle at 70% 34%, rgba(212, 175, 55, 0.2) 0%, rgba(226, 232, 240, 0.86) 34%, #F0F4F9 72%)',
+        opacity: 1,
         transition: reducedMotion ? 'none' : 'opacity 180ms linear',
       }}
     >
@@ -379,20 +395,16 @@ export default function Hero3D() {
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         shadows={!isMobile && !lowPower}
       >
-        <fog attach="fog" args={[COLORS.background, 8, 20]} />
+        <fog attach="fog" args={[isDark ? COLORS.background : '#F0F4F9', 8, 20]} />
         <Scene
           isMobile={isMobile}
           lowPower={lowPower}
           reducedMotion={reducedMotion}
+          isDark={isDark}
           scrollProgress={scrollProgress}
           interaction={interaction}
         />
       </Canvas>
-      {!isMobile && heroOpacity > 0.55 && (
-        <div className="absolute bottom-[13%] right-[13%] rounded-full border border-[#D4AF37]/50 bg-[#0A0F12]/75 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#F3C623] backdrop-blur-sm">
-          Move cursor &middot; drag to rotate
-        </div>
-      )}
     </div>
   );
 }
