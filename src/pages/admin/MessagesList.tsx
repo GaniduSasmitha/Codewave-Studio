@@ -127,7 +127,7 @@ export default function MessagesList() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
             Contact Messages
             {unreadCount > 0 && (
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#A33715]/20 text-[#A33715] dark:text-[#A33715] border border-[#A33715]/30">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/40">
                 {unreadCount} Unread
               </span>
             )}
@@ -143,7 +143,7 @@ export default function MessagesList() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="bg-[#F4F0EC] dark:bg-[#0A0F12] border border-[#394045]/40 dark:border-[#394045] text-xs text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-primary"
+            className="bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] text-xs text-[#0B132B] dark:text-[#F9E79F] rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
           >
             <option value="all">All Messages ({messages.length})</option>
             <option value="unread">Unread ({unreadCount})</option>
@@ -181,10 +181,10 @@ export default function MessagesList() {
                         onClick={() => handleOpenMessage(msg)}
                         className={`p-4 cursor-pointer border transition-all duration-200 ${
                           isSelected
-                            ? 'border-[#A33715]/50 bg-white dark:bg-[#20292D] shadow-lg shadow-[#A33715]/5'
+                            ? 'border-[#D4AF37] bg-white dark:bg-[#131B2E] shadow-lg shadow-[#D4AF37]/10'
                             : isUnread
-                            ? 'border-[#A33715]/30 bg-[#A33715]/10 dark:bg-[#20292D] hover:border-[#A33715]/50 font-medium'
-                            : 'border-[#394045]/30 dark:border-[#394045] bg-white/90 dark:bg-[#20292D] hover:border-slate-400 dark:hover:border-slate-600 opacity-90 hover:opacity-100'
+                            ? 'border-[#D4AF37]/40 bg-[#D4AF37]/10 dark:bg-[#131B2E] hover:border-[#D4AF37]/60 font-medium'
+                            : 'border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 opacity-90 hover:opacity-100'
                         }`}
                         hoverEffect={false}
                       >
@@ -193,7 +193,7 @@ export default function MessagesList() {
                             {/* Status Indicator Badge */}
                             <span
                               className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
-                                isUnread ? 'bg-[#A33715] dark:bg-[#A33715] animate-pulse shadow-sm shadow-[#A33715]' : 'bg-slate-400 dark:bg-slate-700'
+                                isUnread ? 'bg-[#D4AF37] dark:bg-[#F3C623] animate-pulse shadow-sm shadow-[#D4AF37]' : 'bg-slate-400 dark:bg-slate-700'
                               }`}
                             />
                             <span className={`text-sm truncate ${isUnread ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
@@ -239,15 +239,15 @@ export default function MessagesList() {
           {selectedMessage && (
             <div className="lg:col-span-6">
               <ScrollReveal>
-                <GlassCard className="p-6 border border-[#394045]/40 dark:border-[#394045] bg-white/95 dark:bg-[#20292D] sticky top-24 space-y-6 shadow-xl">
-                  <div className="flex items-start justify-between pb-4 border-b border-[#394045]/40">
+                <GlassCard className="p-6 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/95 dark:bg-[#131B2E] sticky top-24 space-y-6 shadow-xl">
+                  <div className="flex items-start justify-between pb-4 border-b border-[#CBD5E1] dark:border-[#1E3A5F]">
                     <div>
                       <div className="flex items-center gap-2">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white">{selectedMessage.name}</h2>
                         <span
                           className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
                             selectedMessage.status === 'unread'
-                              ? 'bg-[#A33715]/20 text-[#A33715] dark:text-[#A33715] border border-[#A33715]/40'
+                              ? 'bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/40'
                               : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                           }`}
                         >

@@ -29,10 +29,10 @@ export default function PublicLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F3ED] dark:bg-[#150C0C] text-[#34150F] dark:text-[#EACEAA] flex flex-col font-sans transition-colors duration-300">
-      <header className="border-b border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/90 dark:bg-[#150C0C]/90 backdrop-blur sticky top-0 z-50 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-[#F0F4F9] dark:bg-[#0B132B] text-[#0B132B] dark:text-[#F9E79F] flex flex-col font-sans transition-colors duration-300">
+      <header className="border-b border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/90 dark:bg-[#0B132B]/90 backdrop-blur sticky top-0 z-50 transition-colors duration-300 relative">
         {/* Ambient Radial Gradient Glow behind Header */}
-        <div className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-primary/15 via-accent/20 to-primary/15 blur-2xl pointer-events-none opacity-80 dark:opacity-60 overflow-hidden" />
+        <div className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-primary/20 via-accent/30 to-primary/20 blur-2xl pointer-events-none opacity-80 dark:opacity-60 overflow-hidden" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
           <Link to="/">
@@ -55,11 +55,11 @@ export default function PublicLayout() {
                     className={`inline-block transition-colors duration-250 ${
                       isActive
                         ? 'text-primary dark:text-accent font-bold'
-                        : 'text-[#54281B] dark:text-[#EACEAA]/80 group-hover:text-primary dark:group-hover:text-accent'
+                        : 'text-[#1E3A5F] dark:text-[#F9E79F]/80 group-hover:text-primary dark:group-hover:text-accent'
                     }`}
                     style={{
                       textShadow: isActive
-                        ? '0 0 10px rgba(133, 67, 30, 0.75), 0 0 22px rgba(211, 152, 88, 0.55)'
+                        ? '0 0 10px rgba(212, 175, 55, 0.8), 0 0 22px rgba(243, 198, 35, 0.6)'
                         : undefined,
                     }}
                     whileHover={{
@@ -67,19 +67,19 @@ export default function PublicLayout() {
                       scale: 1.06,
                       y: -1,
                       textShadow: isActive
-                        ? '0 0 14px rgba(133, 67, 30, 0.95), 0 0 26px rgba(211, 152, 88, 0.75)'
-                        : '0 0 8px rgba(133, 67, 30, 0.6), 0 0 18px rgba(211, 152, 88, 0.45)',
+                        ? '0 0 14px rgba(212, 175, 55, 0.95), 0 0 26px rgba(243, 198, 35, 0.8)'
+                        : '0 0 8px rgba(212, 175, 55, 0.6), 0 0 18px rgba(243, 198, 35, 0.45)',
                     }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
                     {item.label}
                   </motion.span>
 
-                  {/* Active Link Indicator Underline + Warm Glow */}
+                  {/* Active Link Indicator Underline + Royal Gold Glow */}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] rounded-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_12px_rgba(133,67,30,0.8)]"
+                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] rounded-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_12px_rgba(212,175,55,0.9)]"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -101,7 +101,7 @@ export default function PublicLayout() {
                       document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors"
+                  className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors"
                 >
                   My Orders
                 </Link>
@@ -109,15 +109,15 @@ export default function PublicLayout() {
               </>
             ) : user && profile?.role === 'admin' ? (
               <>
-                <Link to="/admin" className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors">
+                <Link to="/admin" className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">
                   Admin Dashboard
                 </Link>
                 <ProfileMenu />
               </>
             ) : (
               <>
-                <Link to="/login" className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors">Log in</Link>
-                <Link to="/signup" className="text-sm font-medium bg-[#85431E] hover:bg-[#85431E]/90 text-[#EACEAA] px-4 py-2 rounded-lg transition-colors shadow-md shadow-primary/20">
+                <Link to="/login" className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Log in</Link>
+                <Link to="/signup" className="text-sm font-bold gradient-brand text-[#0B132B] px-4 py-2 rounded-lg transition-all shadow-md shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-[1.02]">
                   Sign up
                 </Link>
               </>
@@ -130,7 +130,7 @@ export default function PublicLayout() {
             {user && <ProfileMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-[#54281B] dark:text-[#B58E78] hover:text-primary dark:hover:text-[#EACEAA] focus:outline-none p-2 cursor-pointer"
+              className="text-[#1E3A5F] dark:text-[#8496B8] hover:text-primary dark:hover:text-[#F9E79F] focus:outline-none p-2 cursor-pointer"
               aria-label="Toggle menu"
             >
               <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -152,7 +152,7 @@ export default function PublicLayout() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="md:hidden border-b border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/95 dark:bg-[#150C0C]/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
+              className="md:hidden border-b border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/95 dark:bg-[#0B132B]/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
             >
               <div className="flex flex-col space-y-1.5">
                 {navItems.map((item) => {
@@ -165,18 +165,18 @@ export default function PublicLayout() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`relative px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between active:scale-[0.98] ${
                         isActive
-                          ? 'bg-gradient-to-r from-primary/15 to-accent/15 border-l-4 border-primary dark:border-accent text-primary dark:text-accent font-bold shadow-[inset_0_0_20px_rgba(133,67,30,0.15)]'
-                          : 'text-[#54281B] dark:text-[#EACEAA] hover:bg-[#E3D5C5]/50 dark:hover:bg-[#34150F] hover:text-primary dark:hover:text-accent'
+                          ? 'bg-gradient-to-r from-primary/20 to-accent/20 border-l-4 border-primary dark:border-accent text-primary dark:text-accent font-bold shadow-[inset_0_0_20px_rgba(212,175,55,0.2)]'
+                          : 'text-[#1E3A5F] dark:text-[#F9E79F] hover:bg-[#CBD5E1]/50 dark:hover:bg-[#131B2E] hover:text-primary dark:hover:text-accent'
                       }`}
                       style={{
                         textShadow: isActive
-                          ? '0 0 10px rgba(133, 67, 30, 0.6), 0 0 18px rgba(211, 152, 88, 0.4)'
+                          ? '0 0 10px rgba(212, 175, 55, 0.6), 0 0 18px rgba(243, 198, 35, 0.4)'
                           : undefined,
                       }}
                     >
                       <span>{item.label}</span>
                       {isActive && (
-                        <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#85431E]" />
+                        <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#D4AF37]" />
                       )}
                     </Link>
                   );
@@ -184,12 +184,12 @@ export default function PublicLayout() {
               </div>
 
               {/* Theme Toggle in Mobile Menu */}
-              <div className="pt-2 border-t border-[#E3D5C5] dark:border-[#54281B] flex items-center justify-between">
-                <span className="text-sm font-medium text-[#54281B] dark:text-[#B58E78]">Theme</span>
+              <div className="pt-2 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex items-center justify-between">
+                <span className="text-sm font-medium text-[#1E3A5F] dark:text-[#8496B8]">Theme</span>
                 <ThemeToggle showLabel={true} />
               </div>
 
-              <div className="pt-3 border-t border-[#E3D5C5] dark:border-[#54281B] flex flex-col gap-3">
+              <div className="pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex flex-col gap-3">
                 {user ? (
                   <>
                     {profile?.role === 'customer' ? (
@@ -202,7 +202,7 @@ export default function PublicLayout() {
                             document.getElementById('orders-dashboard')?.scrollIntoView({ behavior: 'smooth' });
                           }
                         }}
-                        className="text-center text-sm font-medium text-[#34150F] dark:text-[#EACEAA] py-3 rounded-lg border border-[#E3D5C5] dark:border-[#54281B] bg-[#E3D5C5]/30 hover:bg-[#E3D5C5]/60 dark:bg-[#34150F] dark:hover:bg-[#34150F]/80 transition-colors min-h-[44px] flex items-center justify-center"
+                        className="text-center text-sm font-medium text-[#0B132B] dark:text-[#F9E79F] py-3 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#CBD5E1]/30 hover:bg-[#CBD5E1]/60 dark:bg-[#131B2E] dark:hover:bg-[#131B2E]/80 transition-colors min-h-[44px] flex items-center justify-center"
                       >
                         My Orders
                       </Link>
@@ -210,7 +210,7 @@ export default function PublicLayout() {
                       <Link
                         to="/admin"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-center text-sm font-medium text-[#34150F] dark:text-[#EACEAA] py-3 rounded-lg border border-[#E3D5C5] dark:border-[#54281B] bg-[#E3D5C5]/30 hover:bg-[#E3D5C5]/60 dark:bg-[#34150F] dark:hover:bg-[#34150F]/80 transition-colors min-h-[44px] flex items-center justify-center"
+                        className="text-center text-sm font-medium text-[#0B132B] dark:text-[#F9E79F] py-3 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#CBD5E1]/30 hover:bg-[#CBD5E1]/60 dark:bg-[#131B2E] dark:hover:bg-[#131B2E]/80 transition-colors min-h-[44px] flex items-center justify-center"
                       >
                         Admin Dashboard
                       </Link>
@@ -219,10 +219,10 @@ export default function PublicLayout() {
                   </>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium text-[#34150F] dark:text-[#EACEAA] py-3 rounded-lg border border-[#E3D5C5] dark:border-[#54281B] bg-[#E3D5C5]/30 hover:bg-[#E3D5C5]/60 dark:bg-[#34150F] dark:hover:bg-[#34150F]/80 transition-colors min-h-[44px] flex items-center justify-center">
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium text-[#0B132B] dark:text-[#F9E79F] py-3 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#CBD5E1]/30 hover:bg-[#CBD5E1]/60 dark:bg-[#131B2E] dark:hover:bg-[#131B2E]/80 transition-colors min-h-[44px] flex items-center justify-center">
                       Log in
                     </Link>
-                    <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-medium bg-[#85431E] hover:bg-[#85431E]/90 text-[#EACEAA] py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center">
+                    <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="text-center text-sm font-bold gradient-brand text-[#0B132B] py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center">
                       Sign up
                     </Link>
                   </>
@@ -242,8 +242,8 @@ export default function PublicLayout() {
           <Outlet />
         </motion.div>
       </main>
-      <footer className="border-t border-[#E3D5C5] dark:border-[#54281B] py-10 bg-[#F0E6DD] dark:bg-[#34150F]/80 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#85431E] dark:text-[#B58E78]">
+      <footer className="border-t border-[#CBD5E1] dark:border-[#1E3A5F] py-10 bg-[#E2E8F0] dark:bg-[#070D1D] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#1E3A5F] dark:text-[#8496B8]">
           <div className="flex flex-col items-center md:items-start gap-2">
             <Logo size="sm" showText={true} />
             <p>© {new Date().getFullYear()} Codewave Studio. All rights reserved.</p>

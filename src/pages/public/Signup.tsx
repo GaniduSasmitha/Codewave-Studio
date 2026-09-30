@@ -94,23 +94,23 @@ export default function Signup() {
   return (
     <div className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
       {/* Single Unified Master Glass Card */}
-      <GlassCard className="p-0 border border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#150C0C]/90 shadow-2xl backdrop-blur-2xl rounded-3xl overflow-hidden">
+      <GlassCard className="p-0 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/95 shadow-2xl backdrop-blur-2xl rounded-3xl overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[560px]">
           {/* Left/Top Column: Animated Mascots Stage */}
-          <div className="lg:col-span-6 bg-[#150C0C]/95 relative overflow-hidden border-b lg:border-b-0 lg:border-r border-[#E3D5C5] dark:border-[#54281B] flex flex-col justify-center p-2 sm:p-4 lg:p-6">
+          <div className="lg:col-span-6 bg-[#070D1D]/95 relative overflow-hidden border-b lg:border-b-0 lg:border-r border-[#CBD5E1] dark:border-[#1E3A5F] flex flex-col justify-center p-2 sm:p-4 lg:p-6">
             <AuthMascotsPanel />
           </div>
 
           {/* Right/Bottom Column: Auth Form */}
-          <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white/50 dark:bg-[#34150F]/40 backdrop-blur-xl">
+          <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white/50 dark:bg-[#131B2E]/60 backdrop-blur-xl">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-extrabold text-[#34150F] dark:text-[#EACEAA]">Get Started</h1>
-              <p className="text-[#54281B] dark:text-[#B58E78] text-xs mt-2">Create your account to initiate your project.</p>
+              <h1 className="text-3xl font-extrabold text-[#0B132B] dark:text-[#F9E79F]">Get Started</h1>
+              <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-2">Create your account to initiate your project.</p>
             </div>
 
             {packageId && planNames[packageId] && (
-              <div className="mb-6 p-4 rounded-xl bg-[#85431E]/10 border border-[#85431E]/30 text-xs text-[#54281B] dark:text-[#EACEAA] font-semibold leading-relaxed">
-                Selected Plan: <span className="text-[#85431E] dark:text-[#D39858] font-bold">{planNames[packageId]}</span>
+              <div className="mb-6 p-4 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-xs text-[#0B132B] dark:text-[#F9E79F] font-semibold leading-relaxed">
+                Selected Plan: <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold">{planNames[packageId]}</span>
               </div>
             )}
 
@@ -128,7 +128,7 @@ export default function Signup() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label htmlFor="fullName" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                <label htmlFor="fullName" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                   Full Name
                 </label>
                 <input
@@ -137,13 +137,13 @@ export default function Signup() {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border border-[#E3D5C5] dark:border-[#54281B] rounded-xl text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors"
+                  className="mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-xl text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors"
                   placeholder="Your full name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                <label htmlFor="email" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                   Email Address
                 </label>
                 <input
@@ -152,13 +152,13 @@ export default function Signup() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border border-[#E3D5C5] dark:border-[#54281B] rounded-xl text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors"
+                  className="mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-xl text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                <label htmlFor="password" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                   Password
                 </label>
                 <input
@@ -167,7 +167,7 @@ export default function Signup() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border border-[#E3D5C5] dark:border-[#54281B] rounded-xl text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors"
+                  className="mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-xl text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -178,8 +178,8 @@ export default function Signup() {
             </form>
 
             <div className="relative my-6 flex items-center justify-center">
-              <div className="absolute w-full border-t border-[#E3D5C5] dark:border-[#54281B]"></div>
-              <span className="relative bg-[#F8F3ED] dark:bg-[#34150F] backdrop-blur-md px-3 text-xs text-[#85431E] dark:text-[#B58E78] font-semibold uppercase tracking-wider">
+              <div className="absolute w-full border-t border-[#CBD5E1] dark:border-[#1E3A5F]"></div>
+              <span className="relative bg-[#F0F4F9] dark:bg-[#131B2E] backdrop-blur-md px-3 text-xs text-[#0B132B] dark:text-[#8496B8] font-semibold uppercase tracking-wider">
                 or
               </span>
             </div>
@@ -187,7 +187,7 @@ export default function Signup() {
             <button
               type="button"
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#F8F3ED] hover:bg-[#E3D5C5] dark:bg-[#34150F] dark:hover:bg-[#54281B] text-[#34150F] dark:text-[#EACEAA] font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm border border-[#E3D5C5] dark:border-[#54281B] cursor-pointer"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#F0F4F9] hover:bg-[#CBD5E1] dark:bg-[#131B2E] dark:hover:bg-[#1C2541] text-[#0B132B] dark:text-[#F9E79F] font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm border border-[#CBD5E1] dark:border-[#1E3A5F] cursor-pointer"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -210,9 +210,9 @@ export default function Signup() {
               <span className="font-medium">Continue with Google</span>
             </button>
 
-            <div className="mt-6 text-center text-xs text-[#54281B] dark:text-[#B58E78] font-medium">
+            <div className="mt-6 text-center text-xs text-[#1E3A5F] dark:text-[#8496B8] font-medium">
               Already have an account?{' '}
-              <Link to={`/login${packageId ? `?package=${packageId}` : ''}`} className="text-[#85431E] dark:text-[#D39858] hover:underline font-bold">
+              <Link to={`/login${packageId ? `?package=${packageId}` : ''}`} className="text-[#0B132B] dark:text-[#F3C623] hover:underline font-bold">
                 Log In
               </Link>
             </div>

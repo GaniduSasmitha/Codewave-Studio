@@ -54,29 +54,29 @@ export default function About() {
       {/* Story Section */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <ScrollReveal className="space-y-6 text-left">
-          <h3 className="text-2xl font-bold text-[#34150F] dark:text-[#EACEAA]">Our Mission</h3>
-          <p className="text-[#54281B] dark:text-[#B58E78] text-sm leading-relaxed">
+          <h3 className="text-2xl font-bold text-[#0B132B] dark:text-[#F9E79F]">Our Mission</h3>
+          <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm leading-relaxed">
             Codewave Studio was founded in 2025 to disrupt standard cookie-cutter web agency designs. We believe a website is the digital headquarters of a business and should wow visitors immediately.
           </p>
-          <p className="text-[#54281B] dark:text-[#B58E78] text-sm leading-relaxed">
+          <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm leading-relaxed">
             By leveraging state-of-the-art architectures like React, Vite, Supabase, GSAP, and WebGL, we create high-performance web applications that are as visually premium as they are fast.
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <GlassCard className="p-8 border border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#34150F] text-left">
-            <h4 className="text-lg font-bold text-[#85431E] dark:text-[#D39858] mb-4">Core Numbers</h4>
+          <GlassCard className="p-8 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E] text-left">
+            <h4 className="text-lg font-bold text-[#D4AF37] dark:text-[#F3C623] mb-4">Core Numbers</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               <div>
-                <p className="text-3xl font-black text-[#34150F] dark:text-[#EACEAA]">40+</p>
-                <p className="text-xs text-[#54281B] dark:text-[#B58E78] mt-1">Projects Built</p>
+                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">40+</p>
+                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Projects Built</p>
               </div>
               <div>
-                <p className="text-3xl font-black text-[#34150F] dark:text-[#EACEAA]">99%</p>
-                <p className="text-xs text-[#54281B] dark:text-[#B58E78] mt-1">Client Reviews</p>
+                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">99%</p>
+                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Client Reviews</p>
               </div>
               <div>
-                <p className="text-3xl font-black text-[#34150F] dark:text-[#EACEAA]">&lt;4s</p>
-                <p className="text-xs text-[#54281B] dark:text-[#B58E78] mt-1">Average Load</p>
+                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">&lt;4s</p>
+                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Average Load</p>
               </div>
             </div>
           </GlassCard>

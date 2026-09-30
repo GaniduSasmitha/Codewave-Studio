@@ -17,9 +17,9 @@ export default function AnimatedButton({
   const baseStyles = 'relative px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 overflow-hidden';
 
   const variants = {
-    primary: 'gradient-brand text-white hover:shadow-[0_0_20px_rgba(133,67,30,0.6)] font-semibold',
-    secondary: 'border border-[#54281B] bg-[#EACEAA]/20 hover:bg-[#EACEAA]/30 text-[#150C0C] dark:bg-transparent dark:hover:bg-[#34150F] dark:text-[#EACEAA] dark:hover:border-[#D39858]',
-    glass: 'bg-slate-900/5 dark:bg-white/5 backdrop-blur-md border border-[#54281B]/40 hover:bg-slate-900/10 dark:hover:bg-white/10 text-[#150C0C] dark:text-[#EACEAA] shadow-sm dark:shadow-lg'
+    primary: 'gradient-brand text-[#0B132B] font-bold hover:shadow-[0_0_25px_rgba(212,175,55,0.7)] border border-[#F3C623]/50',
+    secondary: 'border border-[#D4AF37]/40 bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#0B132B] dark:bg-[#131B2E] dark:hover:bg-[#1C2541] dark:text-[#F9E79F] dark:border-[#D4AF37]/60 dark:hover:border-[#F3C623]',
+    glass: 'bg-slate-900/5 dark:bg-white/5 backdrop-blur-md border border-[#D4AF37]/30 hover:border-[#D4AF37]/60 text-[#0B132B] dark:text-[#F9E79F] shadow-sm dark:shadow-lg'
   };
 
   return (

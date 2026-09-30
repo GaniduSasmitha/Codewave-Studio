@@ -27,10 +27,10 @@ interface Order {
 }
 
 const statusColors: Record<string, string> = {
-  pending_payment: "bg-[#D39858]/10 text-[#D39858] border border-[#D39858]/30",
-  pending_verification: "bg-[#D39858]/20 text-[#D39858] border border-[#D39858]/40",
-  verified: "bg-[#85431E]/20 text-[#D39858] border border-[#85431E]/30",
-  in_progress: "bg-[#85431E]/30 text-[#EACEAA] border border-[#85431E]/50",
+  pending_payment: "bg-[#D4AF37]/15 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/40",
+  pending_verification: "bg-[#D4AF37]/25 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/50",
+  verified: "bg-[#1E3A5F]/30 text-[#1E3A5F] dark:text-[#F9E79F] border border-[#1E3A5F]/50",
+  in_progress: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
   completed: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
   cancelled: "bg-rose-500/10 text-rose-400 border border-rose-500/20",
   rejected: "bg-rose-500/10 text-rose-400 border border-rose-500/20"
@@ -349,7 +349,7 @@ export default function Home() {
             variants={heroTitleVariants}
             initial="hidden"
             animate="visible"
-            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-[#EACEAA] leading-tight"
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-[#0B132B] dark:text-[#F9E79F] leading-tight"
           >
             <motion.span variants={wordVariants} className="inline-block">Elevate</motion.span>{' '}
             <motion.span variants={wordVariants} className="inline-block">Your</motion.span> <br />
@@ -358,7 +358,7 @@ export default function Home() {
             </motion.span>
           </motion.h1>
 
-          <p className="max-w-xl text-lg text-[#B58E78] leading-relaxed">
+          <p className="max-w-xl text-lg text-[#1E3A5F] dark:text-[#8496B8] leading-relaxed">
             We build immersive 3D experiences, stunning interfaces, and high-performance applications custom tailored to your goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -383,7 +383,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex justify-center items-center relative">
-          <div className="absolute -inset-4 gradient-brand opacity-10 blur-3xl pointer-events-none"></div>
+          <div className="absolute -inset-4 gradient-brand opacity-15 blur-3xl pointer-events-none"></div>
           <Hero3D />
         </div>
       </section>
@@ -391,10 +391,10 @@ export default function Home() {
       {/* Customer Dashboard Section */}
       {user && profile?.role === 'customer' && (
         <section id="orders-dashboard" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 text-left space-y-8 scroll-mt-24">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#54281B] pb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#CBD5E1] dark:border-[#1E3A5F] pb-6">
             <div>
-              <h2 className="text-3xl font-extrabold text-[#EACEAA] tracking-tight">Client Dashboard</h2>
-              <p className="text-[#B58E78] mt-2 text-sm font-medium">Manage your current orders and request new services directly.</p>
+              <h2 className="text-3xl font-extrabold text-[#0B132B] dark:text-[#F9E79F] tracking-tight">Client Dashboard</h2>
+              <p className="text-[#1E3A5F] dark:text-[#8496B8] mt-2 text-sm font-medium">Manage your current orders and request new services directly.</p>
             </div>
             <AnimatedButton onClick={() => { setNewOrderOpen(true); setNewOrderStep(1); setOrderError(''); }} variant="primary" className="py-2.5 px-6 cursor-pointer">
               + New Project Order
@@ -406,10 +406,10 @@ export default function Home() {
               <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
             </div>
           ) : orders.length === 0 ? (
-            <GlassCard className="p-12 text-center border border-[#54281B] bg-[#34150F]/70 max-w-xl mx-auto mt-8">
+            <GlassCard className="p-12 text-center border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/80 dark:bg-[#131B2E]/80 max-w-xl mx-auto mt-8">
               <div className="text-4xl mb-4">📂</div>
-              <h3 className="text-xl font-bold text-[#EACEAA]">No active orders</h3>
-              <p className="text-[#B58E78] text-sm mt-2 max-w-sm mx-auto">
+              <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F]">No active orders</h3>
+              <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm mt-2 max-w-sm mx-auto">
                 You don't have any custom design or development orders. Start your first project now.
               </p>
               <AnimatedButton onClick={() => { setNewOrderOpen(true); setNewOrderStep(1); setOrderError(''); }} variant="primary" className="mt-8 mx-auto px-8 cursor-pointer">
@@ -438,26 +438,26 @@ export default function Home() {
                       className={isExpanded ? "md:col-span-2 lg:col-span-3" : ""}
                     >
                       <GlassCard
-                        className={`flex flex-col justify-between border border-[#54281B] bg-[#34150F]/70 hover:border-[#85431E]/60 transition-all duration-300 ${isExpanded ? "border-[#85431E] bg-[#34150F]" : ""
+                        className={`flex flex-col justify-between border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/60 transition-all duration-300 ${isExpanded ? "border-[#D4AF37] bg-white dark:bg-[#131B2E]" : ""
                           }`}
                       >
                         <div className="space-y-4">
                           <div className="flex justify-between items-center">
-                            <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${statusColors[order.status] || "bg-[#85431E]/10 text-[#B58E78]"
+                            <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${statusColors[order.status] || "bg-[#1E3A5F]/20 text-[#8496B8]"
                               }`}>
                               {order.status.replace(/_/g, ' ')}
                             </span>
-                            <span className="text-xs text-[#B58E78] font-mono">
+                            <span className="text-xs text-[#1E3A5F] dark:text-[#8496B8] font-mono">
                               {new Date(order.created_at).toLocaleDateString()}
                             </span>
                           </div>
 
                           <div>
-                            <h3 className="text-xl font-bold text-[#EACEAA]">
+                            <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F]">
                               {requirements.businessName || planNames[order.package] || "Custom Project"}
                             </h3>
-                            <p className="text-xs text-[#B58E78] mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
-                            <p className="text-sm font-semibold text-[#D39858] mt-2">
+                            <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
+                            <p className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] mt-2">
                               ${order.price}
                             </p>
                           </div>
@@ -465,15 +465,15 @@ export default function Home() {
 
                         {/* Expanded Details and Timeline */}
                         {isExpanded && (
-                          <div className="mt-6 pt-6 border-t border-[#54281B] space-y-6 animate-fade-in text-left">
+                          <div className="mt-6 pt-6 border-t border-[#CBD5E1] dark:border-[#1E3A5F] space-y-6 animate-fade-in text-left">
                             {/* Timeline */}
-                            <div className="bg-[#150C0C]/80 p-6 rounded-xl border border-[#54281B]">
-                              <h4 className="text-xs font-bold text-[#B58E78] uppercase tracking-wider mb-6">Project Timeline</h4>
+                            <div className="bg-[#F0F4F9] dark:bg-[#070D1D] p-6 rounded-xl border border-[#CBD5E1] dark:border-[#1E3A5F]">
+                              <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-wider mb-6">Project Timeline</h4>
                               <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4">
                                 {/* Connector Line for Desktop */}
-                                <div className="absolute top-4 left-4 right-4 h-0.5 bg-[#54281B] -z-10 hidden md:block">
+                                <div className="absolute top-4 left-4 right-4 h-0.5 bg-[#CBD5E1] dark:bg-[#1E3A5F] -z-10 hidden md:block">
                                   <div
-                                    className="h-full bg-[#85431E] transition-all duration-500"
+                                    className="h-full bg-[#D4AF37] transition-all duration-500"
                                     style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
                                   ></div>
                                 </div>
@@ -484,15 +484,15 @@ export default function Home() {
                                   return (
                                     <div key={step.id} className="flex md:flex-col items-center gap-3 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                                       <div
-                                        className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${isCompleted ? "bg-[#85431E] border-[#85431E] text-[#EACEAA]" :
-                                          isActive ? "bg-[#34150F] border-[#D39858] text-[#D39858] ring-2 ring-[#D39858]/30 animate-pulse" :
-                                            "bg-[#150C0C] border-[#54281B] text-[#B58E78]"
+                                        className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] border transition-all duration-300 ${isCompleted ? "bg-[#D4AF37] border-[#D4AF37] text-[#0B132B]" :
+                                          isActive ? "bg-[#131B2E] border-[#F3C623] text-[#F3C623] ring-2 ring-[#F3C623]/30 animate-pulse" :
+                                            "bg-[#F0F4F9] dark:bg-[#070D1D] border-[#CBD5E1] dark:border-[#1E3A5F] text-[#8496B8]"
                                           }`}
                                       >
                                         {isCompleted ? "✓" : idx + 1}
                                       </div>
                                       <span
-                                        className={`text-[10px] font-semibold ${isActive ? "text-[#D39858] font-bold" : isCompleted ? "text-[#EACEAA]" : "text-[#B58E78]"
+                                        className={`text-[10px] font-semibold ${isActive ? "text-[#F3C623] font-bold" : isCompleted ? "text-[#0B132B] dark:text-[#F9E79F]" : "text-[#8496B8]"
                                           }`}
                                       >
                                         {step.label}
@@ -506,12 +506,12 @@ export default function Home() {
                             {/* Domain & Requirements details */}
                             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-xs">
                               <div>
-                                <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Preferred Domain</span>
-                                <span className="text-[#EACEAA] mt-1 block font-medium">{requirements.preferredDomain || "None specified"}</span>
+                                <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Preferred Domain</span>
+                                <span className="text-[#0B132B] dark:text-[#F9E79F] mt-1 block font-medium">{requirements.preferredDomain || "None specified"}</span>
                               </div>
                               <div>
-                                <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Project Description</span>
-                                <p className="text-[#EACEAA] mt-1.5 p-3 bg-[#150C0C] rounded border border-[#54281B] leading-relaxed whitespace-pre-wrap">
+                                <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Project Description</span>
+                                <p className="text-[#0B132B] dark:text-[#F9E79F] mt-1.5 p-3 bg-[#F0F4F9] dark:bg-[#070D1D] rounded border border-[#CBD5E1] dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap">
                                   {requirements.description}
                                 </p>
                               </div>
@@ -519,7 +519,7 @@ export default function Home() {
 
                             {/* Slip Upload Inline within expanded card */}
                             {['pending_payment', 'pending_verification', 'rejected'].includes(order.status) && user?.id && (
-                              <div className="pt-4 border-t border-[#54281B] max-w-xl">
+                              <div className="pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F] max-w-xl">
                                 <SlipUpload
                                   orderId={order.id}
                                   userId={user.id}
@@ -532,7 +532,7 @@ export default function Home() {
                           </div>
                         )}
 
-                        <div className="mt-6 pt-4 border-t border-[#54281B] flex justify-between items-center gap-3">
+                        <div className="mt-6 pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex justify-between items-center gap-3">
                           <button
                             onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
                             className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center gap-1 cursor-pointer"
@@ -567,28 +567,28 @@ export default function Home() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   transition={{ duration: 0.25 }}
-                  className="w-full max-w-2xl bg-[#34150F] border border-[#54281B] rounded-2xl p-6 sm:p-8 shadow-2xl relative my-8 text-left"
+                  className="w-full max-w-2xl bg-[#131B2E] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-2xl p-6 sm:p-8 shadow-2xl relative my-8 text-left"
                 >
                   <button
                     onClick={() => setNewOrderOpen(false)}
-                    className="absolute top-4 right-4 text-[#B58E78] hover:text-[#EACEAA] text-lg font-bold p-2 focus:outline-none cursor-pointer"
+                    className="absolute top-4 right-4 text-[#8496B8] hover:text-[#F9E79F] text-lg font-bold p-2 focus:outline-none cursor-pointer"
                     aria-label="Close modal"
                   >
                     ✕
                   </button>
 
                   <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-[#EACEAA]">Create a New Project</h3>
-                    <p className="text-[#B58E78] text-xs mt-1">Request your design and development setup in a few quick steps.</p>
+                    <h3 className="text-2xl font-bold text-[#0B132B] dark:text-[#F9E79F]">Create a New Project</h3>
+                    <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-1">Request your design and development setup in a few quick steps.</p>
                   </div>
 
                   {/* Progress Indicator */}
-                  <div className="flex items-center gap-4 bg-[#150C0C] p-4 rounded-xl border border-[#54281B] text-[10px] sm:text-xs font-semibold text-[#B58E78] uppercase tracking-wider mb-6">
-                    <span className={newOrderStep === 1 ? "text-[#D39858] font-extrabold" : newOrderStep > 1 ? "text-[#85431E]" : ""}>1. Select Plan</span>
-                    <span className="text-[#54281B]">|</span>
-                    <span className={newOrderStep === 2 ? "text-[#D39858] font-extrabold" : newOrderStep > 2 ? "text-[#85431E]" : ""}>2. Requirements</span>
-                    <span className="text-[#54281B]">|</span>
-                    <span className={newOrderStep === 3 ? "text-[#D39858] font-extrabold" : ""}>3. Review & Submit</span>
+                  <div className="flex items-center gap-4 bg-[#F0F4F9] dark:bg-[#070D1D] p-4 rounded-xl border border-[#CBD5E1] dark:border-[#1E3A5F] text-[10px] sm:text-xs font-semibold text-[#8496B8] uppercase tracking-wider mb-6">
+                    <span className={newOrderStep === 1 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : newOrderStep > 1 ? "text-[#1E3A5F]" : ""}>1. Select Plan</span>
+                    <span className="text-[#CBD5E1] dark:text-[#1E3A5F]">|</span>
+                    <span className={newOrderStep === 2 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : newOrderStep > 2 ? "text-[#1E3A5F]" : ""}>2. Requirements</span>
+                    <span className="text-[#CBD5E1] dark:text-[#1E3A5F]">|</span>
+                    <span className={newOrderStep === 3 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
                   </div>
 
                   {orderError && (
@@ -604,15 +604,15 @@ export default function Home() {
                         <GlassCard
                           key={pkg.id}
                           onClick={() => handleSelectPackage(pkg.id, pkg.price)}
-                          className="p-5 cursor-pointer border border-[#54281B] bg-[#150C0C]/60 hover:border-[#85431E] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+                          className="p-5 cursor-pointer border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/60 dark:bg-[#070D1D]/60 hover:border-[#D4AF37] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
                         >
                           <div>
-                            <h4 className="text-base font-bold text-[#EACEAA]">{pkg.name}</h4>
-                            <p className="text-[#B58E78] text-xs mt-1 leading-relaxed">{pkg.desc}</p>
+                            <h4 className="text-base font-bold text-[#0B132B] dark:text-[#F9E79F]">{pkg.name}</h4>
+                            <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-1 leading-relaxed">{pkg.desc}</p>
                           </div>
-                          <div className="mt-4 pt-3 border-t border-[#54281B] flex justify-between items-center">
-                            <span className="text-lg font-black text-[#D39858]">${pkg.price}</span>
-                            <span className="text-xs font-semibold text-[#85431E] hover:text-[#D39858] uppercase tracking-wider">Select →</span>
+                          <div className="mt-4 pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex justify-between items-center">
+                            <span className="text-lg font-black text-[#D4AF37] dark:text-[#F3C623]">${pkg.price}</span>
+                            <span className="text-xs font-semibold text-[#1E3A5F] dark:text-[#D4AF37] hover:text-[#F3C623] uppercase tracking-wider">Select →</span>
                           </div>
                         </GlassCard>
                       ))}
@@ -622,15 +622,15 @@ export default function Home() {
                   {/* Step 2: Requirements */}
                   {newOrderStep === 2 && (
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center border-b border-[#54281B] pb-3 mb-1">
-                        <span className="text-xs font-semibold text-[#D39858] uppercase tracking-wider">Selected plan:</span>
-                        <span className="text-xs font-bold text-[#EACEAA] bg-[#150C0C] border border-[#54281B] px-2.5 py-1 rounded">
+                      <div className="flex justify-between items-center border-b border-[#CBD5E1] dark:border-[#1E3A5F] pb-3 mb-1">
+                        <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
+                        <span className="text-xs font-bold text-[#0B132B] dark:text-[#F9E79F] bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] px-2.5 py-1 rounded">
                           {packages.find(p => p.id === selectedPackage)?.name} (${selectedPrice})
                         </span>
                       </div>
 
                       <div>
-                        <label htmlFor="businessName" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+                        <label htmlFor="businessName" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-wider">
                           Business Name
                         </label>
                         <input
@@ -638,13 +638,13 @@ export default function Home() {
                           type="text"
                           value={businessName}
                           onChange={(e) => setBusinessName(e.target.value)}
-                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors"
+                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] placeholder-[#8496B8]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
                           placeholder="e.g. Acme Corporation"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+                        <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-wider">
                           Preferred Domain
                         </label>
                         <input
@@ -652,25 +652,25 @@ export default function Home() {
                           type="text"
                           value={preferredDomain}
                           onChange={(e) => setPreferredDomain(e.target.value)}
-                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors"
+                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] placeholder-[#8496B8]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
                           placeholder="e.g. acme.com (optional)"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="description" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+                        <label htmlFor="description" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-wider">
                           Project Description / Design Notes
                         </label>
                         <textarea
                           id="description"
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
-                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors h-24"
+                          className="mt-1.5 block w-full px-4 py-2.5 bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] placeholder-[#8496B8]/50 focus:outline-none focus:border-[#D4AF37] transition-colors h-24"
                           placeholder="Explain preferred colors, required views, WebGL elements, and integrations..."
                         />
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-[#54281B]">
+                      <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
                         <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-2.5 cursor-pointer">
                           Back to Plans
                         </AnimatedButton>
@@ -684,35 +684,35 @@ export default function Home() {
                   {/* Step 3: Review & Confirm */}
                   {newOrderStep === 3 && (
                     <div className="space-y-4">
-                      <h4 className="text-lg font-bold text-[#EACEAA] border-b border-[#54281B] pb-3">Review Order Details</h4>
+                      <h4 className="text-lg font-bold text-[#0B132B] dark:text-[#F9E79F] border-b border-[#CBD5E1] dark:border-[#1E3A5F] pb-3">Review Order Details</h4>
 
                       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 text-xs">
                         <div>
-                          <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Selected Package</span>
-                          <span className="text-[#EACEAA] font-bold block mt-0.5">{packages.find(p => p.id === selectedPackage)?.name}</span>
+                          <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Selected Package</span>
+                          <span className="text-[#0B132B] dark:text-[#F9E79F] font-bold block mt-0.5">{packages.find(p => p.id === selectedPackage)?.name}</span>
                         </div>
                         <div>
-                          <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Cost</span>
-                          <span className="text-[#D39858] font-bold block mt-0.5">${selectedPrice}</span>
+                          <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Cost</span>
+                          <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold block mt-0.5">${selectedPrice}</span>
                         </div>
                         <div>
-                          <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Business Name</span>
-                          <span className="text-[#EACEAA] font-bold block mt-0.5">{businessName}</span>
+                          <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Business Name</span>
+                          <span className="text-[#0B132B] dark:text-[#F9E79F] font-bold block mt-0.5">{businessName}</span>
                         </div>
                         <div>
-                          <span className="text-[#B58E78] font-semibold uppercase tracking-wider block">Preferred Domain</span>
-                          <span className="text-[#EACEAA] font-bold block mt-0.5">{preferredDomain || "None provided"}</span>
+                          <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Preferred Domain</span>
+                          <span className="text-[#0B132B] dark:text-[#F9E79F] font-bold block mt-0.5">{preferredDomain || "None provided"}</span>
                         </div>
                       </div>
 
                       <div className="pt-1">
-                        <span className="text-[#B58E78] font-semibold uppercase tracking-wider block text-xs">Design Notes & Scope</span>
-                        <p className="text-[#EACEAA] text-xs mt-1.5 bg-[#150C0C] p-3 rounded border border-[#54281B] leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
+                        <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block text-xs">Design Notes & Scope</span>
+                        <p className="text-[#0B132B] dark:text-[#F9E79F] text-xs mt-1.5 bg-[#F0F4F9] dark:bg-[#070D1D] p-3 rounded border border-[#CBD5E1] dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
                           {description}
                         </p>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#54281B]">
+                      <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
                         <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-2.5 cursor-pointer">
                           Back to Edit
                         </AnimatedButton>
@@ -748,13 +748,13 @@ export default function Home() {
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-16">
           {features.map((feat, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
-              <GlassCard className="h-full flex flex-col justify-between border border-[#54281B] bg-[#34150F]/70">
+              <GlassCard className="h-full flex flex-col justify-between border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/50">
                 <div>
-                  <div className="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-[#150C0C] font-bold mb-6 text-xl shadow-md">
+                  <div className="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-[#0B132B] font-bold mb-6 text-xl shadow-md">
                     {feat.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-[#EACEAA] mb-3">{feat.title}</h3>
-                  <p className="text-[#B58E78] text-sm leading-relaxed">{feat.desc}</p>
+                  <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F] mb-3">{feat.title}</h3>
+                  <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm leading-relaxed">{feat.desc}</p>
                 </div>
               </GlassCard>
             </ScrollReveal>
@@ -772,7 +772,7 @@ export default function Home() {
           />
           <Link
             to="/portfolio"
-            className="text-sm font-semibold text-[#D39858] hover:text-[#85431E] hover:underline mb-8 md:mb-0 flex items-center gap-1.5 self-start md:self-auto"
+            className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] hover:underline mb-8 md:mb-0 flex items-center gap-1.5 self-start md:self-auto"
           >
             Explore Full Portfolio <span>→</span>
           </Link>
@@ -781,8 +781,8 @@ export default function Home() {
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
           {previewProjects.map((project, i) => (
             <ScrollReveal key={i} delay={i * 0.15}>
-              <GlassCard hoverEffect={false} className="group overflow-hidden p-0 relative rounded-2xl border border-[#54281B] bg-[#34150F]/80">
-                <div className="aspect-video w-full overflow-hidden relative border-b border-[#54281B]">
+              <GlassCard hoverEffect={false} className="group overflow-hidden p-0 relative rounded-2xl border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90">
+                <div className="aspect-video w-full overflow-hidden relative border-b border-[#CBD5E1] dark:border-[#1E3A5F]">
                   {project.image ? (
                     <img
                       src={project.image}
@@ -791,17 +791,17 @@ export default function Home() {
                     />
                   ) : (
                     <>
-                      <div className="absolute inset-0 bg-gradient-to-tr from-[#150C0C] to-[#85431E]/20 z-0"></div>
-                      <div className="absolute inset-0 bg-[#85431E]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                      <div className="absolute inset-0 flex items-center justify-center text-[#54281B] font-black text-6xl tracking-widest select-none z-0 opacity-20">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-[#070D1D] to-[#D4AF37]/20 z-0"></div>
+                      <div className="absolute inset-0 bg-[#D4AF37]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                      <div className="absolute inset-0 flex items-center justify-center text-[#1E3A5F] font-black text-6xl tracking-widest select-none z-0 opacity-20">
                         CODEWAVE
                       </div>
                     </>
                   )}
                 </div>
-                <div className="p-6 bg-[#34150F] border-t border-[#54281B] relative z-20">
-                  <span className="text-xs font-semibold text-[#D39858] uppercase tracking-wider">{project.category}</span>
-                  <h3 className="text-2xl font-bold text-[#EACEAA] mt-2 group-hover:text-[#D39858] transition-colors duration-300">
+                <div className="p-6 bg-white/95 dark:bg-[#131B2E] border-t border-[#CBD5E1] dark:border-[#1E3A5F] relative z-20">
+                  <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">{project.category}</span>
+                  <h3 className="text-2xl font-bold text-[#0B132B] dark:text-[#F9E79F] mt-2 group-hover:text-[#D4AF37] dark:group-hover:text-[#F3C623] transition-colors duration-300">
                     {project.title}
                   </h3>
                 </div>
@@ -823,8 +823,8 @@ export default function Home() {
         </ScrollReveal>
 
         <div className="mt-12 relative">
-          <GlassCard className="min-h-[220px] flex flex-col justify-between relative overflow-hidden border border-[#54281B] bg-[#34150F]/80" hoverEffect={false}>
-            <div className="absolute top-6 left-6 text-7xl font-serif text-[#85431E]/20 select-none">“</div>
+          <GlassCard className="min-h-[220px] flex flex-col justify-between relative overflow-hidden border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90" hoverEffect={false}>
+            <div className="absolute top-6 left-6 text-7xl font-serif text-[#D4AF37]/20 select-none">“</div>
             <div className="relative z-10">
               <AnimatePresence mode="wait">
                 <motion.p
@@ -833,28 +833,28 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="text-lg md:text-xl text-[#EACEAA] leading-relaxed italic"
+                  className="text-lg md:text-xl text-[#0B132B] dark:text-[#F9E79F] leading-relaxed italic"
                 >
                   {testimonials[activeTestimonial].text}
                 </motion.p>
               </AnimatePresence>
             </div>
 
-            <div className="flex justify-between items-center mt-8 border-t border-[#54281B] pt-6">
+            <div className="flex justify-between items-center mt-8 border-t border-[#CBD5E1] dark:border-[#1E3A5F] pt-6">
               <div>
-                <h4 className="font-bold text-[#EACEAA]">{testimonials[activeTestimonial].author}</h4>
-                <p className="text-xs text-[#B58E78]">{testimonials[activeTestimonial].role}</p>
+                <h4 className="font-bold text-[#0B132B] dark:text-[#F9E79F]">{testimonials[activeTestimonial].author}</h4>
+                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8]">{testimonials[activeTestimonial].role}</p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={prevTestimonial}
-                  className="w-10 h-10 rounded-lg border border-[#54281B] bg-[#150C0C] hover:bg-[#85431E]/30 flex items-center justify-center text-[#EACEAA] transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9] dark:bg-[#070D1D] hover:bg-[#D4AF37]/30 flex items-center justify-center text-[#0B132B] dark:text-[#F9E79F] transition-colors cursor-pointer"
                 >
                   ←
                 </button>
                 <button
                   onClick={nextTestimonial}
-                  className="w-10 h-10 rounded-lg border border-[#54281B] bg-[#150C0C] hover:bg-[#85431E]/30 flex items-center justify-center text-[#EACEAA] transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9] dark:bg-[#070D1D] hover:bg-[#D4AF37]/30 flex items-center justify-center text-[#0B132B] dark:text-[#F9E79F] transition-colors cursor-pointer"
                 >
                   →
                 </button>
@@ -867,11 +867,11 @@ export default function Home() {
       {/* Final CTA Section */}
       <section className="max-w-5xl mx-auto px-4">
         <ScrollReveal>
-          <GlassCard className="relative overflow-hidden p-12 text-center border border-[#85431E]/50 bg-gradient-to-tr from-[#150C0C] via-[#34150F] to-[#85431E]/30">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#D39858]/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#85431E]/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#EACEAA]">Ready to Start Your Project?</h2>
-            <p className="mt-4 max-w-xl mx-auto text-[#B58E78]">
+          <GlassCard className="relative overflow-hidden p-12 text-center border border-[#D4AF37]/50 bg-gradient-to-tr from-[#070D1D] via-[#131B2E] to-[#D4AF37]/25 shadow-2xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4AF37]/15 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#1E3A5F]/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0B132B] dark:text-[#F9E79F]">Ready to Start Your Project?</h2>
+            <p className="mt-4 max-w-xl mx-auto text-[#1E3A5F] dark:text-[#8496B8]">
               Let's craft an industry-leading digital presence custom tailored to your business rules.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">

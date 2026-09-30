@@ -11,13 +11,23 @@
     color-scheme: light;
   }
   body {
-    @apply bg-[#F8F3ED] text-[#150C0C] dark:bg-[#150C0C] dark:text-[#EACEAA] transition-colors duration-300;
+    @apply bg-[#F0F4F9] text-[#0B132B] dark:bg-[#0B132B] dark:text-[#F9E79F] transition-colors duration-300;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer utilities {
   .gradient-brand {
-    background-image: linear-gradient(to right, #85431E, #D39858);
+    background-image: linear-gradient(135deg, #D4AF37 0%, #F3C623 50%, #AA7C11 100%);
+  }
+  .gradient-navy-gold {
+    background-image: linear-gradient(135deg, #070D1D 0%, #131B2E 50%, #D4AF37 100%);
+  }
+  .gold-glow {
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+  }
+  .gold-border-glow {
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
   }
 }

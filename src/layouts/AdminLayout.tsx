@@ -52,25 +52,25 @@ export default function AdminLayout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8F3ED] dark:bg-[#150C0C] text-[#34150F] dark:text-[#EACEAA] flex flex-col font-sans transition-colors duration-300">
-      <header className="border-b border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/90 dark:bg-[#150C0C]/90 backdrop-blur sticky top-0 z-50 transition-colors duration-300">
+    <div className="min-h-screen bg-[#F0F4F9] dark:bg-[#0B132B] text-[#0B132B] dark:text-[#F9E79F] flex flex-col font-sans transition-colors duration-300">
+      <header className="border-b border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/90 dark:bg-[#0B132B]/90 backdrop-blur sticky top-0 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/admin">
             <Logo size="md" subtitle="Admin Console" />
           </Link>
           
           <nav className="hidden md:flex space-x-6 text-sm font-medium items-center">
-            <Link to="/admin" className="text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors">Dashboard</Link>
-            <Link to="/admin/orders" className="text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors">Orders</Link>
-            <Link to="/admin/messages" className="text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent transition-colors flex items-center gap-1.5">
+            <Link to="/admin" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Dashboard</Link>
+            <Link to="/admin/orders" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Orders</Link>
+            <Link to="/admin/messages" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors flex items-center gap-1.5">
               <span>Messages</span>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#85431E]/20 text-[#85431E] dark:text-[#D39858] border border-[#85431E]/40 animate-pulse">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/50 animate-pulse">
                   {unreadCount}
                 </span>
               )}
             </Link>
-            <Link to="/" className="text-[#B58E78] hover:text-primary dark:hover:text-accent transition-colors">Main Site</Link>
+            <Link to="/" className="text-[#8496B8] hover:text-primary dark:hover:text-accent transition-colors">Main Site</Link>
           </nav>
           
           {/* Desktop: Theme toggle & profile menu */}
@@ -85,7 +85,7 @@ export default function AdminLayout() {
             {user && <ProfileMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-[#54281B] dark:text-[#B58E78] hover:text-primary dark:hover:text-[#EACEAA] focus:outline-none p-2"
+              className="text-[#1E3A5F] dark:text-[#8496B8] hover:text-primary dark:hover:text-[#F9E79F] focus:outline-none p-2"
               aria-label="Toggle menu"
             >
               <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -107,29 +107,29 @@ export default function AdminLayout() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="md:hidden border-b border-[#E3D5C5] dark:border-[#54281B] bg-[#F8F3ED]/95 dark:bg-[#150C0C]/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
+              className="md:hidden border-b border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/95 dark:bg-[#0B132B]/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-4 overflow-hidden"
             >
               <div className="flex flex-col space-y-2">
-                <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#E3D5C5] dark:border-[#54281B]/40">Dashboard</Link>
-                <Link to="/admin/orders" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#E3D5C5] dark:border-[#54281B]/40">Orders</Link>
-                <Link to="/admin/messages" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#54281B] dark:text-[#EACEAA] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#E3D5C5] dark:border-[#54281B]/40 flex items-center justify-between">
+                <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#CBD5E1] dark:border-[#1E3A5F]/40">Dashboard</Link>
+                <Link to="/admin/orders" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#CBD5E1] dark:border-[#1E3A5F]/40">Orders</Link>
+                <Link to="/admin/messages" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent py-2.5 border-b border-[#CBD5E1] dark:border-[#1E3A5F]/40 flex items-center justify-between">
                   <span>Messages</span>
                   {unreadCount > 0 && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#85431E]/20 text-[#85431E] dark:text-[#D39858] border border-[#85431E]/40">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] border border-[#D4AF37]/50">
                       {unreadCount} unread
                     </span>
                   )}
                 </Link>
-                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#B58E78] hover:text-accent py-2.5">Main Site</Link>
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#8496B8] hover:text-accent py-2.5">Main Site</Link>
               </div>
 
               {/* Theme Toggle in Mobile Menu */}
-              <div className="pt-2 border-t border-[#E3D5C5] dark:border-[#54281B] flex items-center justify-between">
-                <span className="text-sm font-medium text-[#54281B] dark:text-[#B58E78]">Theme</span>
+              <div className="pt-2 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex items-center justify-between">
+                <span className="text-sm font-medium text-[#1E3A5F] dark:text-[#8496B8]">Theme</span>
                 <ThemeToggle showLabel={true} />
               </div>
 
-              <div className="pt-3 border-t border-[#E3D5C5] dark:border-[#54281B]">
+              <div className="pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
                 {user && <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />}
               </div>
             </motion.div>

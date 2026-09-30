@@ -132,7 +132,7 @@ export default function Contact() {
               repeatDelay: 2.5,
               ease: "easeInOut"
             }}
-            className="w-16 h-16 rounded-full bg-[#85431E]/10 border border-[#85431E]/30 flex items-center justify-center text-[#85431E] dark:text-[#D39858] mx-auto shadow-lg shadow-[#85431E]/10"
+            className="w-16 h-16 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-[#0B132B] dark:text-[#F3C623] mx-auto shadow-lg shadow-[#D4AF37]/20"
           >
             <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="16" x="2" y="4" rx="2" />
@@ -141,17 +141,17 @@ export default function Contact() {
           </motion.div>
 
           {/* Subtitle Badge */}
-          <p className="text-xs font-mono uppercase tracking-widest text-[#85431E] dark:text-[#B58E78] font-semibold">
+          <p className="text-xs font-mono uppercase tracking-widest text-[#1E3A5F] dark:text-[#8496B8] font-semibold">
             — GET IN TOUCH —
           </p>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#85431E] via-[#85431E] to-[#D39858] dark:from-[#85431E] dark:via-[#D39858] dark:to-[#EACEAA]">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0B132B] via-[#1E3A5F] to-[#D4AF37] dark:from-[#0B132B] dark:via-[#D4AF37] dark:to-[#F9E79F]">
             Let's Work Together
           </h1>
 
           {/* Paragraph */}
-          <p className="text-[#54281B] dark:text-[#B58E78] text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
+          <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
             Whether you have an opportunity, a project idea, or just want to connect – We would love to hear from you. Fill out the form and we will get back to you as soon as possible.
           </p>
         </div>
@@ -159,7 +159,7 @@ export default function Contact() {
 
       {/* Contact Details Card */}
       <ScrollReveal delay={0.1}>
-        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#34150F] backdrop-blur-xl shadow-xl space-y-6">
+        <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E] backdrop-blur-xl shadow-xl space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             
             {/* Email Icon Block */}
@@ -172,7 +172,7 @@ export default function Contact() {
                   hover: { scale: 1.1, y: -2 }
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="w-10 h-10 rounded-xl bg-[#85431E]/10 border border-[#85431E]/30 text-[#85431E] dark:text-[#D39858] flex items-center justify-center flex-shrink-0 relative overflow-hidden shadow-sm"
+                className="w-10 h-10 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#0B132B] dark:text-[#F3C623] flex items-center justify-center flex-shrink-0 relative overflow-hidden shadow-sm"
               >
                 <motion.svg
                   className="w-5 h-5 relative z-10"
@@ -194,10 +194,10 @@ export default function Contact() {
                 </motion.svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#85431E] dark:text-[#B58E78] uppercase tracking-widest">EMAIL</p>
+                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">EMAIL</p>
                 <a
                   href="mailto:codewave.studio.tech@gmail.com"
-                  className="text-sm font-semibold text-[#34150F] dark:text-[#EACEAA] font-mono hover:text-[#85431E] dark:hover:text-[#D39858] transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
                 >
                   codewave.studio.tech@gmail.com
                 </a>
@@ -217,17 +217,17 @@ export default function Contact() {
                   }
                 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="w-10 h-10 rounded-xl bg-[#85431E]/10 border border-[#85431E]/30 text-[#85431E] dark:text-[#D39858] flex items-center justify-center flex-shrink-0 shadow-sm"
+                className="w-10 h-10 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#0B132B] dark:text-[#F3C623] flex items-center justify-center flex-shrink-0 shadow-sm"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#85431E] dark:text-[#B58E78] uppercase tracking-widest">PHONE</p>
+                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">PHONE</p>
                 <a
                   href="tel:+94717441420"
-                  className="text-sm font-semibold text-[#34150F] dark:text-[#EACEAA] font-mono hover:text-[#85431E] dark:hover:text-[#D39858] transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
                 >
                   +94 71 744 1420
                 </a>
@@ -247,7 +247,7 @@ export default function Contact() {
                   }
                 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="w-10 h-10 rounded-xl bg-[#85431E]/10 border border-[#85431E]/30 text-[#85431E] dark:text-[#D39858] flex items-center justify-center flex-shrink-0 shadow-sm"
+                className="w-10 h-10 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#0B132B] dark:text-[#F3C623] flex items-center justify-center flex-shrink-0 shadow-sm"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
@@ -255,8 +255,8 @@ export default function Contact() {
                 </svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#85431E] dark:text-[#B58E78] uppercase tracking-widest">LOCATION</p>
-                <p className="text-sm font-semibold text-[#34150F] dark:text-[#EACEAA] font-mono mt-1 leading-snug">
+                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">LOCATION</p>
+                <p className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono mt-1 leading-snug">
                   Pitipana, Homagama, Sri Lanka
                 </p>
               </div>
@@ -265,8 +265,8 @@ export default function Contact() {
           </div>
 
           {/* Social Links inside the card footer */}
-          <div className="pt-6 border-t border-[#E3D5C5] dark:border-[#54281B] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-xs text-[#54281B] dark:text-[#B58E78] font-mono">Connect on social media:</span>
+          <div className="pt-6 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-xs text-[#1E3A5F] dark:text-[#8496B8] font-mono">Connect on social media:</span>
             <SocialLinks />
           </div>
         </div>
@@ -275,11 +275,11 @@ export default function Contact() {
       {/* Inquiry Form */}
       <div className="max-w-xl mx-auto">
         <ScrollReveal delay={0.2}>
-          <GlassCard className="p-8 border border-[#E3D5C5] dark:border-[#54281B] bg-white/90 dark:bg-[#34150F] text-left">
+          <GlassCard className="p-8 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E] text-left">
             {/* Animated Character Mascot */}
             <ContactMascot focusedField={focusedField} isSuccess={isSuccess} />
 
-            <h3 className="text-xl font-bold text-[#34150F] dark:text-[#EACEAA] mb-6 text-center">Send Us a Direct Message</h3>
+            <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F] mb-6 text-center">Send Us a Direct Message</h3>
 
             {isSuccess ? (
               <div className="space-y-6 py-6 text-center">
@@ -287,8 +287,8 @@ export default function Contact() {
                   ✓
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#34150F] dark:text-[#EACEAA]">Message Sent Successfully!</h3>
-                  <p className="text-[#54281B] dark:text-[#B58E78] text-sm">
+                  <h3 className="text-2xl font-bold text-[#0B132B] dark:text-[#F9E79F]">Message Sent Successfully!</h3>
+                  <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm">
                     Thank you for reaching out. A Codewave representative will review your message shortly.
                   </p>
                 </div>
@@ -306,7 +306,7 @@ export default function Contact() {
 
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                  <label htmlFor="name" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                     Full Name
                   </label>
                   <input
@@ -318,8 +318,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border rounded-lg text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors ${
-                      errors.name ? 'border-red-500/50' : 'border-[#E3D5C5] dark:border-[#54281B]'
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${
+                      errors.name ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
                     }`}
                     placeholder="Your name"
                   />
@@ -328,7 +328,7 @@ export default function Contact() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                  <label htmlFor="email" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                     Email Address
                   </label>
                   <input
@@ -340,8 +340,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border rounded-lg text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors ${
-                      errors.email ? 'border-red-500/50' : 'border-[#E3D5C5] dark:border-[#54281B]'
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${
+                      errors.email ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
                     }`}
                     placeholder="you@example.com"
                   />
@@ -350,7 +350,7 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-xs font-semibold text-[#54281B] dark:text-[#EACEAA] uppercase tracking-wider">
+                  <label htmlFor="message" className="block text-xs font-semibold text-[#1E3A5F] dark:text-[#F9E79F] uppercase tracking-wider">
                     Your Message
                   </label>
                   <textarea
@@ -362,8 +362,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F8F3ED] dark:bg-[#150C0C] border rounded-lg text-sm text-[#34150F] dark:text-[#EACEAA] focus:outline-none focus:border-[#85431E] transition-colors h-32 ${
-                      errors.message ? 'border-red-500/50' : 'border-[#E3D5C5] dark:border-[#54281B]'
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors h-32 ${
+                      errors.message ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
                     }`}
                     placeholder="Project details, timeline, or questions..."
                   />

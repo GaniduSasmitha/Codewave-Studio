@@ -26,13 +26,13 @@ export default function Logo({
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       {/* Code Emblem Icon */}
-      <div className={`${iconSizes[size]} rounded-xl bg-[#EACEAA]/20 dark:bg-[#34150F] border border-[#D39858]/30 dark:border-[#54281B] shadow-sm dark:shadow-lg flex items-center justify-center relative overflow-hidden group flex-shrink-0`}>
+      <div className={`${iconSizes[size]} rounded-xl bg-[#D4AF37]/15 dark:bg-[#131B2E] border border-[#D4AF37]/50 dark:border-[#D4AF37]/60 shadow-sm dark:shadow-[0_0_15px_rgba(212,175,55,0.25)] flex items-center justify-center relative overflow-hidden group flex-shrink-0`}>
         {/* Glow background */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#85431E] to-[#D39858] opacity-20 group-hover:opacity-40 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#0B132B] via-[#162544] to-[#D4AF37] opacity-40 group-hover:opacity-75 transition-opacity" />
         
         {/* Code Brackets Icon */}
         <svg
-          className="w-5 h-5 relative z-10 text-[#85431E] dark:text-[#D39858]"
+          className="w-5 h-5 relative z-10 text-[#0B132B] dark:text-[#F3C623]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -49,12 +49,12 @@ export default function Logo({
       {/* Brand Text */}
       {showText && (
         <div className="flex flex-col text-left">
-          <span className={`${textSizes[size]} font-extrabold tracking-tight text-[#150C0C] dark:text-[#EACEAA] leading-none flex items-center gap-1.5`}>
+          <span className={`${textSizes[size]} font-extrabold tracking-tight text-[#0B132B] dark:text-white leading-none flex items-center gap-1.5`}>
             Codewave
-            <span className="text-[#D39858] dark:text-[#D39858] font-semibold text-[0.85em]">Studio</span>
+            <span className="text-[#D4AF37] dark:text-[#F3C623] font-semibold text-[0.85em]">Studio</span>
           </span>
           {subtitle && (
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#B58E78] dark:text-[#B58E78] mt-0.5">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#1E3A5F] dark:text-[#D4AF37]/90 mt-0.5">
               {subtitle}
             </span>
           )}
