@@ -389,10 +389,13 @@ export default function Hero3D() {
       }}
     >
       <Canvas
+        key={theme}
         frameloop={reducedMotion ? 'demand' : 'always'}
         dpr={isMobile || lowPower ? 1 : [1, 1.5]}
         camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 54 : 48, near: 0.1, far: 50 }}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        onCreated={({ gl }) => gl.setClearColor(isDark ? COLORS.background : '#F0F4F9', 0)}
+        style={{ background: 'transparent' }}
         shadows={!isMobile && !lowPower}
       >
         <fog attach="fog" args={[isDark ? COLORS.background : '#F0F4F9', 8, 20]} />
