@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
@@ -451,11 +451,17 @@ export default function Home() {
                             <div className="bg-[#F0F4F9] dark:bg-[#070D1D] p-6 rounded-xl border border-[#CBD5E1] dark:border-[#1E3A5F]">
                               <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-wider mb-6">Project Timeline</h4>
                               <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4">
-                                {/* Connector Line for Desktop */}
-                                <div className="absolute top-4 left-4 right-4 h-0.5 bg-[#CBD5E1] dark:bg-[#1E3A5F] -z-10 hidden md:block">
+                                {/* Connector Line connecting Pending Payment to Completed */}
+                                <div className="absolute top-3.5 left-6 right-6 h-1 bg-[#CBD5E1] dark:bg-[#1E3A5F] hidden md:block pointer-events-none z-0 rounded-full">
                                   <div
-                                    className="h-full bg-[#D4AF37] transition-all duration-500"
+                                    className="h-full bg-[#D4AF37] transition-all duration-500 rounded-full shadow-[0_0_10px_#D4AF37]"
                                     style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
+                                  ></div>
+                                </div>
+                                <div className="absolute top-3.5 bottom-3.5 left-[13px] w-1 bg-[#CBD5E1] dark:bg-[#1E3A5F] md:hidden pointer-events-none z-0 rounded-full">
+                                  <div
+                                    className="w-full bg-[#D4AF37] transition-all duration-500 rounded-full shadow-[0_0_10px_#D4AF37]"
+                                    style={{ height: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
                                   ></div>
                                 </div>
 

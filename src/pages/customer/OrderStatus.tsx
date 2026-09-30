@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -152,11 +152,17 @@ export default function OrderStatus() {
       <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90" hoverEffect={false}>
         <h3 className="text-sm font-bold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider mb-8">Project Timeline</h3>
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4">
-          {/* Connector Line for Desktop */}
-          <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-200 dark:bg-[#1E3A5F] -z-10 hidden md:block">
+          {/* Connector Line connecting Pending Payment to Completed */}
+          <div className="absolute top-4 left-6 right-6 h-1 bg-slate-200 dark:bg-[#1E3A5F] hidden md:block pointer-events-none z-0 rounded-full">
             <div
-              className="h-full bg-[#D4AF37] transition-all duration-500"
+              className="h-full bg-[#D4AF37] transition-all duration-500 rounded-full shadow-[0_0_10px_#D4AF37]"
               style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
+            ></div>
+          </div>
+          <div className="absolute top-4 bottom-4 left-[15px] w-1 bg-slate-200 dark:bg-[#1E3A5F] md:hidden pointer-events-none z-0 rounded-full">
+            <div
+              className="w-full bg-[#D4AF37] transition-all duration-500 rounded-full shadow-[0_0_10px_#D4AF37]"
+              style={{ height: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
             ></div>
           </div>
 
