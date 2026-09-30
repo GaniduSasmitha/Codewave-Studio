@@ -750,7 +750,7 @@ export default function Home() {
             <ScrollReveal key={i} delay={i * 0.1}>
               <GlassCard className="h-full flex flex-col justify-between border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/50">
                 <div>
-                  <div className="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-[#0B132B] font-bold mb-6 text-xl shadow-md">
+                  <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/15 dark:bg-[#070D1D] border border-[#D4AF37]/40 dark:border-[#D4AF37]/60 shadow-md dark:shadow-[0_0_18px_rgba(212,175,55,0.25)] flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
                     {feat.icon}
                   </div>
                   <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F] mb-3">{feat.title}</h3>
