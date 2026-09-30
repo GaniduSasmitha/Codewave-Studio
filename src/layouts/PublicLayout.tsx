@@ -2,7 +2,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ModernPillNavbar from '../components/ModernPillNavbar';
 import OrganicWaveFooter from '../components/OrganicWaveFooter';
-import CustomCursor from '../components/CustomCursor';
 import CookieConsent from '../components/CookieConsent';
 
 export default function PublicLayout() {
@@ -10,9 +9,6 @@ export default function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-[#F0F4F9] dark:bg-[#0B132B] text-[#0B132B] dark:text-[#F9E79F] flex flex-col font-sans transition-colors duration-300">
-      {/* Custom Interactive Magnet Cursor */}
-      <CustomCursor />
-
       {/* Image 1 inspired Modern Floating Pill Navbar */}
       <ModernPillNavbar />
 

@@ -27,11 +27,13 @@ import MessagesList from './pages/admin/MessagesList';
 import ProtectedRoute from './components/ProtectedRoute';
 import RouteWaveTransition from './components/RouteWaveTransition';
 import ScrollToTop from './components/ScrollToTop';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
+        <CustomCursor />
         <ScrollToTop />
         <RouteWaveTransition />
         <Routes>

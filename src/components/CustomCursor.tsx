@@ -6,7 +6,7 @@ export default function CustomCursor() {
   const [isHovered, setIsHovered] = useState(false);
   const [cursorText, setCursorText] = useState('');
   const [cursorVariant, setCursorVariant] = useState<'default' | 'pointer' | 'text' | 'button'>('default');
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
@@ -21,7 +21,7 @@ export default function CustomCursor() {
 
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
 
       // Check hovered element
       const target = e.target as HTMLElement | null;
@@ -68,9 +68,9 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [isVisible]);
+  }, []);
 
-  if (isTouchDevice || !isVisible) return null;
+  if (isTouchDevice) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[99999] overflow-hidden">
@@ -83,7 +83,7 @@ export default function CustomCursor() {
           x: mousePos.x - (cursorVariant === 'text' ? 2 : 6),
           y: mousePos.y - (cursorVariant === 'text' ? 10 : 6),
           scale: isMouseDown ? 0.6 : isHovered ? (cursorVariant === 'button' ? 1.6 : 1.2) : 1,
-          opacity: isVisible ? 1 : 0,
+          opacity: isVisible && mousePos.x >= 0 ? 1 : 0,
         }}
         transition={{
           type: 'spring',
@@ -106,7 +106,7 @@ export default function CustomCursor() {
           width: isHovered ? 52 : 36,
           height: isHovered ? 52 : 36,
           scale: isMouseDown ? 0.85 : 1,
-          opacity: isVisible ? 1 : 0,
+          opacity: isVisible && mousePos.x >= 0 ? 1 : 0,
         }}
         transition={{
           type: 'spring',
