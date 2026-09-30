@@ -142,9 +142,9 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     if (!laptopRef.current || !lidRef.current) return;
 
     if (reducedMotion) {
-      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -1.78 : -0.05, 0);
+      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -0.25 : -0.05, 0);
       laptopRef.current.rotation.set(0.05, isMobile ? -0.08 : -0.2, 0.015);
-      laptopRef.current.scale.setScalar(isMobile ? 0.52 : 1);
+      laptopRef.current.scale.setScalar(isMobile ? 0.68 : 1);
       lidRef.current.rotation.x = restingLidAngle;
       return;
     }
@@ -157,9 +157,9 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
       ? 0
       : MathUtils.lerp(1.85, 1.55, progress);
     const targetY = isMobile
-      ? MathUtils.lerp(-1.78, -1.58, progress)
+      ? -0.25
       : MathUtils.lerp(-0.05, 0.22, progress);
-    const targetScale = (isMobile ? MathUtils.lerp(0.52, 0.47, progress) : MathUtils.lerp(0.94, 0.82, progress))
+    const targetScale = (isMobile ? 0.68 : MathUtils.lerp(0.94, 0.82, progress))
       * MathUtils.lerp(0.72, 1, entrance);
     const targetRotationY = (isMobile ? -0.08 : -0.2) + progress * (isMobile ? 0.2 : 0.62) + input.pointerX * 0.11 + input.dragX;
     const targetRotationX = 0.05 + progress * (isMobile ? 0.025 : 0.08) - input.pointerY * 0.075 + input.dragY;
@@ -178,7 +178,7 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
   return (
     <group
       ref={laptopRef}
-      position={[isMobile ? 0 : 1.85, isMobile ? -1.78 : -0.05, 0]}
+      position={[isMobile ? 0 : 1.85, isMobile ? -0.25 : -0.05, 0]}
       rotation={[0.05, isMobile ? -0.08 : -0.2, 0.015]}
       scale={isMobile ? 0.4 : 0.68}
     >
@@ -267,7 +267,7 @@ export default function Hero3D() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [webGLAvailable, setWebGLAvailable] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [lowPower, setLowPower] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -294,6 +294,12 @@ export default function Hero3D() {
 
   useEffect(() => {
     const updateScroll = () => {
+      if (isMobile) {
+        scrollProgress.current = 0;
+        if (heroRef.current) heroRef.current.style.opacity = '1';
+        return;
+      }
+
       const progress = MathUtils.clamp(window.scrollY / Math.max(window.innerHeight * 0.88, 1), 0, 1);
       scrollProgress.current = progress;
       if (heroRef.current) {
@@ -303,10 +309,10 @@ export default function Hero3D() {
     updateScroll();
     window.addEventListener('scroll', updateScroll, { passive: true });
     return () => window.removeEventListener('scroll', updateScroll);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
-    if (reducedMotion || isMobile) {
+    if (reducedMotion) {
       interaction.current = { pointerX: 0, pointerY: 0, dragX: 0, dragY: 0 };
       return;
     }
@@ -318,7 +324,13 @@ export default function Hero3D() {
     let startDragY = 0;
 
     const handlePointerDown = (event: PointerEvent) => {
-      const isLaptopArea = event.clientX > window.innerWidth * 0.46;
+      const bounds = heroRef.current?.getBoundingClientRect();
+      const isInsideStage = Boolean(bounds
+        && event.clientX >= bounds.left
+        && event.clientX <= bounds.right
+        && event.clientY >= bounds.top
+        && event.clientY <= bounds.bottom);
+      const isLaptopArea = isMobile ? isInsideStage : event.clientX > window.innerWidth * 0.46;
       if (event.button !== 0 || scrollProgress.current > 0.9 || !isLaptopArea) return;
       dragging = true;
       startX = event.clientX;
@@ -328,18 +340,23 @@ export default function Hero3D() {
     };
 
     const handlePointerMove = (event: PointerEvent) => {
-      const active = scrollProgress.current < 0.9;
-      interaction.current.pointerX = active ? (event.clientX / window.innerWidth - 0.5) * 2 : 0;
-      interaction.current.pointerY = active ? (event.clientY / window.innerHeight - 0.5) * 2 : 0;
+      const bounds = heroRef.current?.getBoundingClientRect();
+      const active = isMobile || scrollProgress.current < 0.9;
+      const width = isMobile && bounds ? bounds.width : window.innerWidth;
+      const height = isMobile && bounds ? bounds.height : window.innerHeight;
+      const left = isMobile && bounds ? bounds.left : 0;
+      const top = isMobile && bounds ? bounds.top : 0;
+      interaction.current.pointerX = active ? ((event.clientX - left) / width - 0.5) * 2 : 0;
+      interaction.current.pointerY = active ? ((event.clientY - top) / height - 0.5) * 2 : 0;
       if (!dragging) return;
 
       interaction.current.dragX = MathUtils.clamp(
-        startDragX + ((event.clientX - startX) / window.innerWidth) * 2.5,
+        startDragX + ((event.clientX - startX) / width) * 2.5,
         -0.72,
         0.72,
       );
       interaction.current.dragY = MathUtils.clamp(
-        startDragY + ((event.clientY - startY) / window.innerHeight) * 1.1,
+        startDragY + ((event.clientY - startY) / height) * 1.1,
         -0.2,
         0.24,
       );
@@ -365,7 +382,7 @@ export default function Hero3D() {
     return (
       <div
         aria-hidden="true"
-        className="fixed inset-0 z-0 pointer-events-none"
+        className={isMobile ? 'relative h-full w-full overflow-hidden rounded-[2rem]' : 'fixed inset-0 -z-10 pointer-events-none'}
         style={{
           background: isDark
             ? `radial-gradient(circle at 55% 35%, ${COLORS.body}, ${COLORS.background} 68%)`
@@ -379,13 +396,16 @@ export default function Hero3D() {
     <div
       ref={heroRef}
       aria-hidden="true"
-      className="fixed inset-0 z-0 pointer-events-none"
+      className={isMobile
+        ? 'relative h-full w-full overflow-hidden rounded-[2rem] border border-[#D4AF37]/20 shadow-[0_24px_70px_rgba(11,19,43,0.2)] cursor-grab active:cursor-grabbing'
+        : 'fixed inset-0 -z-10 pointer-events-none'}
       style={{
         background: isDark
           ? 'radial-gradient(circle at 70% 34%, rgba(212, 175, 55, 0.12) 0%, rgba(19, 27, 46, 0.7) 30%, #0A0F12 68%)'
           : 'radial-gradient(circle at 70% 34%, rgba(212, 175, 55, 0.2) 0%, rgba(226, 232, 240, 0.86) 34%, #F0F4F9 72%)',
         opacity: 1,
         transition: reducedMotion ? 'none' : 'opacity 180ms linear',
+        touchAction: isMobile ? 'pan-y' : 'auto',
       }}
     >
       <Canvas
@@ -395,7 +415,7 @@ export default function Hero3D() {
         camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 54 : 48, near: 0.1, far: 50 }}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         onCreated={({ gl }) => gl.setClearColor(isDark ? COLORS.background : '#F0F4F9', 0)}
-        style={{ background: 'transparent' }}
+        style={{ background: 'transparent', touchAction: isMobile ? 'pan-y' : 'auto' }}
         shadows={!isMobile && !lowPower}
       >
         <fog attach="fog" args={[isDark ? COLORS.background : '#F0F4F9', 8, 20]} />

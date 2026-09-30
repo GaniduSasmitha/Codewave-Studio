@@ -318,11 +318,10 @@ export default function Home() {
 
   return (
     <div className="relative isolate overflow-hidden bg-[#F0F4F9] dark:bg-[#0A0F12]">
-      <Hero3D />
       <div className="relative z-10 space-y-32 pb-24">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div className="space-y-8 text-left">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+        <div className="relative z-10 space-y-8 text-left">
           <div className="inline-flex items-center gap-2 border border-primary/30 px-3.5 py-1.5 rounded-full bg-primary/10 dark:bg-primary/5 backdrop-blur text-xs font-semibold text-[#725700] dark:text-accent uppercase tracking-wider">
             <span>✨ Code meets Craft</span>
           </div>
@@ -365,7 +364,14 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="hidden min-h-[500px] lg:block" aria-hidden="true" />
+        <div className="relative h-[340px] sm:h-[400px] lg:h-auto lg:min-h-[500px]">
+          <Hero3D />
+          <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex justify-center lg:hidden">
+            <span className="rounded-full border border-[#D4AF37]/35 bg-[#070D1D]/75 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#F9E79F] shadow-lg backdrop-blur-md">
+              Drag to rotate
+            </span>
+          </div>
+        </div>
       </section>
 
       {/* Customer Dashboard Section */}
