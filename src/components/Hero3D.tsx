@@ -144,7 +144,7 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     if (reducedMotion) {
       laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -0.25 : -0.05, 0);
       laptopRef.current.rotation.set(0.05, isMobile ? -0.08 : -0.2, 0.015);
-      laptopRef.current.scale.setScalar(isMobile ? 0.68 : 1);
+      laptopRef.current.scale.setScalar(isMobile ? 0.82 : 1);
       lidRef.current.rotation.x = restingLidAngle;
       return;
     }
@@ -159,7 +159,7 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     const targetY = isMobile
       ? -0.25
       : MathUtils.lerp(-0.05, 0.22, progress);
-    const targetScale = (isMobile ? 0.68 : MathUtils.lerp(0.94, 0.82, progress))
+    const targetScale = (isMobile ? 0.82 : MathUtils.lerp(0.94, 0.82, progress))
       * MathUtils.lerp(0.72, 1, entrance);
     const targetRotationY = (isMobile ? -0.08 : -0.2) + progress * (isMobile ? 0.2 : 0.62) + input.pointerX * 0.11 + input.dragX;
     const targetRotationX = 0.05 + progress * (isMobile ? 0.025 : 0.08) - input.pointerY * 0.075 + input.dragY;
