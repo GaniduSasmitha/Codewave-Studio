@@ -73,10 +73,10 @@ export default function CustomCursor() {
   if (isTouchDevice) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[99999] overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-[999999] overflow-hidden">
       {/* Central Precision Glowing Dot */}
       <motion.div
-        className={`fixed top-0 left-0 rounded-full bg-[#F3C623] shadow-[0_0_12px_#F3C623] mix-blend-difference ${
+        className={`fixed top-0 left-0 rounded-full bg-[#F3C623] shadow-[0_0_12px_#F3C623] mix-blend-difference pointer-events-none ${
           cursorVariant === 'text' ? 'w-1 h-5' : 'w-3 h-3'
         }`}
         animate={{
