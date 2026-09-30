@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
     <linearGradient id="code-wave-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#85431E" />
-      <stop offset="50%" stop-color="#D39858" />
-      <stop offset="100%" stop-color="#EACEAA" />
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="50%" stop-color="#F3C623" />
+      <stop offset="100%" stop-color="#F9E79F" />
     </linearGradient>
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="2" result="blur" />
@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Card -->
-  <rect width="64" height="64" rx="16" fill="#150C0C" />
+  <rect width="64" height="64" rx="16" fill="#131B2E" />
   <rect x="3" y="3" width="58" height="58" rx="14" fill="none" stroke="url(#code-wave-grad)" stroke-width="2" opacity="0.3" />
 
   <!-- Code Bracket Left: < -->

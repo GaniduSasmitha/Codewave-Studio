@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
   <defs>
     <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#85431E" />
-      <stop offset="100%" stop-color="#D39858" />
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#F3C623" />
     </linearGradient>
   </defs>
 
   <!-- Logo Mark Container -->
   <g transform="translate(6, 6)">
-    <rect width="48" height="48" rx="12" fill="#34150F" stroke="url(#logo-grad)" stroke-width="1.5" />
+    <rect width="48" height="48" rx="12" fill="#131B2E" stroke="url(#logo-grad)" stroke-width="1.5" />
     
     <!-- Code Brackets & Slash -->
     <path d="M 17 17 L 10 24 L 17 31" fill="none" stroke="url(#logo-grad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -17,6 +17,6 @@
   </g>
 
   <!-- Brand Typography -->
-  <text x="66" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#EACEAA" letter-spacing="-0.5">Codewave</text>
-  <text x="66" y="47" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#D39858" letter-spacing="2">STUDIO</text>
+  <text x="66" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#F9E79F" letter-spacing="-0.5">Codewave</text>
+  <text x="66" y="47" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#F3C623" letter-spacing="2">STUDIO</text>
 </svg>
