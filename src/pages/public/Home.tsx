@@ -317,7 +317,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="space-y-32 pb-24 overflow-hidden">
+    <div className="dark relative isolate overflow-hidden bg-[#0A0F12]">
+      <Hero3D />
+      <div className="relative z-10 space-y-32 pb-24">
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8 text-left">
@@ -339,7 +341,7 @@ export default function Home() {
             </motion.span>
           </motion.h1>
 
-          <p className="max-w-xl text-lg text-[#1E3A5F] dark:text-[#8496B8] leading-relaxed">
+          <p className="max-w-md text-lg text-[#1E3A5F] dark:text-[#8496B8] leading-relaxed">
             We build immersive 3D experiences, stunning interfaces, and high-performance applications custom tailored to your goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -363,10 +365,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="flex justify-center items-center relative">
-          <div className="absolute -inset-4 gradient-brand opacity-15 blur-3xl pointer-events-none"></div>
-          <Hero3D />
-        </div>
+        <div className="hidden min-h-[500px] lg:block" aria-hidden="true" />
       </section>
 
       {/* Customer Dashboard Section */}
@@ -814,6 +813,7 @@ export default function Home() {
           </GlassCard>
         </ScrollReveal>
       </section>
+      </div>
     </div>
   );
 }

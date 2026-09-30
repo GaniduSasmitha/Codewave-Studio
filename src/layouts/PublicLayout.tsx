@@ -243,7 +243,13 @@ export default function PublicLayout() {
           <Outlet />
         </motion.div>
       </main>
-      <footer className="border-t border-[#CBD5E1] dark:border-[#1E3A5F] py-10 bg-[#E2E8F0] dark:bg-[#070D1D] transition-colors duration-300">
+      <footer
+        className={`relative z-20 border-t py-10 transition-colors duration-300 ${
+          location.pathname === '/'
+            ? 'dark border-[#20292D] bg-[#0A0F12]'
+            : 'border-[#CBD5E1] bg-[#E2E8F0] dark:border-[#1E3A5F] dark:bg-[#070D1D]'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-7 text-sm text-[#405678] dark:text-[#B7C4DC] md:grid-cols-3 md:items-start">
           <div className="flex flex-col items-center md:items-start gap-2">
             <Logo size="sm" showText={true} />
