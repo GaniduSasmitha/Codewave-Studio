@@ -25,13 +25,13 @@ import MessagesList from './pages/admin/MessagesList';
 
 // Guard
 import ProtectedRoute from './components/ProtectedRoute';
-import RouteThunderTransition from './components/RouteThunderTransition';
+import RouteWaveTransition from './components/RouteWaveTransition';
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
-        <RouteThunderTransition />
+        <RouteWaveTransition />
         <Routes>
           {/* Public Routes */}
           <Route element={<PublicLayout />}>
