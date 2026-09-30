@@ -5,7 +5,6 @@ import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from './ProfileMenu';
 
 const navItems = [
-  { path: '/', label: 'Home' },
   { path: '/services', label: 'Services' },
   { path: '/portfolio', label: 'Portfolio' },
   { path: '/pricing', label: 'Pricing' },
@@ -20,8 +19,14 @@ export default function ModernPillNavbar() {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const isPathActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleCopyEmail = (e: React.MouseEvent) => {
@@ -37,20 +42,30 @@ export default function ModernPillNavbar() {
       {/* Outer Floating Pill Container (Exact layout structure of Image 1) */}
       <div className="relative mx-auto flex h-[64px] max-w-5xl items-center justify-between rounded-full border border-white/15 dark:border-[#D4AF37]/35 bg-[#0D111A]/90 dark:bg-[#070D1D]/95 px-2 sm:px-3 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.12)] backdrop-blur-xl transition-all duration-300">
         
-        {/* Left Circular Emblem Badge (Matching planet icon circle in Image 1) */}
+        {/* Left Circular Emblem Badge with Codewave Studio Logo */}
         <Link
           to="/"
+          onClick={handleLogoClick}
           data-cursor-text="Home"
-          className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#0B132B] shadow-md transition-transform duration-300 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623]"
+          className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#0B132B] shadow-md transition-all duration-300 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623] group overflow-hidden"
           aria-label="Codewave Studio Home"
         >
-          {/* Planet / Orbit Planet SVG emblem like in Image 1 */}
-          <svg className="h-6 w-6 text-[#0B132B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="6" />
-            <path d="M2.5 12a14.5 14.5 0 0 0 19 0" />
-            <path d="M2.5 12a14.5 14.5 0 0 1 19 0" />
-            <circle cx="17" cy="7" r="1.5" fill="currentColor" />
-          </svg>
+          {/* Inner Codewave Emblem Code Brackets Icon */}
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0B132B] text-[#F3C623] transition-transform duration-300 group-hover:rotate-12">
+            <svg
+              className="w-4 h-4 text-[#F3C623]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+              <line x1="14" y1="4" x2="10" y2="20" />
+            </svg>
+          </div>
           <span className="sr-only">Codewave Studio</span>
         </Link>
 
