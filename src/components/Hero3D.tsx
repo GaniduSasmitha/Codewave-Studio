@@ -171,7 +171,10 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     laptopRef.current.rotation.z = MathUtils.damp(laptopRef.current.rotation.z, 0.015 - progress * 0.08, 3.2, delta);
     laptopRef.current.scale.setScalar(MathUtils.damp(laptopRef.current.scale.x, targetScale, 3.4, delta));
 
-    const lidTarget = MathUtils.lerp(1.38, restingLidAngle, entrance);
+    const entranceLidTarget = MathUtils.lerp(1.38, restingLidAngle, entrance);
+    const lidTarget = isMobile
+      ? MathUtils.lerp(entranceLidTarget, 1.38, progress)
+      : entranceLidTarget;
     lidRef.current.rotation.x = MathUtils.damp(lidRef.current.rotation.x, lidTarget, 5.2, delta);
   });
 
@@ -295,7 +298,11 @@ export default function Hero3D() {
   useEffect(() => {
     const updateScroll = () => {
       if (isMobile) {
-        scrollProgress.current = 0;
+        scrollProgress.current = MathUtils.clamp(
+          window.scrollY / Math.max(window.innerHeight * 0.62, 1),
+          0,
+          1,
+        );
         if (heroRef.current) heroRef.current.style.opacity = '1';
         return;
       }
@@ -331,7 +338,7 @@ export default function Hero3D() {
         && event.clientY >= bounds.top
         && event.clientY <= bounds.bottom);
       const isLaptopArea = isMobile ? isInsideStage : event.clientX > window.innerWidth * 0.46;
-      if (event.button !== 0 || scrollProgress.current > 0.9 || !isLaptopArea) return;
+      if (event.button !== 0 || (!isMobile && scrollProgress.current > 0.9) || !isLaptopArea) return;
       dragging = true;
       startX = event.clientX;
       startY = event.clientY;

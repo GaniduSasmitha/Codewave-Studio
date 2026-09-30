@@ -366,11 +366,6 @@ export default function Home() {
         </div>
         <div className="relative h-[340px] sm:h-[400px] lg:h-auto lg:min-h-[500px]">
           <Hero3D />
-          <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex justify-center lg:hidden">
-            <span className="rounded-full border border-[#D4AF37]/35 bg-[#070D1D]/75 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#F9E79F] shadow-lg backdrop-blur-md">
-              Drag to rotate
-            </span>
-          </div>
         </div>
       </section>
 
