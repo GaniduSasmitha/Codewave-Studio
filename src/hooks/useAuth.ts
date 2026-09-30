@@ -6,7 +6,7 @@ export interface Profile {
   id: string;
   full_name: string;
   role: string;
-  avatar_url?: string | null;
+  avatar_path?: string | null;
   created_at: string;
 }
 
@@ -25,10 +25,30 @@ export function useAuth() {
 
       if (error) throw error;
       setProfile(data);
+      return data as Profile;
     } catch (err) {
       console.error('Error fetching profile:', err);
       setProfile(null);
+      return null;
     }
+  };
+
+  const syncGoogleAvatar = async (authUser: User, currentProfile: Profile | null) => {
+    const isGoogleUser = authUser.app_metadata?.provider === 'google'
+      || authUser.app_metadata?.providers?.includes('google');
+    const hasGooglePhoto = Boolean(authUser.user_metadata?.picture || authUser.user_metadata?.avatar_url);
+    if (!isGoogleUser || !hasGooglePhoto || currentProfile?.avatar_path) return;
+
+    const attemptKey = `codewave_avatar_sync_${authUser.id}`;
+    if (sessionStorage.getItem(attemptKey) === 'attempted') return;
+    sessionStorage.setItem(attemptKey, 'attempted');
+
+    const { error } = await supabase.functions.invoke('sync-oauth-avatar');
+    if (error) {
+      console.warn('Could not securely import Google profile photo:', error.message);
+      return;
+    }
+    await fetchProfile(authUser.id);
   };
 
   useEffect(() => {
@@ -39,7 +59,8 @@ export function useAuth() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           setUser(session.user);
-          await fetchProfile(session.user.id);
+          const currentProfile = await fetchProfile(session.user.id);
+          await syncGoogleAvatar(session.user, currentProfile);
         } else {
           setUser(null);
           setProfile(null);
@@ -59,7 +80,8 @@ export function useAuth() {
         setLoading(true);
         if (session) {
           setUser(session.user);
-          await fetchProfile(session.user.id);
+          const currentProfile = await fetchProfile(session.user.id);
+          await syncGoogleAvatar(session.user, currentProfile);
         } else {
           setUser(null);
           setProfile(null);

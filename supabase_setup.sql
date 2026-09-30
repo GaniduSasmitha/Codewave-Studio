@@ -13,6 +13,7 @@ create table if not exists public.profiles (
 
 alter table public.profiles add column if not exists full_name text;
 alter table public.profiles add column if not exists role text default 'customer';
+alter table public.profiles add column if not exists avatar_path text;
 
 alter table public.profiles drop constraint if exists check_role;
 alter table public.profiles add constraint check_role 
@@ -174,6 +175,10 @@ begin
   where bucket_id = 'payment-slips'
     and (storage.foldername(name))[1] = requesting_user::text;
 
+  delete from storage.objects
+  where bucket_id = 'avatars'
+    and (storage.foldername(name))[1] = requesting_user::text;
+
   delete from auth.users where id = requesting_user;
   if not found then
     raise exception 'Account not found';
@@ -183,6 +188,23 @@ $$;
 
 revoke all on function public.delete_own_account() from public;
 grant execute on function public.delete_own_account() to authenticated;
+
+-- 9b. Private profile-avatar storage. OAuth photos are imported by the
+-- sync-oauth-avatar Edge Function using the service role; browsers only read
+-- their own stored copy through a short-lived signed URL.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('avatars', 'avatars', false, 2097152, array['image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do update set
+  public = false,
+  file_size_limit = 2097152,
+  allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp'];
+
+drop policy if exists "Users can read own avatar, admins read all" on storage.objects;
+create policy "Users can read own avatar, admins read all"
+on storage.objects for select using (
+  bucket_id = 'avatars'
+  and ((storage.foldername(name))[1] = auth.uid()::text or public.is_admin(auth.uid()))
+);
 
 -- 10. Contact Messages Table Setup
 create table if not exists public.contact_messages (

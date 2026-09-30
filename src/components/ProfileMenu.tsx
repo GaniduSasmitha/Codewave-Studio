@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import DeleteAccountButton from './DeleteAccountButton';
+import { supabase } from '../lib/supabase';
 
 // A stable set of vivid background colors for avatars, deterministically picked
 // from the first char of the display name so the same user always gets the same color.
@@ -84,6 +85,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Close on outside click
@@ -98,6 +100,22 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
     }
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open, variant]);
+
+  useEffect(() => {
+    let active = true;
+    const loadAvatar = async () => {
+      if (!profile?.avatar_path) {
+        setAvatarSrc(null);
+        return;
+      }
+      const { data, error } = await supabase.storage
+        .from('avatars')
+        .createSignedUrl(profile.avatar_path, 60 * 60);
+      if (active) setAvatarSrc(error ? null : data.signedUrl);
+    };
+    void loadAvatar();
+    return () => { active = false; };
+  }, [profile?.avatar_path]);
 
   // Close on Escape
   useEffect(() => {
@@ -116,10 +134,6 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
   const roleLabel = role === 'admin' ? 'Admin' : 'Customer';
   const avatarInitial = getInitial(displayName);
   const avatarBg = getAvatarColor(displayName);
-
-  // Do not load third-party avatar URLs from OAuth metadata during normal page rendering.
-  const customAvatar = profile?.avatar_url;
-  const avatarSrc = customAvatar || null;
 
   const handleSignOut = async () => {
     setOpen(false);
