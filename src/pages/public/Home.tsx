@@ -867,9 +867,9 @@ export default function Home() {
       {/* Final CTA Section */}
       <section className="max-w-5xl mx-auto px-4">
         <ScrollReveal>
-          <GlassCard className="relative overflow-hidden p-12 text-center border border-[#D4AF37]/50 bg-gradient-to-tr from-[#070D1D] via-[#131B2E] to-[#D4AF37]/25 shadow-2xl">
+          <GlassCard className="relative overflow-hidden p-12 text-center border border-[#D4AF37]/40 dark:border-[#D4AF37]/60 bg-gradient-to-tr from-white via-slate-50 to-[#D4AF37]/15 dark:from-[#070D1D] dark:via-[#131B2E] dark:to-[#D4AF37]/25 shadow-xl dark:shadow-2xl">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4AF37]/15 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#1E3A5F]/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4AF37]/10 dark:bg-[#1E3A5F]/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0B132B] dark:text-[#F9E79F]">Ready to Start Your Project?</h2>
             <p className="mt-4 max-w-xl mx-auto text-[#1E3A5F] dark:text-[#8496B8]">
               Let's craft an industry-leading digital presence custom tailored to your business rules.
