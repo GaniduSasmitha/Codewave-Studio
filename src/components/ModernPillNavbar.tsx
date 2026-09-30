@@ -42,31 +42,37 @@ export default function ModernPillNavbar() {
       {/* Outer Floating Pill Container (Exact layout structure of Image 1) */}
       <div className="relative mx-auto flex h-[64px] max-w-5xl items-center justify-between rounded-full border border-white/15 dark:border-[#D4AF37]/35 bg-[#0D111A]/90 dark:bg-[#070D1D]/95 px-2 sm:px-3 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.12)] backdrop-blur-xl transition-all duration-300">
         
-        {/* Left Circular Emblem Badge with Codewave Studio Logo */}
+        {/* Left Logo Container: Emblem Circle + Codewave Studio Name */}
         <Link
           to="/"
           onClick={handleLogoClick}
           data-cursor-text="Home"
-          className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#0B132B] shadow-md transition-all duration-300 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623] group overflow-hidden"
+          className="relative flex items-center gap-2.5 pl-1 pr-3.5 py-1 rounded-full bg-[#131B2E]/90 hover:bg-[#18233C] border border-[#D4AF37]/35 transition-all duration-300 hover:scale-[1.02] active:scale-95 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623] shadow-sm"
           aria-label="Codewave Studio Home"
         >
-          {/* Inner Codewave Emblem Code Brackets Icon */}
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0B132B] text-[#F3C623] transition-transform duration-300 group-hover:rotate-12">
-            <svg
-              className="w-4 h-4 text-[#F3C623]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-              <line x1="14" y1="4" x2="10" y2="20" />
-            </svg>
+          {/* Inner White Emblem Circle */}
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#0B132B] shadow-md transition-transform duration-300 group-hover:rotate-12">
+            <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#0B132B] text-[#F3C623]">
+              <svg
+                className="w-3.5 h-3.5 text-[#F3C623]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+                <line x1="14" y1="4" x2="10" y2="20" />
+              </svg>
+            </div>
           </div>
-          <span className="sr-only">Codewave Studio</span>
+
+          {/* Brand Name Text */}
+          <span className="text-xs sm:text-sm font-extrabold tracking-tight text-white flex items-center gap-1 select-none pr-0.5">
+            Codewave<span className="text-[#F3C623] font-bold">Studio</span>
+          </span>
         </Link>
 
         {/* Center Navigation Links (Matching Image 1 pill navbar tabs) */}
