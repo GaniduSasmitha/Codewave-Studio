@@ -70,36 +70,6 @@ export default function RouteWaveTransition() {
             />
           ))}
 
-          <motion.svg
-            viewBox="0 0 1440 600"
-            preserveAspectRatio="none"
-            className="absolute inset-x-0 top-1/2 h-[72vh] w-full -translate-y-1/2 drop-shadow-[0_0_24px_rgba(212,175,55,0.45)]"
-            initial={{ x: '-115%', opacity: 0 }}
-            animate={{ x: ['-115%', '0%', '115%'], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 0.82, times: [0, 0.28, 0.72, 1], ease: 'easeInOut' }}
-          >
-            <path
-              d="M-80 318C120 112 322 108 522 302s400 194 600 0 400-194 598 0v180c-198-194-398-194-598 0s-400 194-600 0-400-194-602 0Z"
-              fill="rgba(212,175,55,0.9)"
-            />
-            <path
-              d="M-100 260C120 42 340 42 560 260s440 218 660 0 440-218 660 0"
-              fill="none"
-              stroke="#F9E79F"
-              strokeWidth="18"
-              strokeLinecap="round"
-              opacity="0.95"
-            />
-            <path
-              d="M-120 390c190-152 380-152 570 0s380 152 570 0 380-152 570 0"
-              fill="none"
-              stroke="#F3C623"
-              strokeWidth="8"
-              strokeLinecap="round"
-              opacity="0.7"
-            />
-          </motion.svg>
-
           <motion.div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF37]/70 bg-[#0B132B]/90 px-5 py-2 text-xs font-black tracking-[0.32em] text-[#F9E79F] shadow-[0_0_28px_rgba(243,198,35,0.38)]"
             initial={{ scale: 0.72, opacity: 0 }}
