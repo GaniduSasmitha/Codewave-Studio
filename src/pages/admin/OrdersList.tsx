@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
@@ -229,7 +229,7 @@ export default function OrdersList() {
                           <div className="flex items-center gap-2">
                             <Link
                               to={`/admin/orders/${order.id}`}
-                              className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1.5 rounded-lg font-bold min-h-[38px] flex items-center justify-center"
+                              className="text-xs text-[#725700] dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1.5 rounded-lg font-bold min-h-[38px] flex items-center justify-center"
                             >
                               Manage
                             </Link>
@@ -309,7 +309,7 @@ export default function OrdersList() {
                               <div className="flex items-center justify-end gap-2">
                                 <Link
                                   to={`/admin/orders/${order.id}`}
-                                  className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
+                                  className="text-xs text-[#725700] dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
                                 >
                                   Manage
                                 </Link>

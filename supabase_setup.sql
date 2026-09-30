@@ -65,11 +65,11 @@ $$ language plpgsql security definer;
 -- 5. Profiles RLS Policies
 drop policy if exists "Users can read own profile, admins read all" on public.profiles;
 create policy "Users can read own profile, admins read all"
-on public.profiles for select using (true);
+on public.profiles for select using (id = auth.uid() or public.is_admin(auth.uid()));
 
 drop policy if exists "Users can update own profile" on public.profiles;
-create policy "Users can update own profile"
-on public.profiles for update using (true);
+-- Profile updates are intentionally not exposed to customers. This prevents a
+-- customer from changing the protected role column through the public API.
 
 -- 6. Orders RLS Policies (Full Access for database operations)
 drop policy if exists "Customers can insert own orders, admins read/insert all" on public.orders;
@@ -79,10 +79,27 @@ drop policy if exists "Customers can update own orders" on public.orders;
 drop policy if exists "Customers can delete own orders, admins delete all" on public.orders;
 drop policy if exists "Allow full access on orders" on public.orders;
 
-create policy "Allow full access on orders"
-on public.orders for all
-using (true)
-with check (true);
+create policy "Customers can insert own orders, admins read/insert all"
+on public.orders for insert
+with check (customer_id = auth.uid() or public.is_admin(auth.uid()));
+
+create policy "Customers can read own orders, admins read all"
+on public.orders for select
+using (customer_id = auth.uid() or public.is_admin(auth.uid()));
+
+create policy "Customers can update own orders"
+on public.orders for update
+using (customer_id = auth.uid())
+with check (customer_id = auth.uid());
+
+create policy "Admins can update orders"
+on public.orders for update
+using (public.is_admin(auth.uid()))
+with check (public.is_admin(auth.uid()));
+
+create policy "Customers can delete own orders, admins delete all"
+on public.orders for delete
+using (customer_id = auth.uid() or public.is_admin(auth.uid()));
 
 -- 7. User Registration Trigger
 create or replace function public.handle_new_user()
@@ -105,25 +122,67 @@ create trigger on_auth_user_created
 
 -- 8. Storage Bucket Setup (payment-slips)
 insert into storage.buckets (id, name, public)
-values ('payment-slips', 'payment-slips', true)
-on conflict (id) do update set public = true;
+values ('payment-slips', 'payment-slips', false)
+on conflict (id) do update set public = false;
 
 -- 9. Storage RLS Policies for payment-slips bucket
 drop policy if exists "Customers and admins can read slips" on storage.objects;
 create policy "Customers and admins can read slips"
-on storage.objects for select using (bucket_id = 'payment-slips');
+on storage.objects for select using (
+  bucket_id = 'payment-slips'
+  and ((storage.foldername(name))[1] = auth.uid()::text or public.is_admin(auth.uid()))
+);
 
 drop policy if exists "Customers can upload own slips" on storage.objects;
 create policy "Customers can upload own slips"
-on storage.objects for insert with check (bucket_id = 'payment-slips');
+on storage.objects for insert with check (
+  bucket_id = 'payment-slips'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
 
 drop policy if exists "Customers can update own slips" on storage.objects;
 create policy "Customers can update own slips"
-on storage.objects for update using (bucket_id = 'payment-slips');
+on storage.objects for update using (
+  bucket_id = 'payment-slips'
+  and ((storage.foldername(name))[1] = auth.uid()::text or public.is_admin(auth.uid()))
+);
 
 drop policy if exists "Customers and admins can delete slips" on storage.objects;
 create policy "Customers and admins can delete slips"
-on storage.objects for delete using (bucket_id = 'payment-slips');
+on storage.objects for delete using (
+  bucket_id = 'payment-slips'
+  and ((storage.foldername(name))[1] = auth.uid()::text or public.is_admin(auth.uid()))
+);
+
+-- 9a. Authenticated self-service account deletion.
+-- Removes uploaded slips first, then the auth user. Foreign-key cascades remove
+-- the matching profile and orders in the same transaction.
+create or replace function public.delete_own_account()
+returns void
+language plpgsql
+security definer
+set search_path = public, auth, storage
+as $$
+declare
+  requesting_user uuid := auth.uid();
+begin
+  if requesting_user is null then
+    raise exception 'Authentication required';
+  end if;
+
+  delete from storage.objects
+  where bucket_id = 'payment-slips'
+    and (storage.foldername(name))[1] = requesting_user::text;
+
+  delete from auth.users where id = requesting_user;
+  if not found then
+    raise exception 'Account not found';
+  end if;
+end;
+$$;
+
+revoke all on function public.delete_own_account() from public;
+grant execute on function public.delete_own_account() to authenticated;
 
 -- 10. Contact Messages Table Setup
 create table if not exists public.contact_messages (
@@ -144,10 +203,26 @@ drop policy if exists "Admins can update contact messages" on public.contact_mes
 drop policy if exists "Admins can delete contact messages" on public.contact_messages;
 drop policy if exists "Allow full access on contact_messages" on public.contact_messages;
 
-create policy "Allow full access on contact_messages"
-on public.contact_messages for all
-using (true)
+create policy "Anyone can insert contact messages"
+on public.contact_messages for insert
+to anon, authenticated
 with check (true);
+
+create policy "Admins can read contact messages"
+on public.contact_messages for select
+to authenticated
+using (public.is_admin(auth.uid()));
+
+create policy "Admins can update contact messages"
+on public.contact_messages for update
+to authenticated
+using (public.is_admin(auth.uid()))
+with check (public.is_admin(auth.uid()));
+
+create policy "Admins can delete contact messages"
+on public.contact_messages for delete
+to authenticated
+using (public.is_admin(auth.uid()));
 
 -- 11. Enable Full Replica Identity & Realtime Publication for Live Sync
 alter table public.orders replica identity full;

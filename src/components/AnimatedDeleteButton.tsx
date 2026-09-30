@@ -121,7 +121,7 @@ export default function AnimatedDeleteButton({
             : { x: 0 }
         }
         transition={{ duration: 0.5, ease: 'easeInOut' }}
-        className={`relative inline-flex items-center justify-center font-bold rounded-xl border border-rose-500/30 dark:border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 hover:border-rose-500/50 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer overflow-hidden ${sizeClasses[size]} ${className}`}
+        className={`relative inline-flex items-center justify-center font-bold rounded-xl border border-rose-500/30 dark:border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 hover:border-rose-500/50 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-700 focus-visible:ring-offset-2 ${sizeClasses[size]} ${className}`}
       >
         {/* Trash Can Icon */}
         <motion.div

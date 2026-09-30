@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -22,6 +22,7 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [legalConsent, setLegalConsent] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -48,6 +49,11 @@ export default function Signup() {
 
     if (!cleanName || !cleanEmail || !cleanPassword) {
       setErrorMsg('All fields are required.');
+      return;
+    }
+
+    if (!legalConsent) {
+      setErrorMsg('You must agree to the Privacy Policy and Terms of Service to create an account.');
       return;
     }
 
@@ -78,6 +84,10 @@ export default function Signup() {
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setSuccessMsg('');
+    if (!legalConsent) {
+      setErrorMsg('You must agree to the Privacy Policy and Terms of Service to continue with Google.');
+      return;
+    }
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -110,7 +120,7 @@ export default function Signup() {
 
             {packageId && planNames[packageId] && (
               <div className="mb-6 p-4 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-xs text-[#0B132B] dark:text-[#F9E79F] font-semibold leading-relaxed">
-                Selected Plan: <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold">{planNames[packageId]}</span>
+                Selected Plan: <span className="text-[#725700] dark:text-[#F3C623] font-bold">{planNames[packageId]}</span>
               </div>
             )}
 
@@ -171,6 +181,17 @@ export default function Signup() {
                   placeholder="••••••••"
                 />
               </div>
+
+              <label className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-[#1E3A5F] dark:text-[#D7DEEC]">
+                <input
+                  type="checkbox"
+                  required
+                  checked={legalConsent}
+                  onChange={(e) => setLegalConsent(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#8A6A00]"
+                />
+                <span>I agree to the <Link to="/privacy" className="font-semibold underline">Privacy Policy</Link> and <Link to="/terms" className="font-semibold underline">Terms of Service</Link>.</span>
+              </label>
 
               <AnimatedButton type="submit" variant="primary" disabled={loading} className="w-full py-3 cursor-pointer rounded-xl">
                 {loading ? 'Creating Account...' : 'Sign Up'}

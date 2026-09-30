@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -123,7 +123,7 @@ export default function CustomerDashboard() {
               <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60">
                 <Link
                   to={`/portal/order/${order.id}`}
-                  className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center justify-between"
+                  className="text-xs text-[#725700] dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center justify-between"
                 >
                   <span>Track Progress</span>
                   <span>→</span>

@@ -1,4 +1,4 @@
-interface LogoProps {
+﻿interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
   subtitle?: string;
@@ -51,7 +51,7 @@ export default function Logo({
         <div className="flex flex-col text-left">
           <span className={`${textSizes[size]} font-extrabold tracking-tight text-[#0B132B] dark:text-white leading-none flex items-center gap-1.5`}>
             Codewave
-            <span className="text-[#D4AF37] dark:text-[#F3C623] font-semibold text-[0.85em]">Studio</span>
+            <span className="text-[#725700] dark:text-[#F3C623] font-semibold text-[0.85em]">Studio</span>
           </span>
           {subtitle && (
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#1E3A5F] dark:text-[#D4AF37]/90 mt-0.5">

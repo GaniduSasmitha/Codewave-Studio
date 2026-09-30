@@ -46,7 +46,7 @@ export default function About() {
         <SectionHeading
           title="We Are Creative"
           gradientWord="Codewave"
-          subtitle="Our company story and the team behind the next-generation digital products."
+          subtitle="Our company story and the team behind our digital products."
           align="center"
         />
       </ScrollReveal>
@@ -64,21 +64,8 @@ export default function About() {
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <GlassCard className="p-8 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E] text-left">
-            <h4 className="text-lg font-bold text-[#D4AF37] dark:text-[#F3C623] mb-4">Core Numbers</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-              <div>
-                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">40+</p>
-                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Projects Built</p>
-              </div>
-              <div>
-                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">99%</p>
-                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Client Reviews</p>
-              </div>
-              <div>
-                <p className="text-3xl font-black text-[#0B132B] dark:text-[#F9E79F]">&lt;4s</p>
-                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Average Load</p>
-              </div>
-            </div>
+            <h4 className="text-lg font-bold text-[#725700] dark:text-[#F3C623] mb-4">How we work</h4>
+            <p className="text-sm leading-7 text-[#1E3A5F] dark:text-[#D7DEEC]">We define the scope, agree on the price and expected timeline, build in reviewable stages, and collect feedback before delivery. Project-specific commitments are documented before work begins.</p>
           </GlassCard>
         </ScrollReveal>
       </section>
@@ -89,7 +76,7 @@ export default function About() {
           <SectionHeading
             title="The Creative"
             gradientWord="Collective"
-            subtitle="Meet the elite developers and designers leading our custom builds."
+            subtitle="Meet the developers and designers working on our custom builds."
           />
         </ScrollReveal>
 

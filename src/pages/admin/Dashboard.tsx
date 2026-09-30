@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
 
             <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Pending Verification</h3>
-              <p className="text-4xl font-extrabold text-primary dark:text-accent mt-3 font-mono">{stats.pendingVerification}</p>
+              <p className="text-4xl font-extrabold text-[#725700] dark:text-accent mt-3 font-mono">{stats.pendingVerification}</p>
             </GlassCard>
 
             <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
                 gradientWord="Requests"
                 subtitle="Actions pending verification or recent updates."
               />
-              <Link to="/admin/orders" className="text-sm font-semibold text-primary dark:text-accent hover:underline mb-8">
+              <Link to="/admin/orders" className="text-sm font-semibold text-[#725700] dark:text-accent hover:underline mb-8">
                 View All Orders →
               </Link>
             </div>
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
                       </span>
                       <Link
                         to={`/admin/orders/${order.id}`}
-                        className="text-xs text-primary dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
+                        className="text-xs text-[#725700] dark:text-accent hover:underline border border-slate-300 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-transparent dark:hover:bg-slate-950 px-3 py-1 rounded font-bold"
                       >
                         Manage
                       </Link>

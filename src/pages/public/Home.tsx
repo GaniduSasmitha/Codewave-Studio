@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
@@ -54,32 +54,14 @@ const steps = [
 const packages = [
   { id: "starter", name: "Starter Package", price: 79, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
   { id: "business", name: "Business Suite", price: 199, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
-  { id: "custom", name: "Custom Web App", price: 399, desc: "Full-stack web app, database, auth, admin dashboard, custom scope." },
-  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "24/7 server monitoring, updates, and developer support." }
-];
-
-const testimonials = [
-  {
-    text: "Codewave built our Personal Fitness Tracker application with incredible precision. The real-time workout analytics, streak tracking, and fluid dashboard performance made user engagement skyrocket!",
-    author: "Mr. Indukantha Dissanayaks",
-    role: "Owner & Founder at Personal Fitness Tracker"
-  },
-  {
-    text: "Codewave crafted the Beadoria online storefront with a stunning aesthetic and seamless shopping experience. Our jewelry catalog looks exquisite and customer orders flow effortlessly!",
-    author: "Ms. Niweka Minusandi",
-    role: "Owner & Founder at Beadoria"
-  },
-  {
-    text: "Codewave delivered the Nestlé CommHub internal platform with exceptional architectural quality. The workflow tracking, ticket management, and team collaboration setup exceeded all enterprise standards!",
-    author: "Dr. Tharanga Peiris",
-    role: "Lecturer at APIIT Lanka Pvt (Ltd)"
-  }
+  { id: "custom", name: "Custom Web App", price: 399, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
+  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "Monthly monitoring, updates, and developer support." }
 ];
 
 const features = [
   {
     title: "Lightning Performance",
-    desc: "Built on top of Vite and highly optimized custom React components. Score 100 on Google PageSpeed out of the box.",
+    desc: "Built with modern React tooling and performance-conscious components tailored to each project.",
     icon: "⚡"
   },
   {
@@ -143,8 +125,6 @@ export default function Home() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, profile } = useAuth();
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
@@ -217,6 +197,10 @@ export default function Home() {
     if (user && profile?.role === 'customer' && pkg) {
       const match = packages.find((p) => p.id === pkg);
       if (match) {
+        if (match.id === 'custom') {
+          navigate('/contact?package=custom', { replace: true });
+          return;
+        }
         setSelectedPackage(match.id);
         setSelectedPrice(match.price);
         setNewOrderStep(2);
@@ -230,9 +214,14 @@ export default function Home() {
         }
       }
     }
-  }, [user, profile, searchParams]);
+  }, [user, profile, searchParams, navigate]);
 
   const handleSelectPackage = (pkgId: string, price: number) => {
+    if (pkgId === 'custom') {
+      setNewOrderOpen(false);
+      navigate('/contact?package=custom');
+      return;
+    }
     setSelectedPackage(pkgId);
     setSelectedPrice(price);
     setNewOrderStep(2);
@@ -327,20 +316,12 @@ export default function Home() {
     }
   }, []);
 
-  const nextTestimonial = () => {
-    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
   return (
     <div className="space-y-32 pb-24 overflow-hidden">
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8 text-left">
-          <div className="inline-flex items-center gap-2 border border-primary/30 px-3.5 py-1.5 rounded-full bg-primary/10 dark:bg-primary/5 backdrop-blur text-xs font-semibold text-primary dark:text-accent uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 border border-primary/30 px-3.5 py-1.5 rounded-full bg-primary/10 dark:bg-primary/5 backdrop-blur text-xs font-semibold text-[#725700] dark:text-accent uppercase tracking-wider">
             <span>✨ Code meets Craft</span>
           </div>
 
@@ -457,7 +438,7 @@ export default function Home() {
                               {requirements.businessName || planNames[order.package] || "Custom Project"}
                             </h3>
                             <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
-                            <p className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] mt-2">
+                            <p className="text-sm font-semibold text-[#725700] dark:text-[#F3C623] mt-2">
                               ${order.price}
                             </p>
                           </div>
@@ -535,7 +516,7 @@ export default function Home() {
                         <div className="mt-6 pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex justify-between items-center gap-3">
                           <button
                             onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                            className="text-xs text-primary dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center gap-1 cursor-pointer"
+                            className="text-xs text-[#725700] dark:text-accent hover:underline font-bold tracking-wider uppercase flex items-center gap-1 cursor-pointer"
                           >
                             <span>{isExpanded ? "Collapse Timeline" : "Track Progress"}</span>
                             <span>{isExpanded ? "↑" : "→"}</span>
@@ -584,12 +565,13 @@ export default function Home() {
 
                   {/* Progress Indicator */}
                   <div className="flex items-center gap-4 bg-[#F0F4F9] dark:bg-[#070D1D] p-4 rounded-xl border border-[#CBD5E1] dark:border-[#1E3A5F] text-[10px] sm:text-xs font-semibold text-[#8496B8] uppercase tracking-wider mb-6">
-                    <span className={newOrderStep === 1 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : newOrderStep > 1 ? "text-[#1E3A5F]" : ""}>1. Select Plan</span>
+                    <span className={newOrderStep === 1 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : newOrderStep > 1 ? "text-[#1E3A5F]" : ""}>1. Select Plan</span>
                     <span className="text-[#CBD5E1] dark:text-[#1E3A5F]">|</span>
-                    <span className={newOrderStep === 2 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : newOrderStep > 2 ? "text-[#1E3A5F]" : ""}>2. Requirements</span>
+                    <span className={newOrderStep === 2 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : newOrderStep > 2 ? "text-[#1E3A5F]" : ""}>2. Requirements</span>
                     <span className="text-[#CBD5E1] dark:text-[#1E3A5F]">|</span>
-                    <span className={newOrderStep === 3 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
+                    <span className={newOrderStep === 3 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
                   </div>
+                  <p className="mb-5 text-xs leading-5 text-[#405678] dark:text-[#B7C4DC]">Fixed-package prices are the final service prices for the listed scope. Custom work requires an agreed quote; optional third-party costs are disclosed before payment.</p>
 
                   {orderError && (
                     <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-400 font-semibold leading-relaxed">
@@ -611,8 +593,8 @@ export default function Home() {
                             <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-1 leading-relaxed">{pkg.desc}</p>
                           </div>
                           <div className="mt-4 pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex justify-between items-center">
-                            <span className="text-lg font-black text-[#D4AF37] dark:text-[#F3C623]">${pkg.price}</span>
-                            <span className="text-xs font-semibold text-[#1E3A5F] dark:text-[#D4AF37] hover:text-[#F3C623] uppercase tracking-wider">Select →</span>
+                            <span className="text-lg font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From $${pkg.price}` : `$${pkg.price}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
+                            <span className="text-xs font-semibold text-[#1E3A5F] dark:text-[#D4AF37] hover:text-[#F3C623] uppercase tracking-wider">{pkg.id === 'custom' ? 'Request quote →' : 'Select →'}</span>
                           </div>
                         </GlassCard>
                       ))}
@@ -623,9 +605,9 @@ export default function Home() {
                   {newOrderStep === 2 && (
                     <div className="space-y-4">
                       <div className="flex justify-between items-center border-b border-[#CBD5E1] dark:border-[#1E3A5F] pb-3 mb-1">
-                        <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
+                        <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
                         <span className="text-xs font-bold text-[#0B132B] dark:text-[#F9E79F] bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] px-2.5 py-1 rounded">
-                          {packages.find(p => p.id === selectedPackage)?.name} (${selectedPrice})
+                          {packages.find(p => p.id === selectedPackage)?.name} (${selectedPrice}{selectedPackage === 'maintenance' ? '/month' : ''})
                         </span>
                       </div>
 
@@ -693,7 +675,7 @@ export default function Home() {
                         </div>
                         <div>
                           <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Cost</span>
-                          <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold block mt-0.5">${selectedPrice}</span>
+                          <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-0.5">${selectedPrice}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
                         </div>
                         <div>
                           <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Business Name</span>
@@ -740,7 +722,7 @@ export default function Home() {
           <SectionHeading
             title="Why Partner With"
             gradientWord="Codewave?"
-            subtitle="We blend state-of-the-art technologies with award-winning design aesthetics."
+            subtitle="We combine modern technologies with thoughtful, project-specific design."
             align="center"
           />
         </ScrollReveal>
@@ -772,7 +754,7 @@ export default function Home() {
           />
           <Link
             to="/portfolio"
-            className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] hover:underline mb-8 md:mb-0 flex items-center gap-1.5 self-start md:self-auto"
+            className="text-sm font-semibold text-[#725700] dark:text-[#F3C623] hover:underline mb-8 md:mb-0 flex items-center gap-1.5 self-start md:self-auto"
           >
             Explore Full Portfolio <span>→</span>
           </Link>
@@ -800,7 +782,7 @@ export default function Home() {
                   )}
                 </div>
                 <div className="p-6 bg-white/95 dark:bg-[#131B2E] border-t border-[#CBD5E1] dark:border-[#1E3A5F] relative z-20">
-                  <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">{project.category}</span>
+                  <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">{project.category}</span>
                   <h3 className="text-2xl font-bold text-[#0B132B] dark:text-[#F9E79F] mt-2 group-hover:text-[#D4AF37] dark:group-hover:text-[#F3C623] transition-colors duration-300">
                     {project.title}
                   </h3>
@@ -808,59 +790,6 @@ export default function Home() {
               </GlassCard>
             </ScrollReveal>
           ))}
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6">
-        <ScrollReveal>
-          <SectionHeading
-            title="Client"
-            gradientWord="Feedback"
-            subtitle="Hear directly from business owners who partnered with us."
-            align="center"
-          />
-        </ScrollReveal>
-
-        <div className="mt-12 relative">
-          <GlassCard className="min-h-[220px] flex flex-col justify-between relative overflow-hidden border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90" hoverEffect={false}>
-            <div className="absolute top-6 left-6 text-7xl font-serif text-[#D4AF37]/20 select-none">“</div>
-            <div className="relative z-10">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={activeTestimonial}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-lg md:text-xl text-[#0B132B] dark:text-[#F9E79F] leading-relaxed italic"
-                >
-                  {testimonials[activeTestimonial].text}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            <div className="flex justify-between items-center mt-8 border-t border-[#CBD5E1] dark:border-[#1E3A5F] pt-6">
-              <div>
-                <h4 className="font-bold text-[#0B132B] dark:text-[#F9E79F]">{testimonials[activeTestimonial].author}</h4>
-                <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8]">{testimonials[activeTestimonial].role}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={prevTestimonial}
-                  className="w-10 h-10 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9] dark:bg-[#070D1D] hover:bg-[#D4AF37]/30 flex items-center justify-center text-[#0B132B] dark:text-[#F9E79F] transition-colors cursor-pointer"
-                >
-                  ←
-                </button>
-                <button
-                  onClick={nextTestimonial}
-                  className="w-10 h-10 rounded-lg border border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9] dark:bg-[#070D1D] hover:bg-[#D4AF37]/30 flex items-center justify-center text-[#0B132B] dark:text-[#F9E79F] transition-colors cursor-pointer"
-                >
-                  →
-                </button>
-              </div>
-            </div>
-          </GlassCard>
         </div>
       </section>
 
@@ -872,7 +801,7 @@ export default function Home() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4AF37]/10 dark:bg-[#1E3A5F]/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0B132B] dark:text-[#F9E79F]">Ready to Start Your Project?</h2>
             <p className="mt-4 max-w-xl mx-auto text-[#1E3A5F] dark:text-[#8496B8]">
-              Let's craft an industry-leading digital presence custom tailored to your business rules.
+              Let's craft a digital presence tailored to your business needs.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
               <AnimatedButton onClick={() => navigate('/contact')} variant="primary" className="w-full sm:w-auto">

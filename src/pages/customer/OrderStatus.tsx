@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -131,7 +131,7 @@ export default function OrderStatus() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/portal" className="text-xs text-[#D4AF37] dark:text-[#F3C623] hover:underline font-bold uppercase tracking-wider">
+          <Link to="/portal" className="text-xs text-[#725700] dark:text-[#F3C623] hover:underline font-bold uppercase tracking-wider">
             ← Back to Dashboard
           </Link>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-[#F9E79F] mt-2">Track Project Progress</h1>
@@ -150,7 +150,7 @@ export default function OrderStatus() {
 
       {/* Visual Stepper */}
       <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90" hoverEffect={false}>
-        <h3 className="text-sm font-bold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider mb-8">Project Timeline</h3>
+        <h3 className="text-sm font-bold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider mb-8">Project Timeline</h3>
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4">
           {/* Connector Line for Desktop */}
           <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-200 dark:bg-[#1E3A5F] -z-10 hidden md:block">
@@ -179,7 +179,7 @@ export default function OrderStatus() {
                 <span
                   className={`text-xs font-semibold ${
                     isActive && isRejected ? "text-red-400 font-bold" :
-                    isActive ? "text-[#D4AF37] dark:text-[#F3C623] font-bold" : isCompleted ? "text-slate-900 dark:text-[#F9E79F]" : "text-slate-500 dark:text-slate-400"
+                    isActive ? "text-[#725700] dark:text-[#F3C623] font-bold" : isCompleted ? "text-slate-900 dark:text-[#F9E79F]" : "text-slate-500 dark:text-slate-400"
                   }`}
                 >
                   {step.label}
@@ -211,24 +211,24 @@ export default function OrderStatus() {
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
           </div>
           <div className="text-right">
-            <span className="text-xs text-[#D4AF37] dark:text-[#F3C623] block uppercase tracking-wider font-semibold">Total Price</span>
-            <span className="text-xl font-bold text-[#D4AF37] dark:text-[#F3C623]">${order.price}</span>
+            <span className="text-xs text-[#725700] dark:text-[#F3C623] block uppercase tracking-wider font-semibold">Total Price</span>
+            <span className="text-xl font-bold text-[#725700] dark:text-[#F3C623]">${order.price}</span>
           </div>
         </div>
 
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 text-sm">
           <div>
-            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Created Date</span>
+            <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Created Date</span>
             <span className="text-slate-800 dark:text-slate-200 font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
           </div>
           <div>
-            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
+            <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
             <span className="text-slate-800 dark:text-slate-200 font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
           </div>
         </div>
 
         <div>
-          <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Project Description</span>
+          <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Project Description</span>
           <p className="text-slate-800 dark:text-slate-200 text-xs mt-2 bg-slate-50 dark:bg-[#070D1D] p-4 rounded border border-slate-200 dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap">
             {requirements.description}
           </p>

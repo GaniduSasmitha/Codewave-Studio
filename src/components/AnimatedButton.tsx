@@ -14,7 +14,7 @@ export default function AnimatedButton({
   className = '',
   ...props
 }: AnimatedButtonProps) {
-  const baseStyles = 'relative px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 overflow-hidden';
+  const baseStyles = 'relative px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8A6A00] focus-visible:ring-offset-2 dark:focus-visible:ring-[#F3C623] dark:focus-visible:ring-offset-[#0B132B] flex items-center justify-center gap-2 overflow-hidden disabled:cursor-not-allowed disabled:opacity-60';
 
   const variants = {
     primary: 'gradient-brand text-[#0B132B] font-bold hover:shadow-[0_0_25px_rgba(212,175,55,0.7)] border border-[#F3C623]/50',

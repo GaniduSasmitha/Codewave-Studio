@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
@@ -10,7 +10,7 @@ const services = [
     id: "starter",
     title: "Business Website",
     icon: "🏢",
-    price: "$79",
+    price: "$79 total",
     desc: "A premium corporate presence custom tailored to display your services, build brand authority, and capture leads.",
     features: [
       "Custom responsive design",
@@ -23,7 +23,7 @@ const services = [
     id: "business",
     title: "E-commerce Store",
     icon: "🛒",
-    price: "$199",
+    price: "$199 total",
     desc: "A fully custom digital store complete with product catalog, CMS/blog, custom contact forms, and SEO setup.",
     features: [
       "Up to 10 included pages",
@@ -52,7 +52,7 @@ const services = [
     price: "$15/month",
     desc: "Keep your application secure, up-to-date, and lightning-fast with dedicated support and server health checks.",
     features: [
-      "24/7 server monitoring checks",
+      "Scheduled server monitoring checks",
       "Weekly security patches & updates",
       "Dedicated developer support hours",
       "Performance & speed audit reports"
@@ -93,7 +93,7 @@ export default function Services() {
                 <div className="flex items-center justify-between">
                   <div className="text-4xl">{service.icon}</div>
                   <div className="text-right">
-                    <span className="text-xs text-[#1E3A5F] dark:text-[#8496B8] block uppercase tracking-wider font-semibold">Starting from</span>
+                    <span className="text-xs text-[#1E3A5F] dark:text-[#B7C4DC] block uppercase tracking-wider font-semibold">{service.id === 'custom' ? 'Starting from' : 'Service price'}</span>
                     <span className="text-2xl font-black text-[#0B132B] dark:text-[#F9E79F]">{service.price}</span>
                   </div>
                 </div>
@@ -106,7 +106,7 @@ export default function Services() {
                 <ul className="space-y-2.5 pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
                   {service.features.map((feature, fIdx) => (
                     <li key={fIdx} className="flex items-center gap-2 text-sm text-[#0B132B] dark:text-[#F9E79F]">
-                      <span className="text-[#D4AF37] dark:text-[#F3C623]">✔</span> {feature}
+                      <span className="text-[#725700] dark:text-[#F3C623]">✔</span> {feature}
                     </li>
                   ))}
                 </ul>

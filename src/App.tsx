@@ -15,6 +15,7 @@ import Contact from './pages/public/Contact';
 import Login from './pages/public/Login';
 import Signup from './pages/public/Signup';
 import Unauthorized from './pages/public/Unauthorized';
+import LegalPage from './pages/public/LegalPage';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -41,6 +42,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/privacy" element={<LegalPage policy="privacy" />} />
+            <Route path="/terms" element={<LegalPage policy="terms" />} />
+            <Route path="/refund-policy" element={<LegalPage policy="refund" />} />
+            <Route path="/cookies" element={<LegalPage policy="cookies" />} />
           </Route>
 
           {/* Protected Admin Routes */}

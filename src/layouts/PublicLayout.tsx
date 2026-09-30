@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -6,6 +6,7 @@ import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
 import ThemeToggle from '../components/ThemeToggle';
 import SocialLinks from '../components/SocialLinks';
+import CookieConsent from '../components/CookieConsent';
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -54,7 +55,7 @@ export default function PublicLayout() {
                   <motion.span
                     className={`inline-block transition-colors duration-250 ${
                       isActive
-                        ? 'text-primary dark:text-accent font-bold'
+                        ? 'text-[#725700] dark:text-accent font-bold'
                         : 'text-[#1E3A5F] dark:text-[#F9E79F]/80 group-hover:text-primary dark:group-hover:text-accent'
                     }`}
                     style={{
@@ -165,7 +166,7 @@ export default function PublicLayout() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`relative px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between active:scale-[0.98] ${
                         isActive
-                          ? 'bg-gradient-to-r from-primary/20 to-accent/20 border-l-4 border-primary dark:border-accent text-primary dark:text-accent font-bold shadow-[inset_0_0_20px_rgba(212,175,55,0.2)]'
+                          ? 'bg-gradient-to-r from-primary/20 to-accent/20 border-l-4 border-primary dark:border-accent text-[#725700] dark:text-accent font-bold shadow-[inset_0_0_20px_rgba(212,175,55,0.2)]'
                           : 'text-[#1E3A5F] dark:text-[#F9E79F] hover:bg-[#CBD5E1]/50 dark:hover:bg-[#131B2E] hover:text-primary dark:hover:text-accent'
                       }`}
                       style={{
@@ -243,14 +244,28 @@ export default function PublicLayout() {
         </motion.div>
       </main>
       <footer className="border-t border-[#CBD5E1] dark:border-[#1E3A5F] py-10 bg-[#E2E8F0] dark:bg-[#070D1D] transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#1E3A5F] dark:text-[#8496B8]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-7 text-sm text-[#405678] dark:text-[#B7C4DC] md:grid-cols-3 md:items-start">
           <div className="flex flex-col items-center md:items-start gap-2">
             <Logo size="sm" showText={true} />
             <p>© {new Date().getFullYear()} Codewave Studio. All rights reserved.</p>
           </div>
-          <SocialLinks />
+          <div className="text-center md:text-left">
+            <p className="font-bold text-[#0B132B] dark:text-[#F9E79F]">Codewave Studio</p>
+            <a className="mt-2 block underline hover:text-[#725700] dark:hover:text-[#F3C623]" href="mailto:codewave.studio.tech@gmail.com">codewave.studio.tech@gmail.com</a>
+            <p className="mt-1">Sri Lanka</p>
+          </div>
+          <div className="flex flex-col items-center gap-4 md:items-end">
+            <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-4 gap-y-2 md:justify-end">
+              <Link className="hover:text-[#725700] hover:underline dark:hover:text-[#F3C623]" to="/privacy">Privacy</Link>
+              <Link className="hover:text-[#725700] hover:underline dark:hover:text-[#F3C623]" to="/terms">Terms</Link>
+              <Link className="hover:text-[#725700] hover:underline dark:hover:text-[#F3C623]" to="/refund-policy">Refunds</Link>
+              <Link className="hover:text-[#725700] hover:underline dark:hover:text-[#F3C623]" to="/cookies">Cookies</Link>
+            </nav>
+            <SocialLinks />
+          </div>
         </div>
       </footer>
+      <CookieConsent />
     </div>
   );
 }

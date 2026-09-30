@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import DeleteAccountButton from './DeleteAccountButton';
 
 // A stable set of vivid background colors for avatars, deterministically picked
 // from the first char of the display name so the same user always gets the same color.
@@ -116,8 +117,9 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
   const avatarInitial = getInitial(displayName);
   const avatarBg = getAvatarColor(displayName);
 
-  const customAvatar = profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture;
-  const avatarSrc = customAvatar || (email ? `https://unavatar.io/${encodeURIComponent(email)}` : null);
+  // Do not load third-party avatar URLs from OAuth metadata during normal page rendering.
+  const customAvatar = profile?.avatar_url;
+  const avatarSrc = customAvatar || null;
 
   const handleSignOut = async () => {
     setOpen(false);
@@ -163,6 +165,8 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
           </span>
         </div>
 
+        {role === 'customer' && <DeleteAccountButton onComplete={onItemClick} />}
+
         {/* Sign Out Button */}
         <button
           id="profile-menu-signout"
@@ -197,6 +201,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
+        aria-label={`Open profile menu for ${displayName}`}
         className="flex items-center gap-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 group cursor-pointer"
       >
         {/* Circular avatar */}
@@ -277,6 +282,7 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
 
             {/* Actions */}
             <div className="p-2">
+              {role === 'customer' && <div className="mb-2"><DeleteAccountButton onComplete={() => { setOpen(false); onItemClick?.(); }} /></div>}
               <button
                 id="profile-menu-signout"
                 role="menuitem"

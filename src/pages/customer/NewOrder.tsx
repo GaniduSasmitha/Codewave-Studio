@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -8,8 +8,8 @@ import AnimatedButton from '../../components/AnimatedButton';
 const packages = [
   { id: "starter", name: "Starter Package", price: 79, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
   { id: "business", name: "Business Suite", price: 199, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
-  { id: "custom", name: "Custom Web App", price: 399, desc: "Full-stack web app, database, auth, admin dashboard, custom scope." },
-  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "24/7 server monitoring, updates, and developer support." }
+  { id: "custom", name: "Custom Web App", price: 399, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
+  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "Monthly monitoring, updates, and developer support." }
 ];
 
 export default function NewOrder() {
@@ -32,6 +32,10 @@ export default function NewOrder() {
   useEffect(() => {
     const pkg = searchParams.get('package');
     if (pkg && packages.some((p) => p.id === pkg)) {
+      if (pkg === 'custom') {
+        navigate('/contact?package=custom', { replace: true });
+        return;
+      }
       setSelectedPackage(pkg);
       const match = packages.find((p) => p.id === pkg);
       if (match) {
@@ -39,9 +43,13 @@ export default function NewOrder() {
       }
       setStep(2);
     }
-  }, [searchParams]);
+  }, [navigate, searchParams]);
 
   const handleSelectPackage = (pkgId: string, price: number) => {
+    if (pkgId === 'custom') {
+      navigate('/contact?package=custom');
+      return;
+    }
     setSelectedPackage(pkgId);
     setSelectedPrice(price);
     setStep(2);
@@ -114,14 +122,15 @@ export default function NewOrder() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-[#F9E79F]">Create a New Project</h1>
         <p className="text-slate-600 dark:text-slate-300 mt-2">Request your design and development setup in a few quick steps.</p>
       </div>
+      <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">Fixed-package prices are final for the listed scope. Custom work requires an agreed quote; optional third-party costs are disclosed before payment.</p>
 
       {/* Progress Indicator */}
       <div className="flex items-center gap-4 bg-slate-100 dark:bg-[#070D1D] p-4 rounded-xl border border-slate-200 dark:border-[#1E3A5F] text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-        <span className={step === 1 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : step > 1 ? "text-[#D4AF37]" : ""}>1. Select Plan</span>
+        <span className={step === 1 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : step > 1 ? "text-[#725700]" : ""}>1. Select Plan</span>
         <span className="text-slate-300 dark:text-[#1E3A5F]">|</span>
-        <span className={step === 2 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : step > 2 ? "text-[#D4AF37]" : ""}>2. Requirements</span>
+        <span className={step === 2 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : step > 2 ? "text-[#725700]" : ""}>2. Requirements</span>
         <span className="text-slate-300 dark:text-[#1E3A5F]">|</span>
-        <span className={step === 3 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
+        <span className={step === 3 ? "text-[#725700] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
       </div>
 
       {errorMsg && (
@@ -144,8 +153,8 @@ export default function NewOrder() {
                 <p className="text-slate-600 dark:text-slate-300 text-xs mt-2 leading-relaxed">{pkg.desc}</p>
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 dark:border-[#1E3A5F] flex justify-between items-center">
-                <span className="text-xl font-black text-[#D4AF37] dark:text-[#F3C623]">${pkg.price}</span>
-                <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Select →</span>
+                <span className="text-xl font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From $${pkg.price}` : `$${pkg.price}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
+                <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">{pkg.id === 'custom' ? 'Request quote →' : 'Select →'}</span>
               </div>
             </GlassCard>
           ))}
@@ -156,14 +165,14 @@ export default function NewOrder() {
       {step === 2 && (
         <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 space-y-6" hoverEffect={false}>
           <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1E3A5F] pb-4 mb-2">
-            <span className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
+            <span className="text-sm font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
             <span className="text-sm font-bold text-slate-900 dark:text-[#F9E79F] bg-slate-100 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] px-3 py-1 rounded">
-              {activePlan?.name} (${activePlan?.price})
+              {activePlan?.name} (${activePlan?.price}{selectedPackage === 'maintenance' ? '/month' : ''})
             </span>
           </div>
 
           <div>
-            <label htmlFor="businessName" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
+            <label htmlFor="businessName" className="block text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">
               Business Name
             </label>
             <input
@@ -177,7 +186,7 @@ export default function NewOrder() {
           </div>
 
           <div>
-            <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
+            <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">
               Preferred Domain
             </label>
             <input
@@ -191,7 +200,7 @@ export default function NewOrder() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
+            <label htmlFor="description" className="block text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">
               Project Description / Design Notes
             </label>
             <textarea
@@ -221,25 +230,25 @@ export default function NewOrder() {
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
             <div>
-              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Selected Package</span>
+              <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Selected Package</span>
               <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{activePlan?.name}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Cost</span>
-              <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold block mt-1">${activePlan?.price}</span>
+              <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Cost</span>
+              <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-1">${activePlan?.price}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Business Name</span>
+              <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Business Name</span>
               <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{businessName}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
+              <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
               <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{preferredDomain || "None provided"}</span>
             </div>
           </div>
 
           <div className="pt-2">
-            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Design Notes & Scope</span>
+            <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Design Notes & Scope</span>
             <p className="text-slate-800 dark:text-slate-200 text-xs mt-2 bg-slate-50 dark:bg-[#070D1D] p-4 rounded border border-slate-200 dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap">
               {description}
             </p>

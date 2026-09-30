@@ -306,10 +306,10 @@ export default function MessagesList() {
 
                   {(() => {
                     const replySubject = 'RE: Codewave Studio Inquiry';
-                    const replyBody = `Hi ${selectedMessage.name},\n\n\n\n--- Original Message ---\nFrom: ${selectedMessage.name} <${selectedMessage.email}>\nDate: ${new Date(selectedMessage.created_at).toLocaleString()}\nMessage:\n${selectedMessage.message}`;
-                    
-                    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(selectedMessage.email)}&su=${encodeURIComponent(replySubject)}&body=${encodeURIComponent(replyBody)}`;
-                    const mailtoUrl = `mailto:${selectedMessage.email}?subject=${encodeURIComponent(replySubject)}&body=${encodeURIComponent(replyBody)}`;
+                    // Only pass the recipient and a generic subject to an external
+                    // mail composer; the customer's original message stays in Supabase.
+                    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(selectedMessage.email)}&su=${encodeURIComponent(replySubject)}`;
+                    const mailtoUrl = `mailto:${selectedMessage.email}?subject=${encodeURIComponent(replySubject)}`;
 
                     return (
                       <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">

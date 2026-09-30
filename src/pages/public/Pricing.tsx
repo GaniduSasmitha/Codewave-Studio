@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
@@ -112,6 +112,10 @@ export default function Pricing() {
         ))}
       </div>
 
+      <p className="mx-auto max-w-3xl rounded-xl border border-[#CBD5E1] bg-white/80 p-4 text-center text-sm leading-6 text-[#1E3A5F] dark:border-[#1E3A5F] dark:bg-[#131B2E] dark:text-[#D7DEEC]">
+        Fixed-package prices shown above are the final Codewave Studio service prices for the listed scope. Custom work is quote-based. Any optional third-party costs or work outside the listed scope will be disclosed and agreed before you pay.
+      </p>
+
       {/* Full Features Comparison Table */}
       <section className="pt-12">
         <ScrollReveal>
@@ -140,21 +144,21 @@ export default function Pricing() {
                       <td className="px-6 py-4 font-medium text-[#0B132B] dark:text-[#F9E79F]">{feature.name}</td>
                       <td className="px-6 py-4">
                         {typeof feature.starter === 'boolean' ? (
-                          feature.starter ? <span className="text-[#D4AF37] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.starter ? <span className="text-[#725700] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.starter
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.business === 'boolean' ? (
-                          feature.business ? <span className="text-[#D4AF37] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.business ? <span className="text-[#725700] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.business
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {typeof feature.custom === 'boolean' ? (
-                          feature.custom ? <span className="text-[#D4AF37] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
+                          feature.custom ? <span className="text-[#725700] dark:text-[#F3C623] text-lg">✔</span> : <span className="text-red-500 text-lg">✘</span>
                         ) : (
                           feature.custom
                         )}

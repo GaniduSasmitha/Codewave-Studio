@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GlassCard from './GlassCard';
 
@@ -218,6 +218,15 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                 className={`w-[290px] xs:w-[330px] sm:w-[380px] md:w-[410px] ${isCenter ? 'cursor-pointer' : 'cursor-pointer hover:opacity-90'
                   }`}
                 onClick={() => handleCardClick(i)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleCardClick(i);
+                  }
+                }}
+                role={!isCenter ? 'button' : undefined}
+                tabIndex={isVisible && !isCenter ? 0 : -1}
+                aria-label={!isCenter ? `Show ${project.title} project` : undefined}
               >
                 <GlassCard
                   hoverEffect={false}
@@ -248,7 +257,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                     {project.badge && (
                       <span
                         className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-[#070D1D]/90 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
-                            ? 'text-[#D4AF37] dark:text-[#F3C623] border-[#D4AF37]/50'
+                            ? 'text-[#725700] dark:text-[#F3C623] border-[#D4AF37]/50'
                             : 'text-[#F3C623] dark:text-[#F9E79F] border-[#F3C623]/50'
                           }`}
                       >
@@ -265,7 +274,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                   {/* Body Content */}
                   <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
-                      <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">
+                      <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">
                         {project.category}
                       </span>
                       <h3
@@ -287,7 +296,7 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                         {project.tags.map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="text-[10px] font-semibold text-[#D4AF37] dark:text-[#F3C623] bg-slate-100 dark:bg-[#0B132B] px-2 py-0.5 rounded border border-slate-200 dark:border-[#1E3A5F]"
+                            className="text-[10px] font-semibold text-[#725700] dark:text-[#F3C623] bg-slate-100 dark:bg-[#0B132B] px-2 py-0.5 rounded border border-slate-200 dark:border-[#1E3A5F]"
                           >
                             {tag}
                           </span>

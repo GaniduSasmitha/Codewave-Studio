@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import GlassCard from '../../components/GlassCard';
 import ScrollReveal from '../../components/ScrollReveal';
@@ -18,6 +18,7 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [legalConsent, setLegalConsent] = useState(false);
 
   useEffect(() => {
     if (pkgParam === 'custom') {
@@ -60,6 +61,11 @@ export default function Contact() {
       isValid = false;
     }
 
+    if (!legalConsent) {
+      setSubmitError('You must agree to the Privacy Policy and Terms of Service before sending your message.');
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -94,6 +100,7 @@ export default function Contact() {
           localStorage.setItem('contact_last_submitted', Date.now().toString());
           setIsSuccess(true);
           setForm({ name: '', email: '', message: '' });
+          setLegalConsent(false);
           setErrors({ name: '', email: '', message: '' });
         }
       } catch (err: any) {
@@ -165,7 +172,7 @@ export default function Contact() {
             {/* Email Icon Block */}
             <motion.div
               whileHover="hover"
-              className="flex items-start gap-4 group cursor-pointer"
+              className="flex items-start gap-4 group"
             >
               <motion.div
                 variants={{
@@ -207,7 +214,7 @@ export default function Contact() {
             {/* Phone Icon Block */}
             <motion.div
               whileHover="hover"
-              className="flex items-start gap-4 group cursor-pointer"
+              className="flex items-start gap-4 group"
             >
               <motion.div
                 variants={{
@@ -237,7 +244,7 @@ export default function Contact() {
             {/* Location Icon Block */}
             <motion.div
               whileHover="hover"
-              className="flex items-start gap-4 group cursor-pointer"
+              className="flex items-start gap-4 group"
             >
               <motion.div
                 variants={{
@@ -369,6 +376,17 @@ export default function Contact() {
                   />
                   {errors.message && <p className="text-xs text-red-500 mt-1.5">{errors.message}</p>}
                 </div>
+
+                <label className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-[#1E3A5F] dark:text-[#D7DEEC]">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={legalConsent}
+                    onChange={(e) => { setLegalConsent(e.target.checked); setSubmitError(''); }}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-[#8A6A00]"
+                  />
+                  <span>I agree to the <Link to="/privacy" className="font-semibold underline">Privacy Policy</Link> and <Link to="/terms" className="font-semibold underline">Terms of Service</Link>.</span>
+                </label>
 
                 <AnimatedButton
                   type="submit"

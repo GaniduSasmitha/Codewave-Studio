@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GlassCard from './GlassCard';
 
@@ -215,6 +215,15 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                 className={`w-[290px] xs:w-[330px] sm:w-[360px] md:w-[390px] ${isCenter ? 'cursor-default' : 'cursor-pointer hover:opacity-90'
                   }`}
                 onClick={() => handleCardClick(i)}
+                onKeyDown={(event) => {
+                  if (!isCenter && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    handleCardClick(i);
+                  }
+                }}
+                role={!isCenter ? 'button' : undefined}
+                tabIndex={isVisible && !isCenter ? 0 : -1}
+                aria-label={!isCenter ? `Show ${member.name}` : undefined}
               >
                 <GlassCard
                   hoverEffect={false}
@@ -293,7 +302,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         className="group/name inline-flex items-center gap-1.5 text-xl font-bold text-slate-900 dark:text-[#F9E79F] hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors duration-200 text-center"
                       >
                         <span>{member.name}</span>
-                        <span className="text-xs text-[#D4AF37] dark:text-[#F3C623] opacity-70 group-hover/name:opacity-100 transition-opacity">↗</span>
+                        <span className="text-xs text-[#725700] dark:text-[#F3C623] opacity-70 group-hover/name:opacity-100 transition-opacity">↗</span>
                       </a>
                     ) : (
                       <h4 className="text-xl font-bold text-slate-900 dark:text-[#F9E79F] text-center">
@@ -302,7 +311,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                     )}
 
                     {/* Role / Title */}
-                    <span className="text-xs text-[#D4AF37] dark:text-[#F3C623] font-semibold block mt-1.5 uppercase tracking-wider text-center">
+                    <span className="text-xs text-[#725700] dark:text-[#F3C623] font-semibold block mt-1.5 uppercase tracking-wider text-center">
                       {member.role}
                     </span>
 

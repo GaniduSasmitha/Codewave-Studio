@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -218,7 +218,7 @@ export default function OrderDetail() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <Link to="/admin/orders" className="text-xs text-primary dark:text-accent hover:underline font-bold uppercase tracking-wider">
+          <Link to="/admin/orders" className="text-xs text-[#725700] dark:text-accent hover:underline font-bold uppercase tracking-wider">
             ← Back to Orders List
           </Link>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Manage Project Scope</h1>
@@ -378,7 +378,7 @@ export default function OrderDetail() {
                         href={signedSlipUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-block bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-primary dark:text-accent text-xs font-bold px-4 py-2 rounded border border-slate-300 dark:border-slate-700 transition-colors"
+                        className="inline-block bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-[#725700] dark:text-accent text-xs font-bold px-4 py-2 rounded border border-slate-300 dark:border-slate-700 transition-colors"
                       >
                         Open PDF in New Tab
                       </a>
@@ -387,6 +387,15 @@ export default function OrderDetail() {
                     <div 
                       className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-950/60 p-2 cursor-pointer hover:border-primary/40 transition-colors"
                       onClick={() => setIsModalOpen(true)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          setIsModalOpen(true);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Open payment receipt preview"
                     >
                       <img
                         src={signedSlipUrl}
