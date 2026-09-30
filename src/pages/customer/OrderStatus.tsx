@@ -98,15 +98,15 @@ export default function OrderStatus() {
 
   if (errorMsg || !order) {
     return (
-      <GlassCard className="p-12 text-center border border-[#54281B] bg-[#34150F]/70 max-w-xl mx-auto mt-12">
+      <GlassCard className="p-12 text-center border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 max-w-xl mx-auto mt-12">
         <div className="text-4xl mb-4">⚠️</div>
-        <h3 className="text-xl font-bold text-[#EACEAA]">Order not found</h3>
-        <p className="text-[#B58E78] text-sm mt-2">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-[#F9E79F]">Order not found</h3>
+        <p className="text-slate-600 dark:text-slate-300 text-sm mt-2">
           {errorMsg || "We couldn't retrieve the requested order details. Please verify your portal link."}
         </p>
         <Link
           to="/portal"
-          className="mt-8 inline-block bg-[#85431E] hover:bg-[#85431E]/90 text-[#EACEAA] font-medium px-6 py-2.5 rounded-lg text-sm transition-colors"
+          className="mt-8 inline-block bg-[#D4AF37] hover:bg-[#F3C623] text-[#0B132B] font-bold px-6 py-2.5 rounded-lg text-sm transition-colors shadow-md"
         >
           Back to Dashboard
         </Link>
@@ -131,10 +131,10 @@ export default function OrderStatus() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/portal" className="text-xs text-[#D39858] hover:text-[#85431E] hover:underline font-bold uppercase tracking-wider">
+          <Link to="/portal" className="text-xs text-[#D4AF37] dark:text-[#F3C623] hover:underline font-bold uppercase tracking-wider">
             ← Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-[#EACEAA] mt-2">Track Project Progress</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-[#F9E79F] mt-2">Track Project Progress</h1>
         </div>
         <div className="flex items-center gap-2">
           {isRejected && (
@@ -142,20 +142,20 @@ export default function OrderStatus() {
               Receipt Rejected
             </span>
           )}
-          <span className="text-xs font-mono text-[#B58E78] bg-[#150C0C] border border-[#54281B] px-3 py-1 rounded">
+          <span className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] px-3 py-1 rounded">
             ID: {order.id.slice(0, 8)}...
           </span>
         </div>
       </div>
 
       {/* Visual Stepper */}
-      <GlassCard className="p-8 border border-[#54281B] bg-[#34150F]/80" hoverEffect={false}>
-        <h3 className="text-sm font-bold text-[#B58E78] uppercase tracking-wider mb-8">Project Timeline</h3>
+      <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90" hoverEffect={false}>
+        <h3 className="text-sm font-bold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider mb-8">Project Timeline</h3>
         <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4">
           {/* Connector Line for Desktop */}
-          <div className="absolute top-4 left-4 right-4 h-0.5 bg-[#54281B] -z-10 hidden md:block">
+          <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-200 dark:bg-[#1E3A5F] -z-10 hidden md:block">
             <div
-              className="h-full bg-[#85431E] transition-all duration-500"
+              className="h-full bg-[#D4AF37] transition-all duration-500"
               style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
             ></div>
           </div>
@@ -169,9 +169,9 @@ export default function OrderStatus() {
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${
                     isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
-                    isCompleted ? "bg-[#85431E] border-[#85431E] text-[#EACEAA]" :
-                    isActive ? "bg-[#34150F] border-[#D39858] text-[#D39858] ring-2 ring-[#D39858]/30 animate-pulse" :
-                    "bg-[#150C0C] border-[#54281B] text-[#B58E78]"
+                    isCompleted ? "bg-[#D4AF37] border-[#D4AF37] text-[#0B132B]" :
+                    isActive ? "bg-white dark:bg-[#0B132B] border-[#F3C623] text-[#F3C623] ring-2 ring-[#F3C623]/30 animate-pulse" :
+                    "bg-slate-100 dark:bg-[#070D1D] border-slate-200 dark:border-[#1E3A5F] text-slate-400 dark:text-slate-500"
                   }`}
                 >
                   {isCompleted ? "✓" : idx + 1}
@@ -179,7 +179,7 @@ export default function OrderStatus() {
                 <span
                   className={`text-xs font-semibold ${
                     isActive && isRejected ? "text-red-400 font-bold" :
-                    isActive ? "text-[#D39858] font-bold" : isCompleted ? "text-[#EACEAA]" : "text-[#B58E78]"
+                    isActive ? "text-[#D4AF37] dark:text-[#F3C623] font-bold" : isCompleted ? "text-slate-900 dark:text-[#F9E79F]" : "text-slate-500 dark:text-slate-400"
                   }`}
                 >
                   {step.label}
@@ -196,7 +196,7 @@ export default function OrderStatus() {
               <span className="text-lg">⚠️</span>
               <span>Payment Receipt Rejected — Action Required</span>
             </div>
-            <p className="text-[#B58E78] text-xs leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
               Your previously submitted payment slip was reviewed and rejected by our team. Please upload a clear photo or PDF of your payment receipt below to re-initiate payment verification.
             </p>
           </div>
@@ -204,32 +204,32 @@ export default function OrderStatus() {
       </GlassCard>
 
       {/* Details Card */}
-      <GlassCard className="p-8 border border-[#54281B] bg-[#34150F]/80 space-y-6 animate-fade-in" hoverEffect={false}>
-        <div className="flex justify-between items-center border-b border-[#54281B] pb-4">
+      <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 space-y-6 animate-fade-in" hoverEffect={false}>
+        <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1E3A5F] pb-4">
           <div>
-            <h2 className="text-2xl font-bold text-[#EACEAA]">{requirements.businessName || "Project Order"}</h2>
-            <p className="text-xs text-[#B58E78] mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F9E79F]">{requirements.businessName || "Project Order"}</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
           </div>
           <div className="text-right">
-            <span className="text-xs text-[#B58E78] block uppercase tracking-wider font-semibold">Total Price</span>
-            <span className="text-xl font-bold text-[#D39858]">${order.price}</span>
+            <span className="text-xs text-[#D4AF37] dark:text-[#F3C623] block uppercase tracking-wider font-semibold">Total Price</span>
+            <span className="text-xl font-bold text-[#D4AF37] dark:text-[#F3C623]">${order.price}</span>
           </div>
         </div>
 
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 text-sm">
           <div>
-            <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Created Date</span>
-            <span className="text-[#EACEAA] font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
+            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Created Date</span>
+            <span className="text-slate-800 dark:text-slate-200 font-medium block mt-1">{new Date(order.created_at).toLocaleDateString()}</span>
           </div>
           <div>
-            <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Preferred Domain</span>
-            <span className="text-[#EACEAA] font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
+            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
+            <span className="text-slate-800 dark:text-slate-200 font-medium block mt-1">{requirements.preferredDomain || "None specified"}</span>
           </div>
         </div>
 
         <div>
-          <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Project Description</span>
-          <p className="text-[#EACEAA] text-xs mt-2 bg-[#150C0C] p-4 rounded border border-[#54281B] leading-relaxed whitespace-pre-wrap">
+          <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Project Description</span>
+          <p className="text-slate-800 dark:text-slate-200 text-xs mt-2 bg-slate-50 dark:bg-[#070D1D] p-4 rounded border border-slate-200 dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap">
             {requirements.description}
           </p>
         </div>

@@ -111,17 +111,17 @@ export default function NewOrder() {
     <div className="max-w-2xl mx-auto text-left space-y-6 pb-12">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#EACEAA]">Create a New Project</h1>
-        <p className="text-[#B58E78] mt-2">Request your design and development setup in a few quick steps.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-[#F9E79F]">Create a New Project</h1>
+        <p className="text-slate-600 dark:text-slate-300 mt-2">Request your design and development setup in a few quick steps.</p>
       </div>
 
       {/* Progress Indicator */}
-      <div className="flex items-center gap-4 bg-[#150C0C] p-4 rounded-xl border border-[#54281B] text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
-        <span className={step === 1 ? "text-[#D39858] font-extrabold" : step > 1 ? "text-[#85431E]" : ""}>1. Select Plan</span>
-        <span className="text-[#54281B]">|</span>
-        <span className={step === 2 ? "text-[#D39858] font-extrabold" : step > 2 ? "text-[#85431E]" : ""}>2. Requirements</span>
-        <span className="text-[#54281B]">|</span>
-        <span className={step === 3 ? "text-[#D39858] font-extrabold" : ""}>3. Review & Submit</span>
+      <div className="flex items-center gap-4 bg-slate-100 dark:bg-[#070D1D] p-4 rounded-xl border border-slate-200 dark:border-[#1E3A5F] text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <span className={step === 1 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : step > 1 ? "text-[#D4AF37]" : ""}>1. Select Plan</span>
+        <span className="text-slate-300 dark:text-[#1E3A5F]">|</span>
+        <span className={step === 2 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : step > 2 ? "text-[#D4AF37]" : ""}>2. Requirements</span>
+        <span className="text-slate-300 dark:text-[#1E3A5F]">|</span>
+        <span className={step === 3 ? "text-[#D4AF37] dark:text-[#F3C623] font-extrabold" : ""}>3. Review & Submit</span>
       </div>
 
       {errorMsg && (
@@ -137,15 +137,15 @@ export default function NewOrder() {
             <GlassCard
               key={pkg.id}
               onClick={() => handleSelectPackage(pkg.id, pkg.price)}
-              className="p-6 cursor-pointer border border-[#54281B] bg-[#34150F]/70 hover:border-[#85431E] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+              className="p-6 cursor-pointer border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 hover:border-[#D4AF37] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <h3 className="text-lg font-bold text-[#EACEAA]">{pkg.name}</h3>
-                <p className="text-[#B58E78] text-xs mt-2 leading-relaxed">{pkg.desc}</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-[#F9E79F]">{pkg.name}</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-xs mt-2 leading-relaxed">{pkg.desc}</p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#54281B] flex justify-between items-center">
-                <span className="text-xl font-black text-[#D39858]">${pkg.price}</span>
-                <span className="text-xs font-semibold text-[#85431E] uppercase tracking-wider">Select →</span>
+              <div className="mt-6 pt-4 border-t border-slate-200 dark:border-[#1E3A5F] flex justify-between items-center">
+                <span className="text-xl font-black text-[#D4AF37] dark:text-[#F3C623]">${pkg.price}</span>
+                <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Select →</span>
               </div>
             </GlassCard>
           ))}
@@ -154,16 +154,16 @@ export default function NewOrder() {
 
       {/* Step 2: Requirements */}
       {step === 2 && (
-        <GlassCard className="p-8 border border-[#54281B] bg-[#34150F]/80 space-y-6" hoverEffect={false}>
-          <div className="flex justify-between items-center border-b border-[#54281B] pb-4 mb-2">
-            <span className="text-sm font-semibold text-[#D39858] uppercase tracking-wider">Selected plan:</span>
-            <span className="text-sm font-bold text-[#EACEAA] bg-[#150C0C] border border-[#54281B] px-3 py-1 rounded">
+        <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 space-y-6" hoverEffect={false}>
+          <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1E3A5F] pb-4 mb-2">
+            <span className="text-sm font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-[#F9E79F] bg-slate-100 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] px-3 py-1 rounded">
               {activePlan?.name} (${activePlan?.price})
             </span>
           </div>
 
           <div>
-            <label htmlFor="businessName" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+            <label htmlFor="businessName" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
               Business Name
             </label>
             <input
@@ -171,13 +171,13 @@ export default function NewOrder() {
               type="text"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
-              className="mt-2 block w-full px-4 py-3 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors"
+              className="mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] rounded-lg text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] transition-colors"
               placeholder="e.g. Acme Corporation"
             />
           </div>
 
           <div>
-            <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+            <label htmlFor="preferredDomain" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
               Preferred Domain
             </label>
             <input
@@ -185,25 +185,25 @@ export default function NewOrder() {
               type="text"
               value={preferredDomain}
               onChange={(e) => setPreferredDomain(e.target.value)}
-              className="mt-2 block w-full px-4 py-3 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors"
+              className="mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] rounded-lg text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] transition-colors"
               placeholder="e.g. acme.com (optional)"
             />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-xs font-semibold text-[#B58E78] uppercase tracking-wider">
+            <label htmlFor="description" className="block text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider">
               Project Description / Design Notes
             </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-2 block w-full px-4 py-3 bg-[#150C0C] border border-[#54281B] rounded-lg text-sm text-[#EACEAA] placeholder-[#B58E78]/50 focus:outline-none focus:border-[#85431E] transition-colors h-32"
+              className="mt-2 block w-full px-4 py-3 bg-slate-50 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] rounded-lg text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] transition-colors h-32"
               placeholder="Explain preferred colors, required views, WebGL elements, and integrations..."
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#54281B]">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200 dark:border-[#1E3A5F]">
             <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-3 cursor-pointer">
               Back to Plans
             </AnimatedButton>
@@ -216,36 +216,36 @@ export default function NewOrder() {
 
       {/* Step 3: Review & Confirm */}
       {step === 3 && (
-        <GlassCard className="p-8 border border-[#54281B] bg-[#34150F]/80 space-y-6 animate-fade-in" hoverEffect={false}>
-          <h2 className="text-xl font-bold text-[#EACEAA] border-b border-[#54281B] pb-4">Review Order Details</h2>
+        <GlassCard className="p-8 border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 space-y-6 animate-fade-in" hoverEffect={false}>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-[#F9E79F] border-b border-slate-200 dark:border-[#1E3A5F] pb-4">Review Order Details</h2>
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 text-sm">
             <div>
-              <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Selected Package</span>
-              <span className="text-[#EACEAA] font-bold block mt-1">{activePlan?.name}</span>
+              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Selected Package</span>
+              <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{activePlan?.name}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Cost</span>
-              <span className="text-[#D39858] font-bold block mt-1">${activePlan?.price}</span>
+              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Cost</span>
+              <span className="text-[#D4AF37] dark:text-[#F3C623] font-bold block mt-1">${activePlan?.price}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Business Name</span>
-              <span className="text-[#EACEAA] font-bold block mt-1">{businessName}</span>
+              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Business Name</span>
+              <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{businessName}</span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Preferred Domain</span>
-              <span className="text-[#EACEAA] font-bold block mt-1">{preferredDomain || "None provided"}</span>
+              <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Preferred Domain</span>
+              <span className="text-slate-900 dark:text-[#F9E79F] font-bold block mt-1">{preferredDomain || "None provided"}</span>
             </div>
           </div>
 
           <div className="pt-2">
-            <span className="text-xs font-semibold text-[#B58E78] uppercase tracking-wider block">Design Notes & Scope</span>
-            <p className="text-[#EACEAA] text-xs mt-2 bg-[#150C0C] p-4 rounded border border-[#54281B] leading-relaxed whitespace-pre-wrap">
+            <span className="text-xs font-semibold text-[#D4AF37] dark:text-[#F3C623] uppercase tracking-wider block">Design Notes & Scope</span>
+            <p className="text-slate-800 dark:text-slate-200 text-xs mt-2 bg-slate-50 dark:bg-[#070D1D] p-4 rounded border border-slate-200 dark:border-[#1E3A5F] leading-relaxed whitespace-pre-wrap">
               {description}
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-[#54281B]">
+          <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-200 dark:border-[#1E3A5F]">
             <AnimatedButton onClick={handlePrevStep} variant="secondary" className="w-full sm:w-1/2 py-3 cursor-pointer">
               Back to Edit
             </AnimatedButton>
