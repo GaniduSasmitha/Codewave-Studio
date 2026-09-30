@@ -172,9 +172,7 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     laptopRef.current.scale.setScalar(MathUtils.damp(laptopRef.current.scale.x, targetScale, 3.4, delta));
 
     const entranceLidTarget = MathUtils.lerp(1.38, restingLidAngle, entrance);
-    const lidTarget = isMobile
-      ? MathUtils.lerp(entranceLidTarget, 1.38, progress)
-      : entranceLidTarget;
+    const lidTarget = MathUtils.lerp(entranceLidTarget, 1.38, progress);
     lidRef.current.rotation.x = MathUtils.damp(lidRef.current.rotation.x, lidTarget, 5.2, delta);
   });
 
