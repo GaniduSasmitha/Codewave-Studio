@@ -26,11 +26,13 @@ import MessagesList from './pages/admin/MessagesList';
 // Guard
 import ProtectedRoute from './components/ProtectedRoute';
 import RouteWaveTransition from './components/RouteWaveTransition';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <RouteWaveTransition />
         <Routes>
           {/* Public Routes */}

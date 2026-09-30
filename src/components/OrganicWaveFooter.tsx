@@ -55,24 +55,58 @@ export default function OrganicWaveFooter() {
   ];
 
   return (
-    <footer className="relative w-full overflow-hidden pt-12">
-      {/* Organic Wave Divider SVG (matching Image 2 design style) */}
-      <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+    <footer className="relative w-full overflow-hidden pt-24 sm:pt-28 lg:pt-36">
+      {/* Layered wave divider */}
+      <div className="absolute inset-x-0 top-0 z-10 h-24 overflow-hidden leading-none pointer-events-none sm:h-28 lg:h-36">
         <svg
-          className="relative block w-full h-[50px] sm:h-[80px] lg:h-[110px]"
-          viewBox="0 0 1440 120"
+          className="block h-full w-full"
+          viewBox="0 0 1440 180"
           preserveAspectRatio="none"
           fill="none"
+          aria-hidden="true"
         >
+          <defs>
+            <linearGradient id="footer-wave-gold" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#D4AF37" stopOpacity="0" />
+              <stop offset="0.2" stopColor="#F3C623" stopOpacity="0.9" />
+              <stop offset="0.5" stopColor="#F9E79F" />
+              <stop offset="0.8" stopColor="#F3C623" stopOpacity="0.9" />
+              <stop offset="1" stopColor="#D4AF37" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="footer-wave-blue" x1="0" y1="0" x2="0" y2="180" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#1E3A5F" stopOpacity="0.12" />
+              <stop offset="1" stopColor="#1E3A5F" stopOpacity="0.62" />
+            </linearGradient>
+          </defs>
+
           <path
-            d="M0,32 C280,110 560,0 840,75 C1120,130 1320,30 1440,55 L1440,120 L0,120 Z"
-            className="fill-[#070D1D] dark:fill-[#070D1D]"
+            d="M0 112C170 35 340 43 510 105C690 170 850 152 1020 82C1180 16 1320 42 1440 94V180H0V112Z"
+            fill="url(#footer-wave-blue)"
+          />
+          <path
+            d="M0 128C190 55 348 143 548 104C735 67 874 15 1065 83C1218 138 1345 106 1440 70V180H0V128Z"
+            fill="#070D1D"
+          />
+          <path
+            d="M0 128C190 55 348 143 548 104C735 67 874 15 1065 83C1218 138 1345 106 1440 70"
+            stroke="url(#footer-wave-gold)"
+            strokeWidth="3"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M88 113C267 72 390 130 548 104C735 67 874 15 1065 83C1175 122 1272 119 1354 94"
+            stroke="#F9E79F"
+            strokeWidth="1"
+            strokeDasharray="3 12"
+            strokeLinecap="round"
+            opacity="0.42"
+            vectorEffect="non-scaling-stroke"
           />
         </svg>
       </div>
 
       {/* Main Footer Container */}
-      <div className="relative z-20 bg-[#070D1D] text-[#F9E79F]/90 pt-16 sm:pt-20 pb-10 border-t border-[#D4AF37]/20 shadow-[0_-20px_50px_rgba(0,0,0,0.4)]">
+      <div className="relative z-20 bg-[#070D1D] text-[#F9E79F]/90 pt-10 sm:pt-14 pb-10 shadow-[0_-12px_45px_rgba(7,13,29,0.34)]">
         {/* Subtle Background Glow Spheres */}
         <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 right-10 w-80 h-80 bg-[#1E3A5F]/20 rounded-full blur-3xl pointer-events-none" />
