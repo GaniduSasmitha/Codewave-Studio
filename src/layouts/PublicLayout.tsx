@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
-import ThemeToggle from '../components/ThemeToggle';
 import SocialLinks from '../components/SocialLinks';
 import CookieConsent from '../components/CookieConsent';
 
@@ -89,9 +88,8 @@ export default function PublicLayout() {
             })}
           </nav>
           
-          {/* Desktop: auth area & Theme Toggle */}
+          {/* Desktop auth area */}
           <div className="hidden md:flex items-center space-x-4">
-            <ThemeToggle />
             {user && profile?.role === 'customer' ? (
               <>
                 <Link
@@ -125,9 +123,8 @@ export default function PublicLayout() {
             )}
           </div>
 
-          {/* Mobile Menu Toggle & Theme Toggle & Profile Menu */}
+          {/* Mobile menu toggle and profile menu */}
           <div className="flex md:hidden items-center gap-2 sm:gap-3">
-            <ThemeToggle />
             {user && <ProfileMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -182,12 +179,6 @@ export default function PublicLayout() {
                     </Link>
                   );
                 })}
-              </div>
-
-              {/* Theme Toggle in Mobile Menu */}
-              <div className="pt-2 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex items-center justify-between">
-                <span className="text-sm font-medium text-[#1E3A5F] dark:text-[#8496B8]">Theme</span>
-                <ThemeToggle showLabel={true} />
               </div>
 
               <div className="pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex flex-col gap-3">

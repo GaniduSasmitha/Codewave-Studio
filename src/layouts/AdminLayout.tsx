@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
-import ThemeToggle from '../components/ThemeToggle';
 import { supabase } from '../lib/supabase';
 
 export default function AdminLayout() {
@@ -73,15 +72,13 @@ export default function AdminLayout() {
             <Link to="/" className="text-[#8496B8] hover:text-primary dark:hover:text-accent transition-colors">Main Site</Link>
           </nav>
           
-          {/* Desktop: Theme toggle & profile menu */}
+          {/* Desktop profile menu */}
           <div className="hidden md:flex items-center gap-3">
-            <ThemeToggle />
             {user && <ProfileMenu />}
           </div>
 
-          {/* Mobile Menu Toggle & Theme Toggle & Profile Menu */}
+          {/* Mobile menu toggle and profile menu */}
           <div className="flex md:hidden items-center gap-2 sm:gap-3">
-            <ThemeToggle />
             {user && <ProfileMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -121,12 +118,6 @@ export default function AdminLayout() {
                   )}
                 </Link>
                 <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-[#8496B8] hover:text-accent py-2.5">Main Site</Link>
-              </div>
-
-              {/* Theme Toggle in Mobile Menu */}
-              <div className="pt-2 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex items-center justify-between">
-                <span className="text-sm font-medium text-[#1E3A5F] dark:text-[#8496B8]">Theme</span>
-                <ThemeToggle showLabel={true} />
               </div>
 
               <div className="pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
