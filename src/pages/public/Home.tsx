@@ -353,14 +353,9 @@ export default function Home() {
                   Go to Dashboard
                 </AnimatedButton>
               ) : (
-                <>
-                  <AnimatedButton onClick={() => navigate('/pricing')} variant="primary" className="w-full sm:w-auto">
-                    Get a Website
-                  </AnimatedButton>
-                  <AnimatedButton onClick={() => navigate('/portfolio')} variant="glass" className="w-full sm:w-auto">
-                    View Our Work
-                  </AnimatedButton>
-                </>
+                <AnimatedButton onClick={() => navigate('/pricing')} variant="primary" className="w-full sm:w-auto">
+                  Get a Website
+                </AnimatedButton>
               )}
             </div>
           </div>
