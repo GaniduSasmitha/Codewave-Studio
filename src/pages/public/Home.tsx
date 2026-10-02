@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
+  SiDocker,
   SiGsap,
   SiPostgresql,
   SiReact,
@@ -9,7 +10,6 @@ import {
   SiTailwindcss,
   SiThreedotjs,
   SiTypescript,
-  SiVercel,
   SiVite,
 } from 'react-icons/si';
 import { FaAws } from 'react-icons/fa6';
@@ -118,7 +118,7 @@ const technologyStack = [
   { id: 'threejs', name: 'Three.js', color: '#D4AF37' },
   { id: 'gsap', name: 'GSAP', color: '#88CE02' },
   { id: 'aws', name: 'AWS', color: '#FF9900' },
-  { id: 'vercel', name: 'Vercel', color: '#F9E79F' },
+  { id: 'docker', name: 'Docker', color: '#2496ED' },
 ];
 
 // Staggered Entrance Animation Variants for Hero Title
@@ -347,10 +347,6 @@ export default function Home() {
         {/* Hero Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div className="relative z-10 space-y-8 text-left">
-            <div className="inline-flex items-center gap-2 border border-primary/30 px-3.5 py-1.5 rounded-full bg-primary/10 dark:bg-primary/5 backdrop-blur text-xs font-semibold text-[#725700] dark:text-accent uppercase tracking-wider">
-              <span>✨ Code meets Craft</span>
-            </div>
-
             {/* Hero Entrance Title Animation */}
             <motion.h1
               variants={heroTitleVariants}
@@ -945,7 +941,7 @@ function TechnologyIcon({ name }: { name: string }) {
     threejs: SiThreedotjs,
     gsap: SiGsap,
     aws: FaAws,
-    vercel: SiVercel,
+    docker: SiDocker,
   };
   const Icon = icons[name as keyof typeof icons] || SiReact;
 
