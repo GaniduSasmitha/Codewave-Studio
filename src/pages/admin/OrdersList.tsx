@@ -228,12 +228,17 @@ export default function OrdersList() {
                       exit={{ opacity: 0, scale: 0.9, height: 0, overflow: 'hidden', transition: { duration: 0.35 } }}
                       layout
                     >
-                      <GlassCard className="p-5 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
+                      <GlassCard className={`p-5 border space-y-4 transition-all duration-200 ${
+                        order.is_read
+                          ? 'border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 opacity-90'
+                          : 'border-[#D4AF37]/40 bg-[#D4AF37]/10 dark:bg-[#131B2E] shadow-sm shadow-[#D4AF37]/10'
+                      }`} hoverEffect={false}>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="flex items-center gap-2">
-                              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
-                              <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-blue-500/15 text-blue-700 ring-1 ring-blue-500/30 dark:text-blue-300'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
+                              <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${order.is_read ? 'bg-slate-400 dark:bg-slate-700' : 'bg-[#D4AF37] dark:bg-[#F3C623] animate-pulse shadow-sm shadow-[#D4AF37]'}`} aria-label={order.is_read ? 'Read' : 'Unread'} />
+                              <h4 className={`text-sm ${order.is_read ? 'font-semibold text-slate-700 dark:text-slate-300' : 'font-bold text-slate-900 dark:text-white'}`}>{clientName}</h4>
+                              <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-[#D4AF37]/20 text-[#725700] ring-1 ring-[#D4AF37]/40 dark:text-[#F3C623]'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
                             </div>
                             <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</span>
                           </div>
@@ -317,9 +322,14 @@ export default function OrdersList() {
                             key={order.id}
                             initial={{ opacity: 1 }}
                             exit={{ opacity: 0, scaleY: 0, transition: { duration: 0.3 } }}
-                            className="hover:bg-slate-100/60 dark:hover:bg-slate-900/10 transition-colors"
+                            className={`transition-all duration-200 ${order.is_read ? 'opacity-90 hover:opacity-100 hover:bg-slate-100/60 dark:hover:bg-slate-900/20' : 'bg-[#D4AF37]/10 dark:bg-[#D4AF37]/[0.06] hover:bg-[#D4AF37]/15'}`}
                           >
-                            <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">{clientName}</td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2.5">
+                                <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${order.is_read ? 'bg-slate-400 dark:bg-slate-700' : 'bg-[#D4AF37] dark:bg-[#F3C623] animate-pulse shadow-sm shadow-[#D4AF37]'}`} aria-label={order.is_read ? 'Read' : 'Unread'} />
+                                <span className={order.is_read ? 'font-semibold text-slate-700 dark:text-slate-300' : 'font-bold text-slate-900 dark:text-white'}>{clientName}</span>
+                              </div>
+                            </td>
                             <td className="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</td>
                             <td className="px-6 py-4 font-semibold text-slate-700 dark:text-slate-300">
                               {planNames[order.package] || "Custom Project"}
@@ -333,7 +343,7 @@ export default function OrdersList() {
                               </span>
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`rounded-full px-2 py-1 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-blue-500/15 text-blue-700 ring-1 ring-blue-500/30 dark:text-blue-300'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
+                              <span className={`rounded-full px-2 py-1 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-[#D4AF37]/20 text-[#725700] ring-1 ring-[#D4AF37]/40 dark:text-[#F3C623]'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
                             </td>
                             <td className="px-6 py-4 text-xs text-slate-500 font-mono">
                               {new Date(order.created_at).toLocaleDateString()}
