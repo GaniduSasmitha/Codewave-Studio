@@ -11,7 +11,7 @@ import ScrollReveal from '../../components/ScrollReveal';
 import SlipUpload from '../../components/SlipUpload';
 import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
 
-import beadoriaImg from '../../assets/projects/beadoria.png';
+import evoraImg from '../../assets/projects/evora.png';
 import fitnessTrackerImg from '../../assets/projects/fitness-tracker.png';
 
 interface Order {
@@ -83,10 +83,10 @@ const features = [
 
 const previewProjects = [
   {
-    title: "Beadoria",
-    category: "E-COMMERCE / JEWELRY",
-    link: "https://ganidusasmitha.github.io/Beadoria/",
-    image: beadoriaImg
+    title: "Evora",
+    category: "EV CHARGING / DESIGNATHON",
+    link: null,
+    image: evoraImg
   },
   {
     title: "Personal Fitness Tracker",
@@ -797,6 +797,62 @@ export default function Home() {
               </ScrollReveal>
             ))}
           </div>
+        </section>
+
+        {/* Client Feedback */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <SectionHeading
+              title="Client"
+              gradientWord="Feedback"
+              subtitle="Honest experiences from the people and teams we build for."
+              align="center"
+            />
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1}>
+            <GlassCard hoverEffect={false} className="relative mt-12 overflow-hidden border border-[#D4AF37]/40 bg-gradient-to-br from-white via-[#F8FAFC] to-[#D4AF37]/10 p-0 dark:from-[#0B132B] dark:via-[#131B2E] dark:to-[#D4AF37]/15">
+              <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#D4AF37]/15 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-[#1E3A5F]/10 blur-3xl dark:bg-[#D4AF37]/10" />
+
+              <div className="relative grid items-center gap-10 px-6 py-10 sm:px-10 sm:py-14 lg:grid-cols-[0.75fr_1.25fr] lg:px-16">
+                <div className="flex justify-center lg:justify-start">
+                  <div className="relative flex h-44 w-44 items-center justify-center rounded-[2.25rem] border border-[#D4AF37]/40 bg-white/70 shadow-[0_20px_60px_-20px_rgba(212,175,55,0.45)] backdrop-blur-md dark:bg-[#070D1D]/60 sm:h-52 sm:w-52">
+                    <span className="absolute left-5 top-3 font-serif text-7xl leading-none text-[#D4AF37]/25" aria-hidden="true">“</span>
+                    <div className="text-center">
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/15 text-[#725700] dark:text-[#F3C623]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-7 w-7" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" d="M7 8h10M7 12h6m-8 8 3.5-3H17a4 4 0 0 0 4-4V7a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v6a4 4 0 0 0 2 3.46V20Z" />
+                        </svg>
+                      </div>
+                      <p className="mt-4 text-xs font-bold uppercase tracking-[0.22em] text-[#725700] dark:text-[#F3C623]">Coming soon</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center lg:text-left">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#725700] dark:text-[#F3C623]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+                    Reviews coming soon
+                  </span>
+                  <h3 className="mt-5 text-2xl font-extrabold text-[#0B132B] dark:text-[#F9E79F] sm:text-3xl">
+                    Our client story is just getting started.
+                  </h3>
+                  <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#405678] dark:text-[#AAB7CF] sm:text-base lg:mx-0">
+                    We haven&apos;t received public client feedback yet. As projects are completed and clients share their experience, verified reviews will appear here—clearly and honestly.
+                  </p>
+                  <div className="mt-7 flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
+                    <AnimatedButton onClick={() => navigate('/contact')} variant="primary" className="w-full sm:w-auto">
+                      Start a Project With Us
+                    </AnimatedButton>
+                    <Link to="/portfolio" className="text-sm font-semibold text-[#725700] transition-colors hover:text-[#D4AF37] dark:text-[#F3C623]">
+                      See our completed work <span aria-hidden="true">→</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </ScrollReveal>
         </section>
 
         {/* Final CTA Section */}
