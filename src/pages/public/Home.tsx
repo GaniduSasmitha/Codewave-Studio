@@ -839,16 +839,8 @@ export default function Home() {
                     Our client story is just getting started.
                   </h3>
                   <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#405678] dark:text-[#AAB7CF] sm:text-base lg:mx-0">
-                    We haven&apos;t received public client feedback yet. As projects are completed and clients share their experience, verified reviews will appear here—clearly and honestly.
+                    We haven&apos;t received public client feedback yet. As projects are completed and clients share their experience, verified reviews will appear here clearly and honestly.
                   </p>
-                  <div className="mt-7 flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
-                    <AnimatedButton onClick={() => navigate('/contact')} variant="primary" className="w-full sm:w-auto">
-                      Start a Project With Us
-                    </AnimatedButton>
-                    <Link to="/portfolio" className="text-sm font-semibold text-[#725700] transition-colors hover:text-[#D4AF37] dark:text-[#F3C623]">
-                      See our completed work <span aria-hidden="true">→</span>
-                    </Link>
-                  </div>
                 </div>
               </div>
             </GlassCard>
