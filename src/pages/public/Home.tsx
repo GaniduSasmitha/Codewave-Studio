@@ -1,6 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import {
+  SiGsap,
+  SiPostgresql,
+  SiReact,
+  SiSupabase,
+  SiTailwindcss,
+  SiThreedotjs,
+  SiTypescript,
+  SiVercel,
+  SiVite,
+} from 'react-icons/si';
+import { FaAws } from 'react-icons/fa6';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import Hero3D from '../../components/Hero3D';
@@ -923,63 +935,19 @@ export default function Home() {
 }
 
 function TechnologyIcon({ name }: { name: string }) {
-  const commonClass = 'h-7 w-7';
-
-  if (name === 'react') {
-    return (
-      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" aria-hidden="true">
-        <ellipse cx="12" cy="12" rx="10" ry="4" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-      </svg>
-    );
-  }
-
-  if (name === 'supabase') {
-    return (
-      <svg className={commonClass} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M13.2 2.5 5.3 13.4c-.5.7 0 1.6.8 1.6h6.1l-1.1 6.2c-.2 1.1 1.2 1.6 1.8.7l7.8-11.3c.5-.7 0-1.6-.8-1.6h-6l1.1-5.8c.2-1.1-1.2-1.6-1.8-.7Z" />
-      </svg>
-    );
-  }
-
-  if (name === 'postgresql') {
-    return (
-      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
-      </svg>
-    );
-  }
-
-  if (name === 'threejs') {
-    return (
-      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true">
-        <path d="m12 2 9 17H3L12 2Z" /><path d="m12 7 5 9H7l5-9ZM12 7v9M7 16l9-5" />
-      </svg>
-    );
-  }
-
-  if (name === 'aws') {
-    return (
-      <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <text x="3" y="18" fill="currentColor" fontSize="12" fontWeight="800" fontFamily="Arial, sans-serif">aws</text>
-        <path d="M5 22c6.5 4.4 15.7 4.2 22-.3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /><path d="m24.5 20.2 3.1 1.1-1.2 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-
-  if (name === 'vercel') {
-    return (
-      <svg className={commonClass} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 3 22 20H2L12 3Z" />
-      </svg>
-    );
-  }
-
-  const labels: Record<string, string> = {
-    typescript: 'TS',
-    vite: 'V',
-    tailwind: 'TW',
-    gsap: 'G',
+  const icons = {
+    react: SiReact,
+    typescript: SiTypescript,
+    vite: SiVite,
+    tailwind: SiTailwindcss,
+    supabase: SiSupabase,
+    postgresql: SiPostgresql,
+    threejs: SiThreedotjs,
+    gsap: SiGsap,
+    aws: FaAws,
+    vercel: SiVercel,
   };
+  const Icon = icons[name as keyof typeof icons] || SiReact;
 
-  return <span className="text-[11px] font-black tracking-[-0.04em]">{labels[name] || name.slice(0, 2).toUpperCase()}</span>;
+  return <Icon className="h-7 w-7" aria-hidden="true" />;
 }
