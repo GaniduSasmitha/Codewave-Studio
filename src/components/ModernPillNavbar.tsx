@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import ProfileMenu from './ProfileMenu';
+import SocialLinks from './SocialLinks';
 
 const navItems = [
   { path: '/services', label: 'Services' },
@@ -12,6 +13,15 @@ const navItems = [
   { path: '/contact', label: 'Contact' },
 ];
 
+const mobileNavItems = [
+  { path: '/', label: 'Home', icon: 'home' },
+  { path: '/services', label: 'Services', icon: 'code' },
+  { path: '/portfolio', label: 'Portfolio', icon: 'portfolio' },
+  { path: '/pricing', label: 'Pricing', icon: 'pricing' },
+  { path: '/about', label: 'About', icon: 'about' },
+  { path: '/contact', label: 'Contact', icon: 'contact' },
+];
+
 export default function ModernPillNavbar() {
   const location = useLocation();
   const { user, profile } = useAuth();
@@ -19,8 +29,29 @@ export default function ModernPillNavbar() {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const isPathActive = (path: string) => {
-    return location.pathname.startsWith(path);
+    return path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
   };
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [mobileMenuOpen]);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (location.pathname === '/') {
@@ -104,7 +135,7 @@ export default function ModernPillNavbar() {
         </nav>
 
         {/* Right CTA Pill Capsule (Matching Image 1 right white pill capsule) */}
-        <div className="hidden sm:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           {user ? (
             <div className="flex items-center gap-2 bg-[#171F30] border border-[#D4AF37]/30 pl-3 pr-1.5 py-1 rounded-full">
               {profile?.role === 'customer' ? (
@@ -151,92 +182,188 @@ export default function ModernPillNavbar() {
         </div>
 
         {/* Mobile Right Bar Toggle */}
-        <div className="flex sm:hidden items-center gap-2">
-          {user && <ProfileMenu />}
+        <div className="flex lg:hidden items-center gap-2">
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-[#161D2B] text-white transition-colors hover:border-[#F3C623] cursor-pointer"
-            aria-label="Toggle menu"
+            onClick={() => setMobileMenuOpen(true)}
+            className="group flex h-11 w-12 flex-col items-end justify-center gap-[5px] rounded-full border border-[#D4AF37]/35 bg-[#161D2B] px-2.5 text-white shadow-sm transition-all hover:border-[#F3C623] hover:bg-[#1C2541] cursor-pointer"
+            aria-label="Open navigation menu"
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation-drawer"
           >
-            <svg className="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            <span className="h-[3px] w-7 rounded-full bg-[#F9E79F] transition-colors group-hover:bg-[#F3C623]" />
+            <span className="h-[3px] w-7 rounded-full bg-[#F9E79F] transition-colors group-hover:bg-[#F3C623]" />
+            <span className="h-[3px] w-4 rounded-full bg-[#F9E79F] transition-colors group-hover:bg-[#F3C623]" />
           </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown Drawer */}
+      {/* Mobile left-side drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.96 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute left-4 right-4 top-[76px] z-50 mx-auto max-w-lg space-y-3 overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-[#070D1D]/98 p-5 shadow-[0_22px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
-          >
-            <div className="flex flex-col space-y-1.5">
-              {navItems.map((item) => {
-                const isActive = isPathActive(item.path);
+          <div className="fixed inset-0 z-[70] lg:hidden">
+            <motion.button
+              type="button"
+              aria-label="Close navigation menu"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute inset-0 h-full w-full bg-[#070D1D]/70 backdrop-blur-[3px] cursor-default"
+            />
 
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all ${isActive
-                        ? 'bg-[#D4AF37] text-[#0B132B] font-bold shadow-md'
-                        : 'text-[#F9E79F] hover:bg-[#131B2E] hover:text-[#F3C623]'
-                      }`}
-                  >
-                    <span>{item.label}</span>
-                    {isActive && <span className="h-2 w-2 rounded-full bg-[#0B132B]" />}
-                  </Link>
-                );
-              })}
-            </div>
+            <motion.aside
+              id="mobile-navigation-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 34 }}
+              className="absolute inset-y-0 left-0 flex w-[88vw] max-w-[400px] flex-col overflow-y-auto border-r border-[#D4AF37]/35 bg-[#0B132B] text-[#F9E79F] shadow-[22px_0_70px_rgba(0,0,0,0.55)]"
+            >
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#1E3A5F] bg-[#0B132B]/95 px-5 py-5 backdrop-blur-xl">
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3" aria-label="Codewave Studio Home">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/45 bg-[#131B2E] text-[#F3C623] shadow-md">
+                    <MobileNavIcon name="code" className="h-5 w-5" />
+                  </span>
+                  <span className="text-base font-extrabold tracking-tight text-white">
+                    Codewave<span className="text-[#F3C623]">Studio</span>
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Close navigation menu"
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#1E3A5F] bg-[#131B2E] text-[#F9E79F] transition-colors hover:border-[#D4AF37] hover:text-[#F3C623] cursor-pointer"
+                >
+                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
+              </div>
 
-            {/* Mobile Contact & Auth CTA */}
-            <div className="pt-3 border-t border-[#1E3A5F] flex flex-col gap-2.5">
-              <button
-                onClick={(e) => {
-                  handleCopyEmail(e);
-                }}
-                className="w-full py-2.5 px-4 rounded-xl bg-white text-[#0B132B] text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
-              >
-                <svg className="h-4 w-4 text-[#0B132B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                {copiedEmail ? 'Email Copied!' : 'codewave.studio.tech@gmail.com'}
-              </button>
+              <div className="flex flex-1 flex-col px-5 py-6">
+                <nav aria-label="Mobile navigation" className="space-y-1">
+                  {mobileNavItems.map((item) => {
+                    const isActive = isPathActive(item.path);
 
-              {!user && (
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 rounded-xl border border-[#CBD5E1]/30 dark:border-[#1E3A5F] text-center text-xs font-bold text-[#F9E79F] hover:bg-[#131B2E]"
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`relative flex min-h-14 items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all ${isActive
+                            ? 'bg-[#D4AF37]/18 text-[#F3C623] shadow-[inset_0_0_0_1px_rgba(212,175,55,0.35)]'
+                            : 'text-[#F9E79F] hover:bg-[#131B2E] hover:text-[#F3C623]'
+                          }`}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {isActive && <span className="absolute inset-y-3 left-0 w-1 rounded-full bg-[#F3C623]" />}
+                        <MobileNavIcon name={item.icon} className="h-5 w-5 shrink-0" />
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  })}
+
+                  {profile?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="mt-3 flex min-h-14 items-center gap-4 rounded-2xl border border-[#D4AF37]/45 bg-[#D4AF37]/12 px-4 py-3.5 text-sm font-bold text-[#F3C623] transition-all hover:bg-[#D4AF37]/20"
+                    >
+                      <MobileNavIcon name="admin" className="h-5 w-5 shrink-0" />
+                      <span>Admin Portal</span>
+                      <span className="ml-auto rounded-full bg-[#D4AF37] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-[#0B132B]">Admin</span>
+                    </Link>
+                  )}
+
+                  {profile?.role === 'customer' && (
+                    <Link
+                      to="/#orders-dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="mt-3 flex min-h-14 items-center gap-4 rounded-2xl border border-[#1E3A5F] bg-[#131B2E] px-4 py-3.5 text-sm font-bold text-[#F9E79F] transition-all hover:border-[#D4AF37]/50 hover:text-[#F3C623]"
+                    >
+                      <MobileNavIcon name="orders" className="h-5 w-5 shrink-0" />
+                      <span>My Orders</span>
+                    </Link>
+                  )}
+                </nav>
+
+                <div className="my-6 h-px bg-[#1E3A5F]" />
+
+                <div className="space-y-3">
+                  <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#8496B8]">Contact Codewave</p>
+                  <a
+                    href="tel:+94717441420"
+                    className="flex items-center gap-3 rounded-2xl border border-[#1E3A5F] bg-[#131B2E] px-4 py-3.5 text-sm font-semibold text-[#F9E79F] transition-colors hover:border-[#D4AF37]/50 hover:text-[#F3C623]"
                   >
-                    Log in
-                  </Link>
-                  <Link
-                    to="/signup"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 rounded-xl bg-[#D4AF37] text-center text-xs font-bold text-[#0B132B] shadow-md"
+                    <MobileNavIcon name="phone" className="h-5 w-5 text-[#F3C623]" />
+                    <span>+94 71 744 1420</span>
+                  </a>
+                  <button
+                    onClick={handleCopyEmail}
+                    className="flex w-full items-center gap-3 rounded-2xl border border-[#1E3A5F] bg-[#131B2E] px-4 py-3.5 text-left text-xs font-semibold text-[#F9E79F] transition-colors hover:border-[#D4AF37]/50 hover:text-[#F3C623] cursor-pointer"
                   >
-                    Sign up
-                  </Link>
+                    <MobileNavIcon name="email" className="h-5 w-5 shrink-0 text-[#F3C623]" />
+                    <span className="truncate">{copiedEmail ? 'Email copied!' : 'codewave.studio.tech@gmail.com'}</span>
+                  </button>
                 </div>
-              )}
-            </div>
-          </motion.div>
+
+                <div className="mt-6">
+                  <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#8496B8]">Follow us</p>
+                  <SocialLinks className="flex-wrap [&_a]:h-11 [&_a]:w-11 [&_a]:rounded-xl" />
+                </div>
+
+                <div className="mt-auto pt-7">
+                  {user ? (
+                    <ProfileMenu variant="mobile" onItemClick={() => setMobileMenuOpen(false)} />
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-xl border border-[#D4AF37]/40 px-4 py-3 text-center text-sm font-bold text-[#F9E79F] transition-colors hover:bg-[#131B2E]"
+                      >
+                        Log in
+                      </Link>
+                      <Link
+                        to="/signup"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-xl bg-[#D4AF37] px-4 py-3 text-center text-sm font-bold text-[#0B132B] shadow-md transition-colors hover:bg-[#F3C623]"
+                      >
+                        Sign up
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.aside>
+          </div>
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+function MobileNavIcon({ name, className }: { name: string; className?: string }) {
+  const paths: Record<string, React.ReactNode> = {
+    home: <><path d="M3 11.5 12 4l9 7.5" /><path d="M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6" /></>,
+    code: <><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14" /></>,
+    portfolio: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M8 6V4h8v2M3 11h18" /></>,
+    pricing: <><path d="M12 2v20M17 6.5C17 4.57 14.76 3 12 3S7 4.57 7 6.5 9.24 10 12 10s5 1.57 5 3.5S14.76 17 12 17s-5-1.57-5-3.5" /></>,
+    about: <><circle cx="9" cy="8" r="3" /><circle cx="17" cy="9" r="2.5" /><path d="M3 20c0-4 2.5-6 6-6s6 2 6 6M15 15c3 0 5 1.6 5 5" /></>,
+    contact: <><path d="M4 4h16v14H7l-3 3V4Z" /><path d="m7 8 5 4 5-4" /></>,
+    admin: <><path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z" /><path d="m9 12 2 2 4-4" /></>,
+    orders: <><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" /></>,
+    phone: <path d="M5 4h4l2 5-2.5 1.5a15 15 0 0 0 5 5L15 13l5 2v4c0 1.1-.9 2-2 2C9.7 21 3 14.3 3 6c0-1.1.9-2 2-2Z" />,
+    email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></>,
+  };
+
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
+    </svg>
   );
 }
