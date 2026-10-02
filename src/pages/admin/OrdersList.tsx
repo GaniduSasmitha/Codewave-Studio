@@ -17,6 +17,8 @@ interface Order {
   package: string;
   price: number;
   status: string;
+  is_read: boolean;
+  read_at?: string | null;
   slip_url?: string | null;
   created_at: string;
   profiles?: Profile | Profile[];
@@ -46,6 +48,7 @@ export default function OrdersList() {
 
   // Filter & Sort state
   const [statusFilter, setStatusFilter] = useState('all');
+  const [readFilter, setReadFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date_desc');
 
   const fetchAllOrders = async (silent = false) => {
@@ -118,6 +121,10 @@ export default function OrdersList() {
       result = result.filter((order) => order.status === statusFilter);
     }
 
+    if (readFilter !== 'all') {
+      result = result.filter((order) => readFilter === 'read' ? order.is_read : !order.is_read);
+    }
+
     if (sortBy === 'date_desc') {
       result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     } else if (sortBy === 'date_asc') {
@@ -129,12 +136,19 @@ export default function OrdersList() {
     }
 
     setFilteredOrders(result);
-  }, [orders, statusFilter, sortBy]);
+  }, [orders, statusFilter, readFilter, sortBy]);
+
+  const unreadCount = orders.filter((order) => !order.is_read).length;
 
   return (
     <div className="space-y-8 text-left pb-12">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">All Client Orders</h1>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">All Client Orders</h1>
+          {unreadCount > 0 && (
+            <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-700 dark:text-blue-300">{unreadCount} unread</span>
+          )}
+        </div>
         <p className="text-slate-600 dark:text-slate-400 mt-2">Manage customer transactions, view payments, and advance active scopes.</p>
       </div>
 
@@ -156,6 +170,18 @@ export default function OrdersList() {
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
               <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 uppercase font-semibold">Seen:</span>
+            <select
+              value={readFilter}
+              onChange={(e) => setReadFilter(e.target.value)}
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs text-slate-900 dark:text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-primary"
+            >
+              <option value="all">All ({orders.length})</option>
+              <option value="unread">Unread ({unreadCount})</option>
+              <option value="read">Read ({orders.length - unreadCount})</option>
             </select>
           </div>
         </div>
@@ -205,7 +231,10 @@ export default function OrdersList() {
                       <GlassCard className="p-5 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10 space-y-4" hoverEffect={false}>
                         <div className="flex items-center justify-between">
                           <div>
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{clientName}</h4>
+                              <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-blue-500/15 text-blue-700 ring-1 ring-blue-500/30 dark:text-blue-300'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
+                            </div>
                             <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">#{order.id.slice(0, 8)}</span>
                           </div>
                           <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
@@ -262,6 +291,7 @@ export default function OrdersList() {
                     <th className="px-6 py-4">Plan Package</th>
                     <th className="px-6 py-4">Price</th>
                     <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">Seen</th>
                     <th className="px-6 py-4">Created Date</th>
                     <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
@@ -269,7 +299,7 @@ export default function OrdersList() {
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800/80">
                   {filteredOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
+                      <td colSpan={8} className="px-6 py-12 text-center text-slate-500">
                         No orders match the selected filters.
                       </td>
                     </tr>
@@ -301,6 +331,9 @@ export default function OrdersList() {
                               }`}>
                                 {order.status.replace(/_/g, ' ')}
                               </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`rounded-full px-2 py-1 text-[9px] font-extrabold uppercase ${order.is_read ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-blue-500/15 text-blue-700 ring-1 ring-blue-500/30 dark:text-blue-300'}`}>{order.is_read ? 'Read' : 'Unread'}</span>
                             </td>
                             <td className="px-6 py-4 text-xs text-slate-500 font-mono">
                               {new Date(order.created_at).toLocaleDateString()}

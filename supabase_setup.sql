@@ -31,12 +31,16 @@ create table if not exists public.orders (
   created_at timestamptz default now(),
   verified_at timestamptz,
   verified_by uuid references public.profiles(id),
+  is_read boolean not null default false,
+  read_at timestamptz,
   deleted_by_admin boolean default false,
   deleted_by_user boolean default false
 );
 
 alter table public.orders add column if not exists deleted_by_admin boolean default false;
 alter table public.orders add column if not exists deleted_by_user boolean default false;
+alter table public.orders add column if not exists is_read boolean not null default false;
+alter table public.orders add column if not exists read_at timestamptz;
 
 -- Convert any existing NULL flags to false
 update public.orders set deleted_by_admin = false where deleted_by_admin is null;

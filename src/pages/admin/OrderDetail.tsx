@@ -24,6 +24,8 @@ interface Order {
   created_at: string;
   verified_at: string | null;
   verified_by: string | null;
+  is_read: boolean;
+  read_at: string | null;
   profiles?: Profile | Profile[];
 }
 
@@ -69,6 +71,19 @@ export default function OrderDetail() {
 
       if (error) throw error;
       setOrder(data);
+
+      if (!data.is_read) {
+        const { error: readError } = await supabase
+          .from('orders')
+          .update({ is_read: true, read_at: new Date().toISOString() })
+          .eq('id', id);
+
+        if (readError) {
+          console.error('Error marking order as read:', readError);
+        } else {
+          setOrder({ ...data, is_read: true, read_at: new Date().toISOString() });
+        }
+      }
 
       if (data.slip_url) {
         await resolveSignedUrl(data.slip_url);
