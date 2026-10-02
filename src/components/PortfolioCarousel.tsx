@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GlassCard from './GlassCard';
 
@@ -231,8 +231,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                 <GlassCard
                   hoverEffect={false}
                   className={`h-full flex flex-col justify-between overflow-hidden p-0 transition-all duration-300 border ${isCenter
-                      ? 'border-[#D4AF37]/70 dark:border-[#D4AF37]/70 shadow-[0_12px_40px_-10px_rgba(212,175,55,0.3)] ring-2 ring-[#D4AF37]/30 dark:ring-[#D4AF37]/30 bg-white/95 dark:bg-[#131B2E]'
-                      : 'border-slate-200 dark:border-[#1E3A5F] bg-white/80 dark:bg-[#0B132B]/80 shadow-lg'
+                    ? 'border-[#D4AF37]/70 dark:border-[#D4AF37]/70 shadow-[0_12px_40px_-10px_rgba(212,175,55,0.3)] ring-2 ring-[#D4AF37]/30 dark:ring-[#D4AF37]/30 bg-white/95 dark:bg-[#131B2E]'
+                    : 'border-slate-200 dark:border-[#1E3A5F] bg-white/80 dark:bg-[#0B132B]/80 shadow-lg'
                     }`}
                 >
                   {/* Image Header Area */}
@@ -257,8 +257,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                     {project.badge && (
                       <span
                         className={`absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-[#070D1D]/90 backdrop-blur-md shadow-md border ${project.badge === 'Company Project'
-                            ? 'text-[#725700] dark:text-[#F3C623] border-[#D4AF37]/50'
-                            : 'text-[#F3C623] dark:text-[#F9E79F] border-[#F3C623]/50'
+                          ? 'text-[#725700] dark:text-[#F3C623] border-[#D4AF37]/50'
+                          : 'text-[#F3C623] dark:text-[#F9E79F] border-[#F3C623]/50'
                           }`}
                       >
                         {project.badge}
@@ -279,8 +279,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
                       </span>
                       <h3
                         className={`text-xl font-bold transition-colors duration-300 ${isCenter
-                            ? 'text-slate-900 dark:text-[#F9E79F]'
-                            : 'text-slate-800 dark:text-slate-200'
+                          ? 'text-slate-900 dark:text-[#F9E79F]'
+                          : 'text-slate-800 dark:text-slate-200'
                           }`}
                       >
                         {project.title}
@@ -356,8 +356,8 @@ export default function PortfolioCarousel({ projects }: PortfolioCarouselProps) 
             onClick={() => setActiveIndex(idx)}
             aria-label={`Go to project ${idx + 1}`}
             className={`transition-all duration-300 rounded-full focus:outline-none cursor-pointer ${idx === activeIndex
-                ? 'w-8 h-2.5 bg-gradient-to-r from-[#D4AF37] to-[#F3C623] shadow-md'
-                : 'w-2.5 h-2.5 bg-slate-300 dark:bg-[#1E3A5F] hover:bg-[#D4AF37]/50 dark:hover:bg-[#D4AF37]/50'
+              ? 'w-8 h-2.5 bg-gradient-to-r from-[#D4AF37] to-[#F3C623] shadow-md'
+              : 'w-2.5 h-2.5 bg-slate-300 dark:bg-[#1E3A5F] hover:bg-[#D4AF37]/50 dark:hover:bg-[#D4AF37]/50'
               }`}
           />
         ))}

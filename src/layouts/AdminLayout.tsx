@@ -6,11 +6,18 @@ import ProfileMenu from '../components/ProfileMenu';
 import Logo from '../components/Logo';
 import { supabase } from '../lib/supabase';
 
+interface IncomingMessageNotification {
+  id: string;
+  name: string;
+  message: string;
+}
+
 export default function AdminLayout() {
   const location = useLocation();
   const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [incomingMessage, setIncomingMessage] = useState<IncomingMessageNotification | null>(null);
 
   const fetchUnreadCount = async () => {
     try {
@@ -39,8 +46,17 @@ export default function AdminLayout() {
           schema: 'public',
           table: 'contact_messages'
         },
-        () => {
+        (payload) => {
           fetchUnreadCount();
+
+          if (payload.eventType === 'INSERT') {
+            const message = payload.new as IncomingMessageNotification;
+            setIncomingMessage({
+              id: message.id,
+              name: message.name,
+              message: message.message
+            });
+          }
         }
       )
       .subscribe();
@@ -50,6 +66,16 @@ export default function AdminLayout() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!incomingMessage) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setIncomingMessage(null);
+    }, 8000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [incomingMessage]);
+
   return (
     <div className="min-h-screen bg-[#F0F4F9] dark:bg-[#0B132B] text-[#0B132B] dark:text-[#F9E79F] flex flex-col font-sans transition-colors duration-300">
       <header className="border-b border-[#CBD5E1] dark:border-[#1E3A5F] bg-[#F0F4F9]/90 dark:bg-[#0B132B]/90 backdrop-blur sticky top-0 z-50 transition-colors duration-300">
@@ -57,7 +83,7 @@ export default function AdminLayout() {
           <Link to="/admin">
             <Logo size="md" subtitle="Admin Console" />
           </Link>
-          
+
           <nav className="hidden md:flex space-x-6 text-sm font-medium items-center">
             <Link to="/admin" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Dashboard</Link>
             <Link to="/admin/orders" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Orders</Link>
@@ -71,7 +97,7 @@ export default function AdminLayout() {
             </Link>
             <Link to="/" className="text-[#8496B8] hover:text-primary dark:hover:text-accent transition-colors">Main Site</Link>
           </nav>
-          
+
           {/* Desktop profile menu */}
           <div className="hidden md:flex items-center gap-3">
             {user && <ProfileMenu />}
@@ -127,6 +153,57 @@ export default function AdminLayout() {
           )}
         </AnimatePresence>
       </header>
+
+      <AnimatePresence>
+        {incomingMessage && (
+          <motion.div
+            initial={{ opacity: 0, x: 40, y: -10 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0, x: 40, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed right-4 top-20 z-[60] w-[calc(100%-2rem)] max-w-sm overflow-hidden rounded-xl border border-[#D4AF37]/60 bg-white shadow-2xl dark:bg-[#111C35]"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex items-start gap-3 p-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#D4AF37]/20 text-[#725700] dark:text-[#F3C623]">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4v8z" />
+                </svg>
+              </div>
+
+              <Link
+                to="/admin/messages"
+                onClick={() => setIncomingMessage(null)}
+                className="min-w-0 flex-1"
+              >
+                <p className="text-xs font-bold uppercase tracking-wider text-[#725700] dark:text-[#F3C623]">New message received</p>
+                <p className="mt-1 truncate text-sm font-bold text-[#0B132B] dark:text-white">{incomingMessage.name}</p>
+                <p className="mt-1 line-clamp-2 text-sm text-[#405678] dark:text-[#D7DEEC]">{incomingMessage.message}</p>
+                <p className="mt-2 text-xs font-semibold text-[#725700] dark:text-[#F3C623]">View message →</p>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setIncomingMessage(null)}
+                className="rounded-md p-1 text-[#8496B8] transition-colors hover:bg-slate-100 hover:text-[#0B132B] dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Dismiss new message notification"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <motion.div
+              key={incomingMessage.id}
+              initial={{ scaleX: 1 }}
+              animate={{ scaleX: 0 }}
+              transition={{ duration: 8, ease: 'linear' }}
+              className="h-1 origin-left bg-[#D4AF37]"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full overflow-x-hidden">
         <motion.div
           key={location.pathname}

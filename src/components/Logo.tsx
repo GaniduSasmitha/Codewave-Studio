@@ -1,4 +1,4 @@
-﻿interface LogoProps {
+interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
   subtitle?: string;
@@ -29,7 +29,7 @@ export default function Logo({
       <div className={`${iconSizes[size]} rounded-xl bg-[#131B2E] border border-[#D4AF37]/60 shadow-[0_0_15px_rgba(212,175,55,0.25)] flex items-center justify-center relative overflow-hidden group flex-shrink-0`}>
         {/* Glow background */}
         <div className="absolute inset-0 bg-gradient-to-tr from-[#070D1D] via-[#131B2E] to-[#D4AF37] opacity-60 group-hover:opacity-75 transition-opacity" />
-        
+
         {/* Code Brackets Icon */}
         <svg
           className="w-5 h-5 relative z-10 text-[#F3C623]"

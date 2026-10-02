@@ -1,4 +1,4 @@
-﻿import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
@@ -76,8 +76,8 @@ export default function Pricing() {
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard
               className={`h-full flex flex-col justify-between p-8 border relative ${tier.popular
-                  ? 'border-[#D4AF37] bg-[#D4AF37]/10 dark:bg-[#131B2E] shadow-xl shadow-[#D4AF37]/10'
-                  : 'border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90'
+                ? 'border-[#D4AF37] bg-[#D4AF37]/10 dark:bg-[#131B2E] shadow-xl shadow-[#D4AF37]/10'
+                : 'border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90'
                 }`}
             >
               {tier.popular && (

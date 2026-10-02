@@ -15,12 +15,12 @@ export default function CustomerLayout() {
           <Link to="/portal">
             <Logo size="md" subtitle="Client Portal" />
           </Link>
-          
+
           <nav className="hidden md:flex space-x-6 text-sm font-medium">
             <Link to="/portal" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">Dashboard</Link>
             <Link to="/portal/new-order" className="text-[#1E3A5F] dark:text-[#F9E79F] hover:text-primary dark:hover:text-accent transition-colors">New Order</Link>
           </nav>
-          
+
           {/* Desktop profile menu */}
           <div className="hidden md:flex items-center gap-3">
             <ProfileMenu />

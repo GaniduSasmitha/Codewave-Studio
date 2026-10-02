@@ -173,20 +173,18 @@ export default function OrderStatus() {
             return (
               <div key={step.id} className="flex md:flex-col items-center gap-4 md:gap-2 flex-1 relative z-10 w-full md:w-auto">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${
-                    isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
-                    isCompleted ? "bg-[#D4AF37] border-[#D4AF37] text-[#0B132B]" :
-                    isActive ? "bg-white dark:bg-[#0B132B] border-[#F3C623] text-[#F3C623] ring-2 ring-[#F3C623]/30 animate-pulse" :
-                    "bg-slate-100 dark:bg-[#070D1D] border-slate-200 dark:border-[#1E3A5F] text-slate-400 dark:text-slate-500"
-                  }`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 ${isActive && isRejected ? "bg-red-500/20 border-red-500 text-red-400 ring-2 ring-red-500/30 animate-pulse" :
+                      isCompleted ? "bg-[#D4AF37] border-[#D4AF37] text-[#0B132B]" :
+                        isActive ? "bg-white dark:bg-[#0B132B] border-[#F3C623] text-[#F3C623] ring-2 ring-[#F3C623]/30 animate-pulse" :
+                          "bg-slate-100 dark:bg-[#070D1D] border-slate-200 dark:border-[#1E3A5F] text-slate-400 dark:text-slate-500"
+                    }`}
                 >
                   {isCompleted ? "✓" : idx + 1}
                 </div>
                 <span
-                  className={`text-xs font-semibold ${
-                    isActive && isRejected ? "text-red-400 font-bold" :
-                    isActive ? "text-[#725700] dark:text-[#F3C623] font-bold" : isCompleted ? "text-slate-900 dark:text-[#F9E79F]" : "text-slate-500 dark:text-slate-400"
-                  }`}
+                  className={`text-xs font-semibold ${isActive && isRejected ? "text-red-400 font-bold" :
+                      isActive ? "text-[#725700] dark:text-[#F3C623] font-bold" : isCompleted ? "text-slate-900 dark:text-[#F9E79F]" : "text-slate-500 dark:text-slate-400"
+                    }`}
                 >
                   {step.label}
                 </span>

@@ -28,7 +28,7 @@ export default function CustomCursor() {
       if (!target) return;
 
       const interactiveEl = target.closest('a, button, input, textarea, select, [role="button"], [data-cursor]');
-      
+
       if (interactiveEl) {
         setIsHovered(true);
         const text = interactiveEl.getAttribute('data-cursor-text') || '';
@@ -76,9 +76,8 @@ export default function CustomCursor() {
     <div className="pointer-events-none fixed inset-0 z-[999999] overflow-hidden">
       {/* Central Precision Glowing Dot */}
       <motion.div
-        className={`fixed top-0 left-0 rounded-full bg-[#F3C623] shadow-[0_0_12px_#F3C623] mix-blend-difference pointer-events-none ${
-          cursorVariant === 'text' ? 'w-1 h-5' : 'w-3 h-3'
-        }`}
+        className={`fixed top-0 left-0 rounded-full bg-[#F3C623] shadow-[0_0_12px_#F3C623] mix-blend-difference pointer-events-none ${cursorVariant === 'text' ? 'w-1 h-5' : 'w-3 h-3'
+          }`}
         animate={{
           x: mousePos.x - (cursorVariant === 'text' ? 2 : 6),
           y: mousePos.y - (cursorVariant === 'text' ? 10 : 6),
@@ -95,11 +94,10 @@ export default function CustomCursor() {
 
       {/* Outer Magnetic Trailing Halo Ring */}
       <motion.div
-        className={`fixed top-0 left-0 rounded-full border flex items-center justify-center transition-colors duration-200 ${
-          isHovered
+        className={`fixed top-0 left-0 rounded-full border flex items-center justify-center transition-colors duration-200 ${isHovered
             ? 'border-[#F3C623]/80 bg-[#F3C623]/10 backdrop-blur-[2px] shadow-[0_0_20px_rgba(243,198,35,0.3)]'
             : 'border-[#D4AF37]/40 bg-transparent'
-        }`}
+          }`}
         animate={{
           x: mousePos.x - (isHovered ? 26 : 18),
           y: mousePos.y - (isHovered ? 26 : 18),

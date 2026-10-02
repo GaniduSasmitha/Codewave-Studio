@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import GlassCard from './GlassCard';
 
@@ -228,8 +228,8 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                 <GlassCard
                   hoverEffect={false}
                   className={`h-full flex flex-col justify-between items-center text-center p-6 sm:p-8 transition-all duration-300 border ${isCenter
-                      ? 'border-[#D4AF37]/70 dark:border-[#D4AF37]/70 shadow-[0_12px_40px_-10px_rgba(212,175,55,0.3)] ring-2 ring-[#D4AF37]/30 dark:ring-[#D4AF37]/30 bg-white/95 dark:bg-[#131B2E]'
-                      : 'border-slate-200 dark:border-[#1E3A5F] bg-white/80 dark:bg-[#0B132B]/80 shadow-lg'
+                    ? 'border-[#D4AF37]/70 dark:border-[#D4AF37]/70 shadow-[0_12px_40px_-10px_rgba(212,175,55,0.3)] ring-2 ring-[#D4AF37]/30 dark:ring-[#D4AF37]/30 bg-white/95 dark:bg-[#131B2E]'
+                    : 'border-slate-200 dark:border-[#1E3A5F] bg-white/80 dark:bg-[#0B132B]/80 shadow-lg'
                     }`}
                 >
                   <div className="flex flex-col items-center text-center w-full">
@@ -382,8 +382,8 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
             onClick={() => setActiveIndex(idx)}
             aria-label={`Go to team member ${idx + 1}`}
             className={`transition-all duration-300 rounded-full focus:outline-none cursor-pointer ${idx === activeIndex
-                ? 'w-8 h-2.5 bg-gradient-to-r from-[#D4AF37] to-[#F3C623] shadow-md'
-                : 'w-2.5 h-2.5 bg-slate-300 dark:bg-[#1E3A5F] hover:bg-[#D4AF37]/50 dark:hover:bg-[#D4AF37]/50'
+              ? 'w-8 h-2.5 bg-gradient-to-r from-[#D4AF37] to-[#F3C623] shadow-md'
+              : 'w-2.5 h-2.5 bg-slate-300 dark:bg-[#1E3A5F] hover:bg-[#D4AF37]/50 dark:hover:bg-[#D4AF37]/50'
               }`}
           />
         ))}

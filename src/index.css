@@ -7,9 +7,11 @@
   html.dark {
     color-scheme: dark;
   }
+
   html:not(.dark) {
     color-scheme: light;
   }
+
   body {
     @apply bg-[#F0F4F9] text-[#0B132B] dark:bg-[#0B132B] dark:text-[#F9E79F] transition-colors duration-300;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -18,7 +20,17 @@
 
 /* Hide native default browser cursor on desktop/mouse devices so only the custom cursor is visible */
 @media (pointer: fine) {
-  html, body, body *, a, button, input, textarea, select, label, [role="button"] {
+
+  html,
+  body,
+  body *,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  [role="button"] {
     cursor: none !important;
   }
 }
@@ -27,12 +39,15 @@
   .gradient-brand {
     background-image: linear-gradient(135deg, #D4AF37 0%, #F3C623 50%, #AA7C11 100%);
   }
+
   .gradient-navy-gold {
     background-image: linear-gradient(135deg, #070D1D 0%, #131B2E 50%, #D4AF37 100%);
   }
+
   .gold-glow {
     box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
   }
+
   .gold-border-glow {
     border-color: rgba(212, 175, 55, 0.5);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);

@@ -132,12 +132,12 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
         animate={
           isSuccess
             ? {
-                y: [0, -16, 0, -10, 0],
-                rotate: [0, -6, 6, -3, 0],
-              }
+              y: [0, -16, 0, -10, 0],
+              rotate: [0, -6, 6, -3, 0],
+            }
             : {
-                y: [0, -5, 0],
-              }
+              y: [0, -5, 0],
+            }
         }
         transition={
           isSuccess
@@ -154,15 +154,15 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
               scale: isSuccess ? [1, 1.5, 1.2, 1.5, 1] : [1, 1.25, 1],
               boxShadow: isSuccess
                 ? [
-                    "0 0 8px #D4AF37",
-                    "0 0 24px #D4AF37, 0 0 36px #F3C623",
-                    "0 0 12px #D4AF37",
-                  ]
+                  "0 0 8px #D4AF37",
+                  "0 0 24px #D4AF37, 0 0 36px #F3C623",
+                  "0 0 12px #D4AF37",
+                ]
                 : [
-                    "0 0 6px #D4AF37",
-                    "0 0 16px #F3C623",
-                    "0 0 6px #D4AF37",
-                  ],
+                  "0 0 6px #D4AF37",
+                  "0 0 16px #F3C623",
+                  "0 0 6px #D4AF37",
+                ],
             }}
             transition={{
               duration: isSuccess ? 0.4 : 2,

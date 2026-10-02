@@ -165,11 +165,10 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
           </div>
           {/* Role badge */}
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide flex-shrink-0 ${
-              role === 'admin'
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide flex-shrink-0 ${role === 'admin'
                 ? 'bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] ring-1 ring-[#D4AF37]/50'
                 : 'bg-[#1E3A5F]/20 text-[#1E3A5F] dark:text-[#F9E79F] ring-1 ring-[#1E3A5F]/50'
-            }`}
+              }`}
           >
             <span
               className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#D4AF37]' : 'bg-[#1E3A5F]'}`}
@@ -279,11 +278,10 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
               {/* Role badge */}
               <div className="mt-3">
                 <span
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide ${
-                    role === 'admin'
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide ${role === 'admin'
                       ? 'bg-[#D4AF37]/20 text-[#0B132B] dark:text-[#F3C623] ring-1 ring-[#D4AF37]/50'
                       : 'bg-[#1E3A5F]/20 text-[#1E3A5F] dark:text-[#F9E79F] ring-1 ring-[#1E3A5F]/50'
-                  }`}
+                    }`}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${role === 'admin' ? 'bg-[#D4AF37]' : 'bg-[#1E3A5F]'}`}

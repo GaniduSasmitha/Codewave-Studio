@@ -168,7 +168,7 @@ export default function Contact() {
       <ScrollReveal delay={0.1}>
         <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E] backdrop-blur-xl shadow-xl space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            
+
             {/* Email Icon Block */}
             <motion.div
               whileHover="hover"
@@ -325,9 +325,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${
-                      errors.name ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
-                    }`}
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${errors.name ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
+                      }`}
                     placeholder="Your name"
                   />
                   {errors.name && <p className="text-xs text-red-500 mt-1.5">{errors.name}</p>}
@@ -347,9 +346,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${
-                      errors.email ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
-                    }`}
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors ${errors.email ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
+                      }`}
                     placeholder="you@example.com"
                   />
                   {errors.email && <p className="text-xs text-red-500 mt-1.5">{errors.email}</p>}
@@ -369,9 +367,8 @@ export default function Contact() {
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
                     disabled={isSubmitting}
-                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors h-32 ${
-                      errors.message ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
-                    }`}
+                    className={`mt-2 block w-full px-4 py-3 bg-[#F0F4F9] dark:bg-[#0B132B] border rounded-lg text-sm text-[#0B132B] dark:text-[#F9E79F] focus:outline-none focus:border-[#D4AF37] transition-colors h-32 ${errors.message ? 'border-red-500/50' : 'border-[#CBD5E1] dark:border-[#1E3A5F]'
+                      }`}
                     placeholder="Project details, timeline, or questions..."
                   />
                   {errors.message && <p className="text-xs text-red-500 mt-1.5">{errors.message}</p>}

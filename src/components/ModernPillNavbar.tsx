@@ -41,7 +41,7 @@ export default function ModernPillNavbar() {
     <header className="sticky top-0 z-50 pt-3 sm:pt-4 px-3 sm:px-6 lg:px-8 w-full">
       {/* Outer Floating Pill Container (Exact layout structure of Image 1) */}
       <div className="relative mx-auto flex h-[64px] max-w-5xl items-center justify-between rounded-full border border-white/15 dark:border-[#D4AF37]/35 bg-[#0D111A]/90 dark:bg-[#070D1D]/95 px-2 sm:px-3 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.12)] backdrop-blur-xl transition-all duration-300">
-        
+
         {/* Left Logo Container: Emblem Circle + Codewave Studio Name */}
         <Link
           to="/"
@@ -85,11 +85,10 @@ export default function ModernPillNavbar() {
                 key={item.path}
                 to={item.path}
                 data-cursor-text="Go"
-                className={`relative px-4 py-2 text-sm font-semibold transition-colors rounded-full ${
-                  isActive
+                className={`relative px-4 py-2 text-sm font-semibold transition-colors rounded-full ${isActive
                     ? 'text-white dark:text-[#0B132B]'
                     : 'text-gray-300 hover:text-white dark:text-[#F9E79F]/80 dark:hover:text-[#F3C623]'
-                }`}
+                  }`}
               >
                 {isActive && (
                   <motion.div
@@ -190,11 +189,10 @@ export default function ModernPillNavbar() {
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                      isActive
+                    className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all ${isActive
                         ? 'bg-[#D4AF37] text-[#0B132B] font-bold shadow-md'
                         : 'text-[#F9E79F] hover:bg-[#131B2E] hover:text-[#F3C623]'
-                    }`}
+                      }`}
                   >
                     <span>{item.label}</span>
                     {isActive && <span className="h-2 w-2 rounded-full bg-[#0B132B]" />}
