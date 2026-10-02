@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import DeleteAccountButton from './DeleteAccountButton';
 import { supabase } from '../lib/supabase';
 
 // A stable set of vivid background colors for avatars, deterministically picked
@@ -178,8 +177,6 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
           </span>
         </div>
 
-        {role === 'customer' && <DeleteAccountButton onComplete={onItemClick} />}
-
         {/* Sign Out Button */}
         <button
           id="profile-menu-signout"
@@ -294,7 +291,6 @@ export default function ProfileMenu({ className = '', variant = 'desktop', onIte
 
             {/* Actions */}
             <div className="p-2">
-              {role === 'customer' && <div className="mb-2"><DeleteAccountButton onComplete={() => { setOpen(false); onItemClick?.(); }} /></div>}
               <button
                 id="profile-menu-signout"
                 role="menuitem"
