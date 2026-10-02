@@ -96,6 +96,19 @@ const previewProjects = [
   }
 ];
 
+const technologyStack = [
+  { id: 'react', name: 'React', color: '#61DAFB' },
+  { id: 'typescript', name: 'TypeScript', color: '#3178C6' },
+  { id: 'vite', name: 'Vite', color: '#A855F7' },
+  { id: 'tailwind', name: 'Tailwind CSS', color: '#38BDF8' },
+  { id: 'supabase', name: 'Supabase', color: '#3ECF8E' },
+  { id: 'postgresql', name: 'PostgreSQL', color: '#4169E1' },
+  { id: 'threejs', name: 'Three.js', color: '#D4AF37' },
+  { id: 'gsap', name: 'GSAP', color: '#88CE02' },
+  { id: 'aws', name: 'AWS', color: '#FF9900' },
+  { id: 'vercel', name: 'Vercel', color: '#F9E79F' },
+];
+
 // Staggered Entrance Animation Variants for Hero Title
 const heroTitleVariants: Variants = {
   hidden: { opacity: 0 },
@@ -794,6 +807,47 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Technology Stack */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="relative overflow-hidden rounded-[2rem] border border-[#D4AF37]/35 bg-gradient-to-br from-white via-[#F8FAFC] to-[#D4AF37]/10 px-5 py-10 shadow-[0_24px_80px_-40px_rgba(11,19,43,0.5)] dark:from-[#070D1D] dark:via-[#0B132B] dark:to-[#131B2E] sm:px-8 sm:py-14 lg:px-12">
+              <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-[#D4AF37]/15 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-[#1E3A5F]/15 blur-3xl dark:bg-[#D4AF37]/10" />
+
+              <div className="relative text-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#725700] dark:text-[#F3C623]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+                  Our technology stack
+                </span>
+                <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-[#0B132B] dark:text-[#F9E79F] sm:text-4xl lg:text-5xl">
+                  Built With <span className="gradient-brand bg-clip-text text-transparent">Modern Technologies</span>
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#405678] dark:text-[#AAB7CF] sm:text-base">
+                  Reliable tools for fast interfaces, secure data, immersive experiences, and scalable cloud delivery.
+                </p>
+              </div>
+
+              <div className="relative mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:mt-12 lg:grid-cols-5">
+                {technologyStack.map((technology, index) => (
+                  <ScrollReveal key={technology.id} delay={(index % 5) * 0.06}>
+                    <div className="group flex min-h-[116px] h-full flex-col items-center justify-center gap-3 rounded-2xl border border-[#CBD5E1] bg-white/75 px-3 py-5 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/65 hover:shadow-[0_18px_35px_-20px_rgba(212,175,55,0.75)] dark:border-[#1E3A5F] dark:bg-[#131B2E]/85 dark:hover:border-[#D4AF37]/65 sm:min-h-[92px] sm:flex-row sm:justify-start sm:px-4 sm:text-left">
+                      <span
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border bg-[#F0F4F9] shadow-inner transition-transform duration-300 group-hover:scale-110 dark:bg-[#070D1D]"
+                        style={{ color: technology.color, borderColor: `${technology.color}55` }}
+                      >
+                        <TechnologyIcon name={technology.id} />
+                      </span>
+                      <span className="text-xs font-extrabold leading-tight text-[#0B132B] dark:text-[#F9E79F] sm:text-sm">
+                        {technology.name}
+                      </span>
+                    </div>
+                  </ScrollReveal>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+        </section>
+
         {/* Client Feedback */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
@@ -866,4 +920,66 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+function TechnologyIcon({ name }: { name: string }) {
+  const commonClass = 'h-7 w-7';
+
+  if (name === 'react') {
+    return (
+      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" aria-hidden="true">
+        <ellipse cx="12" cy="12" rx="10" ry="4" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+
+  if (name === 'supabase') {
+    return (
+      <svg className={commonClass} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M13.2 2.5 5.3 13.4c-.5.7 0 1.6.8 1.6h6.1l-1.1 6.2c-.2 1.1 1.2 1.6 1.8.7l7.8-11.3c.5-.7 0-1.6-.8-1.6h-6l1.1-5.8c.2-1.1-1.2-1.6-1.8-.7Z" />
+      </svg>
+    );
+  }
+
+  if (name === 'postgresql') {
+    return (
+      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+      </svg>
+    );
+  }
+
+  if (name === 'threejs') {
+    return (
+      <svg className={commonClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true">
+        <path d="m12 2 9 17H3L12 2Z" /><path d="m12 7 5 9H7l5-9ZM12 7v9M7 16l9-5" />
+      </svg>
+    );
+  }
+
+  if (name === 'aws') {
+    return (
+      <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <text x="3" y="18" fill="currentColor" fontSize="12" fontWeight="800" fontFamily="Arial, sans-serif">aws</text>
+        <path d="M5 22c6.5 4.4 15.7 4.2 22-.3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /><path d="m24.5 20.2 3.1 1.1-1.2 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (name === 'vercel') {
+    return (
+      <svg className={commonClass} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 3 22 20H2L12 3Z" />
+      </svg>
+    );
+  }
+
+  const labels: Record<string, string> = {
+    typescript: 'TS',
+    vite: 'V',
+    tailwind: 'TW',
+    gsap: 'G',
+  };
+
+  return <span className="text-[11px] font-black tracking-[-0.04em]">{labels[name] || name.slice(0, 2).toUpperCase()}</span>;
 }
