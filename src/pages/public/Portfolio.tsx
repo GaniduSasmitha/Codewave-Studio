@@ -14,8 +14,7 @@ const projects: Project[] = [
     description: 'Full-stack fitness tracking app with workout logging, streaks, and progress analytics.',
     tags: ['React', 'Supabase', 'Node.js'],
     link: 'https://personal-fitness-tracker-cyan.vercel.app/',
-    image: fitnessTrackerImg,
-    badge: 'Personal Project'
+    image: fitnessTrackerImg
   },
   {
     id: 3,
@@ -24,8 +23,7 @@ const projects: Project[] = [
     description: 'A personal portfolio site showcasing projects and skills.',
     tags: ['HTML', 'CSS', 'JavaScript'],
     link: 'https://ganidusasmitha.42web.io/',
-    image: portfolioPreviewImg,
-    badge: 'Personal Project'
+    image: portfolioPreviewImg
   },
   {
     id: 6,
@@ -34,8 +32,7 @@ const projects: Project[] = [
     description: 'EV charging station finder concept — designed as curunt problem soliving project',
     tags: ['Figma', 'UX Design', 'Concept'],
     link: null,
-    image: evoraImg,
-    badge: 'Personal Project'
+    image: evoraImg
   }
 ];
 
