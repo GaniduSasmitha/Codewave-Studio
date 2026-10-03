@@ -119,6 +119,8 @@ Deno.serve(async (request) => {
   if (!updatedOrder) return json({ error: 'This payment slip has already been reviewed' }, 409);
 
   const orderNumber = order.id.slice(0, 8).toUpperCase();
+  const supportEmail = 'codewave.studio.tech@gmail.com';
+  const supportEmailUrl = `mailto:${supportEmail}?subject=${encodeURIComponent(`Order #${orderNumber}`)}`;
   const customerName = customerProfile?.full_name || customer.user_metadata?.full_name || 'Customer';
   const planName = planNames[order.package] || order.package || 'Custom Project';
   const accepted = decision === 'verified';
@@ -159,7 +161,7 @@ Deno.serve(async (request) => {
         ${requirements.description ? `<div style="margin:20px 0"><div style="font-size:12px;font-weight:800;text-transform:uppercase;color:#64748b;margin-bottom:7px">Project details</div><div style="font-size:14px;line-height:1.6;color:#334155;background:#f8fafc;padding:14px;border-radius:9px">${escapeHtml(requirements.description)}</div></div>` : ''}
         ${accepted ? '<p style="font-size:14px;line-height:1.7;color:#475569">Use the button below at any time to view your order’s live progress in the Client Dashboard.</p>' : ''}
         <a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;margin-top:6px;padding:12px 18px;background:#d4af37;color:#0b132b;text-decoration:none;border-radius:9px;font-size:14px;font-weight:800">${accepted ? 'Track Your Order' : 'Upload a New Payment Slip'}</a>
-        <p style="margin-top:28px;font-size:13px;line-height:1.7;color:#64748b">For future details, call us on <a href="tel:+94717441420" style="color:#8a6a00;font-weight:700">+94 71 744 1420</a> or reply directly to this email.</p>
+        <p style="margin-top:28px;font-size:13px;line-height:1.7;color:#64748b">For future details, call us on <a href="tel:+94717441420" style="color:#8a6a00;font-weight:700">+94 71 744 1420</a> or email <a href="${escapeHtml(supportEmailUrl)}" style="color:#8a6a00;font-weight:700">${supportEmail}</a>. Please include order number <strong>#${orderNumber}</strong> in your email.</p>
         <p style="font-size:13px;color:#64748b">Regards,<br><strong style="color:#0b132b">Codewave Studio</strong></p>
       </div>
     </div>
@@ -178,7 +180,7 @@ Deno.serve(async (request) => {
     accepted
       ? `Track your order's live progress in the Client Dashboard: ${dashboardUrl}`
       : `Upload a new payment slip from your Client Dashboard: ${dashboardUrl}`,
-    'For future details, call +94 71 744 1420 or reply directly to this email.',
+    `For future details, call +94 71 744 1420 or email ${supportEmail}. Please include order number #${orderNumber} in your email.`,
     'Regards, Codewave Studio',
   ].filter(Boolean).join('\n\n');
 
