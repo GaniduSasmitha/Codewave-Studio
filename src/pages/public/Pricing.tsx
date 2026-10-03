@@ -53,18 +53,61 @@ interface PricingEnvelopeProps {
   onSelect: () => void;
 }
 
+function PackageArtwork({ packageId }: { packageId: string }) {
+  const commonProps = {
+    className: 'h-14 w-20',
+    viewBox: '0 0 80 56',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true
+  };
+
+  if (packageId === 'starter') {
+    return (
+      <svg {...commonProps}>
+        <rect x="8" y="7" width="64" height="40" rx="5" />
+        <path d="M8 17h64M17 12h.1M23 12h.1M29 12h.1" />
+        <rect x="15" y="23" width="21" height="17" rx="2" />
+        <path d="M43 24h20M43 31h16M43 38h12" />
+        <path d="M30 51h20" />
+      </svg>
+    );
+  }
+
+  if (packageId === 'business') {
+    return (
+      <svg {...commonProps}>
+        <rect x="8" y="7" width="64" height="42" rx="5" />
+        <path d="M17 40V30M28 40V23M39 40V27M50 40V17" />
+        <path d="m16 23 12-7 11 4 17-10" />
+        <path d="m51 10 5 .2-.3 5" />
+        <path d="M58 22h7M58 29h7M58 36h7" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...commonProps}>
+      <rect x="22" y="5" width="36" height="18" rx="4" />
+      <rect x="5" y="34" width="28" height="17" rx="4" />
+      <rect x="47" y="34" width="28" height="17" rx="4" />
+      <path d="M40 23v6M19 34v-5h42v5" />
+      <path d="m32 10-5 4 5 4M48 10l5 4-5 4M43 9l-6 10" />
+      <circle cx="14" cy="42.5" r="2" />
+      <path d="M20 42.5h7M54 39h14M54 45h10" />
+    </svg>
+  );
+}
+
 function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopeProps) {
   const details = tier.desc.replace(/\.$/, '').split(', ');
   const envelopeId = `pricing-envelope-${tier.id}`;
 
   return (
     <article className="relative mx-auto h-[460px] w-full max-w-[390px] pt-20 sm:h-[480px] sm:pt-24">
-      {tier.popular && (
-        <span className="absolute left-1/2 top-2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-[#F3C623]/60 bg-[#D4AF37] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#0B132B] shadow-lg shadow-[#D4AF37]/20">
-          Most Popular
-        </span>
-      )}
-
       <div
         role="button"
         tabIndex={0}
@@ -80,6 +123,12 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
         }}
         className="group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B]"
       >
+        {tier.popular && (
+          <span className="absolute -right-2 top-4 z-50 whitespace-nowrap rounded-full border border-[#F3C623]/70 bg-[#D4AF37] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#0B132B] shadow-lg shadow-[#D4AF37]/20">
+            Most Popular
+          </span>
+        )}
+
         {/* Open pocket back */}
         <div className={`absolute inset-x-2 inset-y-0 rounded-[30px] border shadow-2xl transition-colors duration-300 ${tier.popular
           ? 'border-[#D4AF37] bg-[#1C2541] shadow-[#D4AF37]/20'
@@ -121,16 +170,6 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             ))}
           </ul>
 
-          <AnimatedButton
-            onClick={(event) => {
-              event.stopPropagation();
-              onSelect();
-            }}
-            variant="primary"
-            className="absolute inset-x-5 bottom-4 py-2.5"
-          >
-            {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
-          </AnimatedButton>
         </motion.div>
 
         {/* Open pocket front */}
@@ -146,11 +185,23 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
 
         <motion.div
           animate={{ y: isOpen ? 7 : 0 }}
-          className="pointer-events-none absolute inset-x-0 bottom-16 z-30 text-center"
+          className="pointer-events-none absolute inset-x-0 top-14 z-30 flex flex-col items-center text-center text-[#F3C623]"
         >
-          <p className="text-base font-extrabold uppercase tracking-[0.16em] text-[#F9E79F]">{tier.name} Package</p>
+          <PackageArtwork packageId={tier.id} />
+          <p className="mt-2 text-sm font-extrabold uppercase tracking-[0.16em] text-[#F9E79F]">{tier.name} Package</p>
           <p className="mt-1 text-[10px] font-medium text-[#8496B8]">{isOpen ? 'Tap to close' : 'Tap to view details'}</p>
         </motion.div>
+
+        <AnimatedButton
+          onClick={(event) => {
+            event.stopPropagation();
+            onSelect();
+          }}
+          variant="primary"
+          className="absolute inset-x-8 bottom-4 z-50 py-2.5"
+        >
+          {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
+        </AnimatedButton>
       </div>
     </article>
   );
