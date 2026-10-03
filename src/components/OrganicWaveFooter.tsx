@@ -296,7 +296,7 @@ export default function OrganicWaveFooter() {
 
           {/* Bottom Legal & Copyright Bar */}
           <div className="pt-8 border-t border-[#1E3A5F]/70 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8496B8]">
-            <p>© {new Date().getFullYear()} <span className="text-[#F9E79F] font-semibold">codewave.studio.co</span>. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} <span className="text-[#F9E79F] font-semibold">codewave.studio.tech</span>. All rights reserved.</p>
 
             <nav aria-label="Footer Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
               <Link to="/privacy" className="hover:text-[#F3C623] transition-colors">Privacy Policy</Link>

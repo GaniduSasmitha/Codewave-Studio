@@ -36,6 +36,10 @@
 }
 
 @layer utilities {
+  .font-roboto {
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  }
+
   .gradient-brand {
     background-image: linear-gradient(135deg, #D4AF37 0%, #F3C623 50%, #AA7C11 100%);
   }

@@ -123,7 +123,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <div className="font-roboto py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       {/* Header Section */}
       <ScrollReveal>
         <div className="text-center space-y-4 max-w-2xl mx-auto">
@@ -148,7 +148,7 @@ export default function Contact() {
           </motion.div>
 
           {/* Subtitle Badge */}
-          <p className="text-xs font-mono uppercase tracking-widest text-[#1E3A5F] dark:text-[#8496B8] font-semibold">
+          <p className="text-xs uppercase tracking-widest text-[#1E3A5F] dark:text-[#8496B8] font-semibold">
             — GET IN TOUCH —
           </p>
 
@@ -158,7 +158,7 @@ export default function Contact() {
           </h1>
 
           {/* Paragraph */}
-          <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm sm:text-base leading-relaxed font-mono max-w-xl mx-auto">
+          <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             Whether you have an opportunity, a project idea, or just want to connect – We would love to hear from you. Fill out the form and we will get back to you as soon as possible.
           </p>
         </div>
@@ -201,10 +201,10 @@ export default function Contact() {
                 </motion.svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">EMAIL</p>
+                <p className="text-[10px] font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">EMAIL</p>
                 <a
                   href="mailto:codewave.studio.tech@gmail.com"
-                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
                 >
                   codewave.studio.tech@gmail.com
                 </a>
@@ -231,10 +231,10 @@ export default function Contact() {
                 </svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">PHONE</p>
+                <p className="text-[10px] font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">PHONE</p>
                 <a
                   href="tel:+94717441420"
-                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
+                  className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] hover:text-[#D4AF37] dark:hover:text-[#F3C623] transition-colors block truncate mt-1"
                 >
                   +94 71 744 1420
                 </a>
@@ -262,8 +262,8 @@ export default function Contact() {
                 </svg>
               </motion.div>
               <div className="min-w-0">
-                <p className="text-[10px] font-mono font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">LOCATION</p>
-                <p className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] font-mono mt-1 leading-snug">
+                <p className="text-[10px] font-semibold text-[#1E3A5F] dark:text-[#8496B8] uppercase tracking-widest">LOCATION</p>
+                <p className="text-sm font-semibold text-[#0B132B] dark:text-[#F9E79F] mt-1 leading-snug">
                   Pitipana, Homagama, Sri Lanka
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function Contact() {
 
           {/* Social Links inside the card footer */}
           <div className="pt-6 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-xs text-[#1E3A5F] dark:text-[#8496B8] font-mono">Connect on social media:</span>
+            <span className="text-xs text-[#1E3A5F] dark:text-[#8496B8]">Connect on social media:</span>
             <SocialLinks />
           </div>
         </div>
