@@ -153,6 +153,21 @@ export default function OrderDetail() {
     }
 
     try {
+      if (newStatus === 'verified' || newStatus === 'rejected') {
+        const { data, error: reviewError } = await supabase.functions.invoke('review-payment-slip', {
+          body: { orderId: id, decision: newStatus }
+        });
+
+        if (reviewError) throw reviewError;
+        if (data?.error) throw new Error(data.error);
+
+        setSuccessMsg(
+          `Order ${newStatus === 'verified' ? 'accepted' : 'rejected'} and notification email sent successfully!`
+        );
+        await fetchOrderAndClient();
+        return;
+      }
+
       const { error } = await supabase
         .from('orders')
         .update(updates)

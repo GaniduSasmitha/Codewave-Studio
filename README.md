@@ -11,6 +11,17 @@ The app uses Google Identity Services to sign users in directly and then exchang
 
 The Google client ID is public browser configuration; never expose the Google client secret. If `VITE_GOOGLE_CLIENT_ID` is absent or Google's script cannot load, the app temporarily falls back to Supabase's redirect flow.
 
+## Order review email setup
+
+Payment acceptance and rejection emails are sent by the `review-payment-slip` Supabase Edge Function through Resend. Verify the sending domain in Resend, then configure and deploy the function:
+
+```powershell
+npx supabase secrets set RESEND_API_KEY=re_your_key ORDER_EMAIL_FROM="Codewave Studio <orders@codewave.studio.tech>" ORDER_REPLY_TO=codewave.studio.tech@gmail.com SITE_URL=https://codewave.studio.tech
+npx supabase functions deploy review-payment-slip
+```
+
+These values are server secrets. Do not add `RESEND_API_KEY` to Vercel or expose it with a `VITE_` prefix.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
