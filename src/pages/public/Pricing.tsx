@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
-import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import AnimatedButton from '../../components/AnimatedButton';
@@ -45,9 +46,145 @@ const featuresList = [
   { name: "Support & Maintenance", starter: "Standard Support", business: "Priority Support", custom: "Dedicated Support" }
 ];
 
+interface PricingEnvelopeProps {
+  tier: (typeof tiers)[number];
+  isOpen: boolean;
+  onToggle: () => void;
+  onSelect: () => void;
+}
+
+function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopeProps) {
+  const details = tier.desc.replace(/\.$/, '').split(', ');
+  const envelopeId = `pricing-envelope-${tier.id}`;
+
+  return (
+    <article className="relative mx-auto h-[460px] w-full max-w-[390px] pt-20 sm:h-[480px] sm:pt-24">
+      {tier.popular && (
+        <span className="absolute left-1/2 top-2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-[#F3C623]/60 bg-[#D4AF37] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#0B132B] shadow-lg shadow-[#D4AF37]/20">
+          Most Popular
+        </span>
+      )}
+
+      <div
+        role="button"
+        tabIndex={0}
+        aria-expanded={isOpen}
+        aria-controls={envelopeId}
+        aria-label={`${isOpen ? 'Close' : 'Open'} ${tier.name} pricing envelope`}
+        onClick={onToggle}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onToggle();
+          }
+        }}
+        className="group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer outline-none [perspective:1000px] focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B]"
+      >
+        {/* Envelope back */}
+        <div className={`absolute inset-0 rounded-[28px] border shadow-2xl transition-colors duration-300 ${tier.popular
+          ? 'border-[#D4AF37] bg-[#1C2541] shadow-[#D4AF37]/20'
+          : 'border-[#2A4B7C] bg-[#131B2E] shadow-[#0B132B]/25'
+          }`} />
+
+        {/* Letter */}
+        <motion.div
+          id={envelopeId}
+          initial={false}
+          animate={{
+            y: isOpen ? -150 : 76,
+            scale: isOpen ? 1 : 0.96
+          }}
+          transition={{ type: 'spring', stiffness: 210, damping: 24 }}
+          className={`absolute inset-x-4 -top-20 h-[330px] overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-5 text-[#0B132B] shadow-2xl sm:inset-x-6 ${isOpen ? 'z-40' : 'z-10'}`}
+        >
+          <div className="mb-3 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#7A5C07]">Codewave Studio</p>
+              <h3 className="mt-1 text-xl font-extrabold">{tier.name} Package</h3>
+            </div>
+            <span className="rounded-full bg-[#D4AF37]/20 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#7A5C07]">
+              {tier.id === 'custom' ? 'Custom' : 'Fixed'}
+            </span>
+          </div>
+
+          <div className="flex items-end gap-2">
+            <span className={`${tier.id === 'custom' ? 'text-2xl' : 'text-3xl'} font-black leading-none`}>{tier.price}</span>
+            <span className="pb-0.5 text-[10px] font-semibold text-[#1E3A5F]">{tier.billing}</span>
+          </div>
+
+          <ul className="mt-4 grid gap-1.5 text-[11px] font-medium leading-4 text-[#1E3A5F]">
+            {details.map((detail) => (
+              <li key={detail} className="flex items-start gap-2">
+                <span className="mt-0.5 font-black text-[#8A6A00]">✓</span>
+                <span>{detail}</span>
+              </li>
+            ))}
+          </ul>
+
+          <AnimatedButton
+            onClick={(event) => {
+              event.stopPropagation();
+              onSelect();
+            }}
+            variant="primary"
+            className="absolute inset-x-5 bottom-4 py-2.5"
+          >
+            {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
+          </AnimatedButton>
+        </motion.div>
+
+        {/* Open/close flap */}
+        <motion.div
+          initial={false}
+          animate={{ rotateX: isOpen ? -178 : 0 }}
+          transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+          style={{
+            clipPath: 'polygon(0 0, 50% 62%, 100% 0)',
+            transformOrigin: 'top center',
+            backfaceVisibility: 'hidden'
+          }}
+          className={`absolute inset-0 rounded-[28px] border-t border-[#D4AF37]/35 bg-[#1C2541] ${isOpen ? 'z-[5]' : 'z-30'}`}
+        />
+
+        {/* Envelope front */}
+        <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[28px]">
+          <div
+            className="absolute inset-0 bg-[#172038]"
+            style={{ clipPath: 'polygon(0 0, 52% 58%, 0 100%)' }}
+          />
+          <div
+            className="absolute inset-0 bg-[#1C2541]"
+            style={{ clipPath: 'polygon(100% 0, 48% 58%, 100% 100%)' }}
+          />
+          <div
+            className="absolute inset-0 bg-[#131B2E]"
+            style={{ clipPath: 'polygon(0 100%, 50% 48%, 100% 100%)' }}
+          />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-[#D4AF37]/40" />
+        </div>
+
+        <motion.div
+          animate={{ y: isOpen ? 7 : 0 }}
+          className="pointer-events-none absolute inset-x-0 bottom-7 z-30 text-center"
+        >
+          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/60 bg-[#D4AF37]/15 text-[#F3C623] shadow-lg shadow-[#D4AF37]/10">
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" />
+            </svg>
+          </div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F9E79F]">{tier.name}</p>
+          <p className="mt-1 text-[10px] font-medium text-[#8496B8]">{isOpen ? 'Tap to close' : 'Tap to view details'}</p>
+        </motion.div>
+      </div>
+    </article>
+  );
+}
+
 export default function Pricing() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+  const [openTierId, setOpenTierId] = useState<string | null>(null);
 
   const handleSelectPackage = (packageId: string) => {
     if (packageId === 'custom') {
@@ -71,43 +208,15 @@ export default function Pricing() {
       </ScrollReveal>
 
       {/* Tier Cards Grid */}
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12">
+      <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         {tiers.map((tier, i) => (
-          <ScrollReveal key={i} delay={i * 0.1}>
-            <GlassCard
-              className={`h-full flex flex-col justify-between p-8 border relative ${tier.popular
-                ? 'border-[#D4AF37] bg-[#D4AF37]/10 dark:bg-[#131B2E] shadow-xl shadow-[#D4AF37]/10'
-                : 'border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90'
-                }`}
-            >
-              {tier.popular && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 gradient-brand text-[#0B132B] text-[10px] uppercase font-extrabold tracking-widest px-3 py-1 rounded-full border border-[#F3C623]/50 shadow-md">
-                  Most Popular
-                </span>
-              )}
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F]">{tier.name}</h3>
-                  <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-2 leading-relaxed">{tier.desc}</p>
-                </div>
-
-                <div className="pt-4 border-t border-[#CBD5E1] dark:border-[#1E3A5F]">
-                  <span className="text-4xl font-black text-[#0B132B] dark:text-[#F9E79F]">{tier.price}</span>
-                  <span className="text-[#1E3A5F] dark:text-[#8496B8] text-xs block mt-1">{tier.billing}</span>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <AnimatedButton
-                  onClick={() => handleSelectPackage(tier.id)}
-                  variant={tier.popular ? 'primary' : 'glass'}
-                  className="w-full py-3 cursor-pointer"
-                >
-                  {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
-                </AnimatedButton>
-              </div>
-            </GlassCard>
+          <ScrollReveal key={tier.id} delay={i * 0.1}>
+            <PricingEnvelope
+              tier={tier}
+              isOpen={openTierId === tier.id}
+              onToggle={() => setOpenTierId((current) => current === tier.id ? null : tier.id)}
+              onSelect={() => handleSelectPackage(tier.id)}
+            />
           </ScrollReveal>
         ))}
       </div>
