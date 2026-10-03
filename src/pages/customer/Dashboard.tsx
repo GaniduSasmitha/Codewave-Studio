@@ -87,9 +87,6 @@ export default function CustomerDashboard() {
           <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-sm mx-auto">
             You don't have any custom design or development orders. Start your first project now.
           </p>
-          <AnimatedButton onClick={() => navigate('/portal/new-order')} variant="primary" className="mt-8 mx-auto px-8 cursor-pointer">
-            Create Order
-          </AnimatedButton>
         </GlassCard>
       ) : (
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">

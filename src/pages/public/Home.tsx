@@ -409,9 +409,6 @@ export default function Home() {
                 <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm mt-2 max-w-sm mx-auto">
                   You don't have any custom design or development orders. Start your first project now.
                 </p>
-                <AnimatedButton onClick={() => { setNewOrderOpen(true); setNewOrderStep(1); setOrderError(''); }} variant="primary" className="mt-8 mx-auto px-8 cursor-pointer">
-                  Create Order
-                </AnimatedButton>
               </GlassCard>
             ) : (
               <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
