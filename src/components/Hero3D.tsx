@@ -1,12 +1,47 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, extend, useFrame } from '@react-three/fiber';
+import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import { Effects, Instance, Instances, RoundedBox, Sparkles } from '@react-three/drei';
-import { CanvasTexture, MathUtils, SRGBColorSpace, Vector2 } from 'three';
+import { CanvasTexture, getConsoleFunction, MathUtils, setConsoleFunction, SRGBColorSpace, Vector2 } from 'three';
 import type { Group } from 'three';
 import { UnrealBloomPass } from 'three-stdlib';
 import { useTheme } from '../context/ThemeContext';
 
 const BloomPass = extend(UnrealBloomPass);
+
+function useExpectedContextDisposalLogFilter() {
+  useEffect(() => {
+    const previousConsoleFunction = getConsoleFunction();
+    let expectedDisposal = false;
+
+    const consoleFunction: Parameters<typeof setConsoleFunction>[0] = (level, message, ...params) => {
+      if (expectedDisposal && level === 'log' && message === 'THREE.WebGLRenderer: Context Lost.') {
+        return;
+      }
+
+      if (previousConsoleFunction) {
+        previousConsoleFunction(level, message, ...params);
+        return;
+      }
+
+      const method = level === 'warn' ? console.warn : level === 'error' ? console.error : console.log;
+      method(message, ...params);
+    };
+
+    setConsoleFunction(consoleFunction);
+
+    return () => {
+      // R3F deliberately loses the context after disposing the renderer. Keep
+      // genuine context-loss logs visible while the scene is mounted, and only
+      // suppress the expected teardown notification.
+      expectedDisposal = true;
+      window.setTimeout(() => {
+        if (getConsoleFunction() === consoleFunction) {
+          setConsoleFunction(previousConsoleFunction);
+        }
+      }, 1000);
+    };
+  }, []);
+}
 
 const COLORS = {
   background: '#0A0F12',
@@ -43,6 +78,16 @@ type InteractionState = {
   dragX: number;
   dragY: number;
 };
+
+function RendererBackground({ color }: { color: string }) {
+  const renderer = useThree((state) => state.gl);
+
+  useEffect(() => {
+    renderer.setClearColor(color, 0);
+  }, [color, renderer]);
+
+  return null;
+}
 
 function useScreenTexture() {
   const texture = useMemo(() => {
@@ -265,6 +310,7 @@ function Scene(props: SceneProps) {
 }
 
 export default function Hero3D() {
+  useExpectedContextDisposalLogFilter();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [webGLAvailable, setWebGLAvailable] = useState(true);
@@ -414,15 +460,14 @@ export default function Hero3D() {
       }}
     >
       <Canvas
-        key={theme}
         frameloop={reducedMotion ? 'demand' : 'always'}
         dpr={isMobile || lowPower ? 1 : [1, 1.5]}
         camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 54 : 48, near: 0.1, far: 50 }}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
-        onCreated={({ gl }) => gl.setClearColor(isDark ? COLORS.background : '#F0F4F9', 0)}
         style={{ background: 'transparent', touchAction: isMobile ? 'pan-y' : 'auto' }}
         shadows={!isMobile && !lowPower}
       >
+        <RendererBackground color={isDark ? COLORS.background : '#F0F4F9'} />
         <fog attach="fog" args={[isDark ? COLORS.background : '#F0F4F9', 8, 20]} />
         <Scene
           isMobile={isMobile}

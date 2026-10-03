@@ -37,7 +37,7 @@
 
 @layer utilities {
   .font-roboto {
-    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+    font-family: 'Roboto Variable', system-ui, -apple-system, sans-serif;
   }
 
   .gradient-brand {
