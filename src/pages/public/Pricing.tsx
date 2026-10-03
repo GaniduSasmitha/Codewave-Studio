@@ -170,6 +170,17 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             ))}
           </ul>
 
+          <AnimatedButton
+            onClick={(event) => {
+              event.stopPropagation();
+              onSelect();
+            }}
+            variant="primary"
+            className="mt-3 w-fit"
+            style={{ padding: '6px 16px', fontSize: '11px' }}
+          >
+            {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
+          </AnimatedButton>
         </motion.div>
 
         {/* Open pocket front */}
@@ -192,16 +203,6 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           <p className="mt-1 text-[10px] font-medium text-[#8496B8]">{isOpen ? 'Tap to close' : 'Tap to view details'}</p>
         </motion.div>
 
-        <AnimatedButton
-          onClick={(event) => {
-            event.stopPropagation();
-            onSelect();
-          }}
-          variant="primary"
-          className="absolute inset-x-8 bottom-4 z-50 py-2.5"
-        >
-          {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
-        </AnimatedButton>
       </div>
     </article>
   );
@@ -234,7 +235,7 @@ export default function Pricing() {
       </ScrollReveal>
 
       {/* Tier Cards Grid */}
-      <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      <div className="mt-12 grid grid-cols-1 gap-x-4 gap-y-12 md:grid-cols-2 md:gap-y-6 lg:grid-cols-3 lg:gap-6">
         {tiers.map((tier, i) => (
           <ScrollReveal key={tier.id} delay={i * 0.1}>
             <PricingEnvelope
