@@ -127,9 +127,10 @@ Deno.serve(async (request) => {
     : `Payment slip rejected — Order #${orderNumber}`;
   const headline = accepted ? 'Your payment has been accepted' : 'Your payment slip was rejected';
   const message = accepted
-    ? 'We have verified your payment and accepted your order. Our team will contact you with the next project steps.'
+    ? 'We have verified your payment and accepted your order. You can follow the live project status and track each order update from your Client Dashboard. Our team will also contact you with the next project steps.'
     : 'We could not verify the payment slip you submitted. Please sign in to your dashboard and upload a clear, valid payment-slip image to continue.';
   const accent = accepted ? '#15803d' : '#b91c1c';
+  const dashboardUrl = `${siteUrl.replace(/\/$/, '')}/#orders-dashboard`;
 
   const detailRows = [
     ['Order number', `#${orderNumber}`],
@@ -156,7 +157,8 @@ Deno.serve(async (request) => {
         <p style="font-size:15px;line-height:1.7;color:#475569">${message}</p>
         <table role="presentation" style="width:100%;border-collapse:collapse;margin:24px 0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">${detailRows}</table>
         ${requirements.description ? `<div style="margin:20px 0"><div style="font-size:12px;font-weight:800;text-transform:uppercase;color:#64748b;margin-bottom:7px">Project details</div><div style="font-size:14px;line-height:1.6;color:#334155;background:#f8fafc;padding:14px;border-radius:9px">${escapeHtml(requirements.description)}</div></div>` : ''}
-        <a href="${escapeHtml(siteUrl)}" style="display:inline-block;margin-top:6px;padding:12px 18px;background:#d4af37;color:#0b132b;text-decoration:none;border-radius:9px;font-size:14px;font-weight:800">Open Client Dashboard</a>
+        ${accepted ? '<p style="font-size:14px;line-height:1.7;color:#475569">Use the button below at any time to view your order’s live progress in the Client Dashboard.</p>' : ''}
+        <a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;margin-top:6px;padding:12px 18px;background:#d4af37;color:#0b132b;text-decoration:none;border-radius:9px;font-size:14px;font-weight:800">${accepted ? 'Track Your Order' : 'Upload a New Payment Slip'}</a>
         <p style="margin-top:28px;font-size:13px;line-height:1.7;color:#64748b">For future details, call us on <a href="tel:+94717441420" style="color:#8a6a00;font-weight:700">+94 71 744 1420</a> or reply directly to this email.</p>
         <p style="font-size:13px;color:#64748b">Regards,<br><strong style="color:#0b132b">Codewave Studio</strong></p>
       </div>
@@ -173,7 +175,9 @@ Deno.serve(async (request) => {
     `Business name: ${requirements.businessName || 'Not provided'}`,
     `Preferred domain: ${requirements.preferredDomain || 'Not specified'}`,
     requirements.description ? `Project details: ${requirements.description}` : '',
-    `Client dashboard: ${siteUrl}`,
+    accepted
+      ? `Track your order's live progress in the Client Dashboard: ${dashboardUrl}`
+      : `Upload a new payment slip from your Client Dashboard: ${dashboardUrl}`,
     'For future details, call +94 71 744 1420 or reply directly to this email.',
     'Regards, Codewave Studio',
   ].filter(Boolean).join('\n\n');
@@ -201,16 +205,25 @@ Deno.serve(async (request) => {
   }
 
   if (!emailResponse.ok) {
+    let providerMessage = `Resend returned HTTP ${emailResponse.status}`;
+    try {
+      const providerError = await emailResponse.json();
+      if (typeof providerError?.message === 'string') providerMessage = providerError.message;
+      else if (typeof providerError?.error === 'string') providerMessage = providerError.error;
+    } catch {
+      // Keep the status-based message when Resend does not return JSON.
+    }
+
     const { error: rollbackError } = await admin
       .from('orders')
       .update({ status: 'pending_verification', verified_at: null, verified_by: null })
       .eq('id', orderId)
       .eq('status', decision);
-    console.error('Order email delivery failed', emailResponse.status, rollbackError?.message || 'rollback successful');
+    console.error('Order email delivery failed', providerMessage, rollbackError?.message || 'rollback successful');
     return json({
       error: rollbackError
         ? 'Email delivery failed and the order status could not be restored. Please check the order immediately.'
-        : 'Email delivery failed. The order was left pending so you can retry.',
+        : `Email delivery failed: ${providerMessage}. The order was left pending so you can retry.`,
     }, 502);
   }
 

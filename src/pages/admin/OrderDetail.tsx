@@ -158,7 +158,19 @@ export default function OrderDetail() {
           body: { orderId: id, decision: newStatus }
         });
 
-        if (reviewError) throw reviewError;
+        if (reviewError) {
+          let reviewMessage = reviewError.message;
+          const errorResponse = (reviewError as { context?: Response }).context;
+          if (errorResponse) {
+            try {
+              const errorBody = await errorResponse.clone().json();
+              if (typeof errorBody?.error === 'string') reviewMessage = errorBody.error;
+            } catch {
+              // Use the Supabase client message when the response is not JSON.
+            }
+          }
+          throw new Error(reviewMessage);
+        }
         if (data?.error) throw new Error(data.error);
 
         setSuccessMsg(
