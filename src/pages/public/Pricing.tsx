@@ -70,7 +70,7 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
         tabIndex={0}
         aria-expanded={isOpen}
         aria-controls={envelopeId}
-        aria-label={`${isOpen ? 'Close' : 'Open'} ${tier.name} pricing envelope`}
+        aria-label={`${isOpen ? 'Close' : 'Open'} ${tier.name} pricing card`}
         onClick={onToggle}
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -78,12 +78,12 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             onToggle();
           }
         }}
-        className={`group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer rounded-[28px] outline-none [perspective:1000px] focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B] ${isOpen ? 'overflow-visible' : 'overflow-hidden'}`}
+        className="group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B]"
       >
-        {/* Envelope back */}
-        <div className={`absolute inset-0 rounded-[28px] border shadow-2xl transition-colors duration-300 ${tier.popular
+        {/* Open pocket back */}
+        <div className={`absolute inset-x-2 inset-y-0 rounded-[30px] border shadow-2xl transition-colors duration-300 ${tier.popular
           ? 'border-[#D4AF37] bg-[#1C2541] shadow-[#D4AF37]/20'
-          : 'border-[#2A4B7C] bg-[#131B2E] shadow-[#0B132B]/25'
+          : 'border-[#2A4B7C] bg-[#172038] shadow-[#0B132B]/25'
           }`} />
 
         {/* Letter */}
@@ -91,7 +91,7 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           id={envelopeId}
           initial={false}
           animate={{
-            y: isOpen ? -150 : 0,
+            y: isOpen ? -150 : 10,
             scale: isOpen ? 1 : 0.96
           }}
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
@@ -133,47 +133,22 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           </AnimatedButton>
         </motion.div>
 
-        {/* Open/close flap */}
-        <motion.div
-          initial={false}
-          animate={{ rotateX: isOpen ? -178 : 0 }}
-          transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-          style={{
-            clipPath: 'polygon(0 0, 50% 62%, 100% 0)',
-            transformOrigin: 'top center',
-            backfaceVisibility: 'hidden'
-          }}
-          className={`absolute inset-0 rounded-[28px] border-t border-[#D4AF37]/35 bg-[#1C2541] ${isOpen ? 'z-[5]' : 'z-30'}`}
-        />
-
-        {/* Envelope front */}
-        <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[28px]">
-          <div
-            className="absolute inset-0 bg-[#172038]"
-            style={{ clipPath: 'polygon(0 0, 52% 58%, 0 100%)' }}
-          />
-          <div
-            className="absolute inset-0 bg-[#1C2541]"
-            style={{ clipPath: 'polygon(100% 0, 48% 58%, 100% 100%)' }}
-          />
-          <div
-            className="absolute inset-0 bg-[#131B2E]"
-            style={{ clipPath: 'polygon(0 100%, 50% 48%, 100% 100%)' }}
-          />
+        {/* Open pocket front */}
+        <div className={`pointer-events-none absolute inset-x-0 bottom-0 top-8 z-20 overflow-hidden rounded-[26px] border ${tier.popular
+          ? 'border-[#D4AF37] bg-gradient-to-b from-[#24304F] to-[#131B2E]'
+          : 'border-[#2A4B7C] bg-gradient-to-b from-[#1C2541] to-[#131B2E]'
+          }`}>
+          <div className="absolute -left-5 -top-8 h-20 w-28 rounded-[50%] border-b border-[#D4AF37]/20 bg-[#1C2541]" />
+          <div className="absolute -right-5 -top-8 h-20 w-28 rounded-[50%] border-b border-[#D4AF37]/20 bg-[#1C2541]" />
+          <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-[#D4AF37]/40" />
         </div>
 
         <motion.div
           animate={{ y: isOpen ? 7 : 0 }}
-          className="pointer-events-none absolute inset-x-0 bottom-7 z-30 text-center"
+          className="pointer-events-none absolute inset-x-0 bottom-16 z-30 text-center"
         >
-          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/60 bg-[#D4AF37]/15 text-[#F3C623] shadow-lg shadow-[#D4AF37]/10">
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <path d="m3 7 9 6 9-6" />
-            </svg>
-          </div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F9E79F]">{tier.name}</p>
+          <p className="text-base font-extrabold uppercase tracking-[0.16em] text-[#F9E79F]">{tier.name} Package</p>
           <p className="mt-1 text-[10px] font-medium text-[#8496B8]">{isOpen ? 'Tap to close' : 'Tap to view details'}</p>
         </motion.div>
       </div>
