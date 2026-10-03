@@ -78,7 +78,7 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             onToggle();
           }
         }}
-        className="group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer outline-none [perspective:1000px] focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B]"
+        className={`group absolute inset-x-0 bottom-5 h-[245px] cursor-pointer rounded-[28px] outline-none [perspective:1000px] focus-visible:ring-2 focus-visible:ring-[#F3C623] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F0F4F9] dark:focus-visible:ring-offset-[#0B132B] ${isOpen ? 'overflow-visible' : 'overflow-hidden'}`}
       >
         {/* Envelope back */}
         <div className={`absolute inset-0 rounded-[28px] border shadow-2xl transition-colors duration-300 ${tier.popular
@@ -91,7 +91,7 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           id={envelopeId}
           initial={false}
           animate={{
-            y: isOpen ? -150 : 76,
+            y: isOpen ? -150 : 0,
             scale: isOpen ? 1 : 0.96
           }}
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
