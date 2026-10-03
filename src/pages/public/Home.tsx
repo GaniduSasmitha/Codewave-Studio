@@ -380,7 +380,7 @@ export default function Home() {
               )}
             </div>
           </div>
-          <div className="relative h-[340px] sm:h-[400px] lg:h-auto lg:min-h-[500px]">
+          <div className="relative h-[380px] sm:h-[420px] lg:h-auto lg:min-h-[500px]">
             <Hero3D />
           </div>
         </section>

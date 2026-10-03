@@ -187,9 +187,9 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
     if (!laptopRef.current || !lidRef.current) return;
 
     if (reducedMotion) {
-      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -0.25 : -0.05, 0);
+      laptopRef.current.position.set(isMobile ? 0 : 1.85, isMobile ? -0.12 : -0.05, 0);
       laptopRef.current.rotation.set(0.05, isMobile ? -0.08 : -0.2, 0.015);
-      laptopRef.current.scale.setScalar(isMobile ? 0.82 : 1);
+      laptopRef.current.scale.setScalar(1);
       lidRef.current.rotation.x = restingLidAngle;
       return;
     }
@@ -202,9 +202,9 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
       ? 0
       : MathUtils.lerp(1.85, 1.55, progress);
     const targetY = isMobile
-      ? -0.25
+      ? -0.12
       : MathUtils.lerp(-0.05, 0.22, progress);
-    const targetScale = (isMobile ? 0.82 : MathUtils.lerp(0.94, 0.82, progress))
+    const targetScale = (isMobile ? 1 : MathUtils.lerp(0.94, 0.82, progress))
       * MathUtils.lerp(0.72, 1, entrance);
     const targetRotationY = (isMobile ? -0.08 : -0.2) + progress * (isMobile ? 0.2 : 0.62) + input.pointerX * 0.11 + input.dragX;
     const targetRotationX = 0.05 + progress * (isMobile ? 0.025 : 0.08) - input.pointerY * 0.075 + input.dragY;
@@ -224,9 +224,9 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
   return (
     <group
       ref={laptopRef}
-      position={[isMobile ? 0 : 1.85, isMobile ? -0.25 : -0.05, 0]}
+      position={[isMobile ? 0 : 1.85, isMobile ? -0.12 : -0.05, 0]}
       rotation={[0.05, isMobile ? -0.08 : -0.2, 0.015]}
-      scale={isMobile ? 0.4 : 0.68}
+      scale={isMobile ? 0.56 : 0.68}
     >
       <RoundedBox args={[4, 0.18, 2.45]} radius={0.1} smoothness={3} position={[0, -0.86, 0.08]} castShadow receiveShadow>
         <meshStandardMaterial color={COLORS.body} emissive={COLORS.bodyHighlight} emissiveIntensity={0.12} roughness={0.46} metalness={0.48} />
@@ -461,9 +461,9 @@ export default function Hero3D() {
     >
       <Canvas
         frameloop={reducedMotion ? 'demand' : 'always'}
-        dpr={isMobile || lowPower ? 1 : [1, 1.5]}
-        camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 54 : 48, near: 0.1, far: 50 }}
-        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        dpr={lowPower ? [1, 1.25] : isMobile ? [1.25, 1.75] : [1, 1.5]}
+        camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 48 : 48, near: 0.1, far: 50 }}
+        gl={{ antialias: !lowPower, alpha: true, powerPreference: 'high-performance' }}
         style={{ background: 'transparent', touchAction: isMobile ? 'pan-y' : 'auto' }}
         shadows={!isMobile && !lowPower}
       >
