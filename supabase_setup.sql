@@ -126,9 +126,18 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 -- 8. Storage Bucket Setup (payment-slips)
-insert into storage.buckets (id, name, public)
-values ('payment-slips', 'payment-slips', false)
-on conflict (id) do update set public = false;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'payment-slips',
+  'payment-slips',
+  false,
+  2097152,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update set
+  public = false,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
 
 -- 9. Storage RLS Policies for payment-slips bucket
 drop policy if exists "Customers and admins can read slips" on storage.objects;

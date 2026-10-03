@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import GlassCard from './GlassCard';
 import AnimatedButton from './AnimatedButton';
@@ -11,101 +11,29 @@ interface SlipUploadProps {
   onUploadSuccess: () => void;
 }
 
-// Client-side image compression helper for mobile phone camera photos (routinely 8MB-15MB)
-const compressMobileImageIfNeeded = async (originalFile: File): Promise<File> => {
-  const fileName = (originalFile.name || '').toLowerCase();
-  const fileType = (originalFile.type || '').toLowerCase();
+const MAX_SLIP_SIZE = 2 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
 
-  const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
-  const isHeic = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif)$/i.test(fileName);
+// MIME metadata from Android gallery providers can be empty, so verify the
+// actual file signature instead of relying only on the file name or MIME type.
+const detectSupportedImageType = async (selectedFile: File): Promise<string | null> => {
+  const bytes = new Uint8Array(await selectedFile.slice(0, 12).arrayBuffer());
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  const isPng = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
+  const isWebp =
+    bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
+    bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
 
-  // HEIC and PDF files cannot be decoded natively by HTML Image() canvas - return raw file directly
-  if (isPdf || isHeic) {
-    return originalFile;
-  }
-
-  const isImage = fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp|jfif)$/i.test(fileName);
-
-  if (!isImage) return originalFile;
-  if (originalFile.size <= 1.5 * 1024 * 1024) return originalFile; // Under 1.5MB doesn't need compression
-
-  return new Promise((resolve) => {
-    // 2.5s Timeout guard so slow mobile devices never get stuck
-    const timer = setTimeout(() => {
-      resolve(originalFile);
-    }, 2500);
-
-    const safeResolve = (result: File) => {
-      clearTimeout(timer);
-      resolve(result);
-    };
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const srcStr = e.target?.result as string;
-      if (!srcStr) {
-        safeResolve(originalFile);
-        return;
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          const maxDim = 1920;
-
-          if (width > maxDim || height > maxDim) {
-            if (width > height) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            } else {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            safeResolve(originalFile);
-            return;
-          }
-
-          ctx.drawImage(img, 0, 0, width, height);
-          canvas.toBlob(
-            (blob) => {
-              if (!blob) {
-                safeResolve(originalFile);
-                return;
-              }
-              const cleanName = originalFile.name.replace(/\.[^/.]+$/, "") + ".jpg";
-              const compressedFile = new File([blob], cleanName, {
-                type: "image/jpeg",
-                lastModified: Date.now()
-              });
-              safeResolve(compressedFile);
-            },
-            'image/jpeg',
-            0.85
-          );
-        } catch {
-          safeResolve(originalFile);
-        }
-      };
-      img.onerror = () => safeResolve(originalFile);
-      img.src = srcStr;
-    };
-    reader.onerror = () => safeResolve(originalFile);
-    reader.readAsDataURL(originalFile);
-  });
+  if (isJpeg) return 'image/jpeg';
+  if (isPng) return 'image/png';
+  if (isWebp) return 'image/webp';
+  return null;
 };
 
 export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUploadSuccess }: SlipUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [detectedContentType, setDetectedContentType] = useState<string | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [previewFailed, setPreviewFailed] = useState(false);
   const [processingFile, setProcessingFile] = useState(false);
@@ -115,11 +43,18 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
   const [successMsg, setSuccessMsg] = useState('');
   const [isReplacing, setIsReplacing] = useState(false);
 
+  useEffect(() => () => {
+    if (filePreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(filePreview);
+    }
+  }, [filePreview]);
+
   const clearSelectedFile = () => {
     if (filePreview && filePreview.startsWith('blob:')) {
       URL.revokeObjectURL(filePreview);
     }
     setFile(null);
+    setDetectedContentType(null);
     setFilePreview(null);
     setPreviewFailed(false);
     setProcessingFile(false);
@@ -128,72 +63,62 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMsg('');
     setSuccessMsg('');
     setProgress(0);
     setPreviewFailed(false);
 
-    const files = e.target.files;
+    const input = e.currentTarget;
+    const files = input.files;
     if (!files || files.length === 0) {
       return;
     }
 
     const selectedFile = files[0];
     const fileType = (selectedFile.type || '').toLowerCase();
-    const fileName = (selectedFile.name || '').toLowerCase();
+    input.value = '';
 
-    const isPdf = fileType.includes('pdf') || fileName.endsWith('.pdf');
-    const isHeic = fileType.includes('heic') || fileType.includes('heif') || /\.(heic|heif)$/i.test(fileName);
-    const isStandardWebImage = !isPdf && !isHeic && (fileType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif)$/i.test(fileName));
-
-    const isDisallowed = /\.(exe|apk|app|zip|rar|tar|mp4|avi|mov|mp3|wav)$/i.test(fileName);
-    if (isDisallowed) {
-      const err = "Invalid format. Please select an image or PDF receipt.";
-      setErrorMsg(err);
-      clearSelectedFile();
-      return;
-    }
-
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      const err = "File size is too large (max 5MB). Please select a smaller file.";
-      setErrorMsg(err);
-      clearSelectedFile();
-      return;
-    }
-
-    if (filePreview && filePreview.startsWith('blob:')) {
-      URL.revokeObjectURL(filePreview);
-    }
-
-    setFile(selectedFile);
-
-    if (isStandardWebImage) {
-      try {
-        const objectUrl = URL.createObjectURL(selectedFile);
-        setFilePreview(objectUrl);
-      } catch {
-        setFilePreview(null);
-      }
-    } else {
+    if (selectedFile.size > MAX_SLIP_SIZE) {
+      setErrorMsg("Image size is too large. Please select an image smaller than 2 MB.");
+      setFile(null);
+      setDetectedContentType(null);
       setFilePreview(null);
+      return;
     }
 
-    if (isStandardWebImage && selectedFile.size > 1.5 * 1024 * 1024) {
-      setProcessingFile(true);
-      compressMobileImageIfNeeded(selectedFile)
-        .then((compressedFile) => {
-          setFile(compressedFile);
-        })
-        .catch(() => {})
-        .finally(() => {
-          setProcessingFile(false);
-        });
+    setProcessingFile(true);
+    try {
+      const hasAllowedMime = !fileType || fileType === 'application/octet-stream' || ALLOWED_IMAGE_TYPES.has(fileType);
+      const imageContentType = await detectSupportedImageType(selectedFile);
+      if (!hasAllowedMime || !imageContentType) {
+        setErrorMsg("Invalid file. Please select a JPG, PNG, or WEBP image only.");
+        setFile(null);
+        setDetectedContentType(null);
+        setFilePreview(null);
+        return;
+      }
+
+      setFile(selectedFile);
+      setDetectedContentType(imageContentType);
+      setFilePreview(URL.createObjectURL(selectedFile));
+    } catch {
+      setErrorMsg("We could not read that image. Please select another JPG, PNG, or WEBP image.");
+      setFile(null);
+      setDetectedContentType(null);
+      setFilePreview(null);
+    } finally {
+      setProcessingFile(false);
     }
   };
 
   const handleUpload = async () => {
     if (!file) return;
+
+    if (file.size > MAX_SLIP_SIZE || !detectedContentType) {
+      setErrorMsg("Please select a valid JPG, PNG, or WEBP image smaller than 2 MB.");
+      return;
+    }
     setUploading(true);
     setErrorMsg('');
     setProgress(15);
@@ -209,8 +134,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         throw new Error("Authentication session missing. Please log in again.");
       }
 
-      const rawExt = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
-      const fileExt = (rawExt || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const fileExt = detectedContentType === 'image/png' ? 'png' : detectedContentType === 'image/webp' ? 'webp' : 'jpg';
       const safeOrderId = orderId.replace(/[^a-zA-Z0-9-]/g, '');
       const safeUserId = currentUserId.replace(/[^a-zA-Z0-9-]/g, '');
       const fileName = `${safeOrderId}-${Date.now()}.${fileExt}`;
@@ -222,7 +146,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
         .from('payment-slips')
         .upload(filePath, file, {
           cacheControl: '3600',
-          contentType: file.type || 'image/jpeg',
+          contentType: detectedContentType,
           upsert: true
         });
 
@@ -310,7 +234,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             {isReplacing ? "Replace Payment Receipt" : "Upload Payment Receipt"}
           </h3>
           <p className="text-slate-600 dark:text-slate-400 text-xs">
-            Please upload your bank receipt or payment slip (PNG, JPG, WEBP, or PDF) to initiate verification.
+            Please upload your bank receipt or payment slip as a JPG, PNG, or WEBP image (maximum 2 MB).
           </p>
         </div>
         {isReplacing && (
@@ -340,23 +264,17 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       )}
 
       <div className="space-y-4">
+        <input
+          id={inputId}
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+          className="sr-only"
+          disabled={uploading || processingFile}
+        />
         {!file ? (
           <>
-            <input
-              id={inputId}
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (fileInputRef.current) {
-                  fileInputRef.current.value = '';
-                }
-              }}
-              accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-              className="sr-only"
-              disabled={uploading}
-            />
             <label
               htmlFor={inputId}
               className="w-full border-2 border-dashed border-slate-300 dark:border-slate-800 hover:border-primary/50 bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] cursor-pointer group transition-all select-none relative"
@@ -366,7 +284,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                 Tap / Click to Select Receipt
               </span>
               <span className="text-[10px] text-slate-500 mt-1 pointer-events-none">
-                Supports JPEG, PNG, WEBP, HEIC, PDF
+                JPG, PNG, or WEBP image · Maximum 2 MB
               </span>
             </label>
           </>
@@ -399,17 +317,8 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-slate-200 dark:border-slate-800 pt-3 sm:pt-0">
-              <input
-                id={`change-${inputId}`}
-                type="file"
-                onChange={handleFileChange}
-                onClick={(e) => e.stopPropagation()}
-                accept="image/*,application/pdf,.heic,.heif,.pdf,.jpg,.jpeg,.png,.webp"
-                className="sr-only"
-                disabled={uploading}
-              />
               <label
-                htmlFor={`change-${inputId}`}
+                htmlFor={inputId}
                 className="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition-colors text-center inline-block select-none"
               >
                 Change

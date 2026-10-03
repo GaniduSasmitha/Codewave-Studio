@@ -201,7 +201,7 @@ export default function OrderStatus() {
               <span>Payment Receipt Rejected — Action Required</span>
             </div>
             <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Your previously submitted payment slip was reviewed and rejected by our team. Please upload a clear photo or PDF of your payment receipt below to re-initiate payment verification.
+              Your previously submitted payment slip was reviewed and rejected by our team. Please upload a clear image of your payment receipt below to re-initiate payment verification.
             </p>
           </div>
         )}
