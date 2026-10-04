@@ -153,7 +153,7 @@ export default function Contact() {
           </p>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0B132B] via-[#1E3A5F] to-[#D4AF37] dark:from-[#0B132B] dark:via-[#D4AF37] dark:to-[#F9E79F]">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0B132B] via-[#1E3A5F] to-[#D4AF37] dark:from-[#F3C623] dark:via-[#D4AF37] dark:to-[#F9E79F]">
             Let's Work Together
           </h1>
 
