@@ -141,9 +141,9 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           id={envelopeId}
           initial={false}
           animate={{
-            y: isOpen ? -215 : 0,
+            y: isOpen ? -225 : 0,
             scale: isOpen ? 1 : 0.96,
-            height: isOpen ? 375 : 215
+            height: isOpen ? 385 : 215
           }}
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
           className={`absolute inset-x-3.5 top-3 rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-4 sm:p-5 text-[#0B132B] shadow-2xl flex flex-col justify-between overflow-hidden sm:inset-x-4 ${isOpen ? 'z-40' : 'z-10'}`}
@@ -157,6 +157,13 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             {tier.name} Package
           </motion.p>
 
+          <motion.div
+            initial={false}
+            animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 18 }}
+            transition={{ duration: 0.22, delay: isOpen ? 0.12 : 0 }}
+            aria-hidden={!isOpen}
+            className="flex h-full flex-col justify-between"
+          >
           <div>
             <div className="mb-2.5 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-2.5">
               <div>
@@ -197,12 +204,14 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
               event.stopPropagation();
               onSelect();
             }}
+            disabled={!isOpen}
             variant="primary"
             className="mt-3.5 w-fit shrink-0 cursor-pointer"
             style={{ padding: '7px 18px', fontSize: '11px' }}
           >
             {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
           </AnimatedButton>
+          </motion.div>
         </motion.div>
 
         {/* Open pocket front */}
