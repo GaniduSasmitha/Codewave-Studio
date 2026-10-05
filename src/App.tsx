@@ -1,27 +1,28 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
-import PublicLayout from './layouts/PublicLayout';
-import AdminLayout from './layouts/AdminLayout';
+const PublicLayout = lazy(() => import('./layouts/PublicLayout'));
+const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
 
 // Public Pages
-import Home from './pages/public/Home';
-import Services from './pages/public/Services';
-import Portfolio from './pages/public/Portfolio';
-import Pricing from './pages/public/Pricing';
-import About from './pages/public/About';
-import Contact from './pages/public/Contact';
-import Login from './pages/public/Login';
-import Signup from './pages/public/Signup';
-import Unauthorized from './pages/public/Unauthorized';
-import LegalPage from './pages/public/LegalPage';
+const Home = lazy(() => import('./pages/public/Home'));
+const Services = lazy(() => import('./pages/public/Services'));
+const Portfolio = lazy(() => import('./pages/public/Portfolio'));
+const Pricing = lazy(() => import('./pages/public/Pricing'));
+const About = lazy(() => import('./pages/public/About'));
+const Contact = lazy(() => import('./pages/public/Contact'));
+const Login = lazy(() => import('./pages/public/Login'));
+const Signup = lazy(() => import('./pages/public/Signup'));
+const Unauthorized = lazy(() => import('./pages/public/Unauthorized'));
+const LegalPage = lazy(() => import('./pages/public/LegalPage'));
 
 // Admin Pages
-import AdminDashboard from './pages/admin/Dashboard';
-import OrdersList from './pages/admin/OrdersList';
-import OrderDetail from './pages/admin/OrderDetail';
-import MessagesList from './pages/admin/MessagesList';
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const OrdersList = lazy(() => import('./pages/admin/OrdersList'));
+const OrderDetail = lazy(() => import('./pages/admin/OrderDetail'));
+const MessagesList = lazy(() => import('./pages/admin/MessagesList'));
 
 // Guard
 import ProtectedRoute from './components/ProtectedRoute';
@@ -36,6 +37,7 @@ function App() {
         <CustomCursor />
         <ScrollToTop />
         <RouteWaveTransition />
+        <Suspense fallback={<div className="min-h-screen bg-[#0B132B]" />}>
         <Routes>
           {/* Public Routes */}
           <Route element={<PublicLayout />}>
@@ -67,6 +69,7 @@ function App() {
           {/* Fallback redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </Router>
     </ThemeProvider>
   );

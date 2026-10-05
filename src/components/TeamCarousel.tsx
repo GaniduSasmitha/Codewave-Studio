@@ -6,7 +6,7 @@ export interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  avatar: string;
+  avatar?: string;
   image?: string | null;
   imagePosition?: string;
   imageScale?: string;

@@ -27,9 +27,8 @@ export default function PublicLayout() {
       {/* Image 2 inspired Organic Wave Multi-Column Footer */}
       <OrganicWaveFooter />
 
-      {/* Cookie Consent Banner */}
+      {/* Cookie notice stays in the bottom-left corner. */}
       <CookieConsent />
     </div>
   );
 }
-

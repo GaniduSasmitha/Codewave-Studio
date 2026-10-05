@@ -415,7 +415,7 @@ export default function OrderDetail() {
                 <div className="space-y-4">
                   {isPdf ? (
                     <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-lg text-center bg-slate-100 dark:bg-slate-950/60">
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 font-semibold">📄 PDF Payment slip Document</p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 font-semibold">PDF Payment Slip Document</p>
                       <a
                         href={signedSlipUrl}
                         target="_blank"

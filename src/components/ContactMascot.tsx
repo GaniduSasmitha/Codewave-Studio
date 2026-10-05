@@ -71,9 +71,9 @@ export default function ContactMascot({ focusedField, isSuccess }: ContactMascot
   }, []);
 
   // Speech text calculation
-  let speechText = "Hi! Tell us about your project. 👋";
+  let speechText = "Hi! Tell us about your project.";
   if (isSuccess) {
-    speechText = "Woohoo! Message received! 🚀";
+    speechText = "Message received!";
   } else if (focusedField === 'name') {
     speechText = "Nice to meet you! What's your name?";
   } else if (focusedField === 'email') {

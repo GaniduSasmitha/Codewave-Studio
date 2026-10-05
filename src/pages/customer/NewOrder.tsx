@@ -19,7 +19,6 @@ export default function NewOrder() {
 
   const [step, setStep] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState('starter');
-  const [selectedPrice, setSelectedPrice] = useState(79);
 
   // Requirements form fields
   const [businessName, setBusinessName] = useState('');
@@ -37,21 +36,16 @@ export default function NewOrder() {
         return;
       }
       setSelectedPackage(pkg);
-      const match = packages.find((p) => p.id === pkg);
-      if (match) {
-        setSelectedPrice(match.price);
-      }
       setStep(2);
     }
   }, [navigate, searchParams]);
 
-  const handleSelectPackage = (pkgId: string, price: number) => {
+  const handleSelectPackage = (pkgId: string) => {
     if (pkgId === 'custom') {
       navigate('/contact?package=custom');
       return;
     }
     setSelectedPackage(pkgId);
-    setSelectedPrice(price);
     setStep(2);
   };
 
@@ -95,12 +89,9 @@ export default function NewOrder() {
     };
 
     try {
-      const { error } = await supabase.from('orders').insert({
-        customer_id: user.id,
-        package: selectedPackage,
-        price: selectedPrice,
-        requirements: JSON.stringify(requirements),
-        status: 'pending_payment'
+      const { error } = await supabase.rpc('create_customer_order', {
+        package_id: selectedPackage,
+        requirements_payload: JSON.stringify(requirements)
       });
 
       if (error) throw error;
@@ -145,7 +136,7 @@ export default function NewOrder() {
           {packages.map((pkg) => (
             <GlassCard
               key={pkg.id}
-              onClick={() => handleSelectPackage(pkg.id, pkg.price)}
+              onClick={() => handleSelectPackage(pkg.id)}
               className="p-6 cursor-pointer border border-slate-200 dark:border-[#1E3A5F] bg-white/90 dark:bg-[#0B132B]/90 hover:border-[#D4AF37] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div>

@@ -88,10 +88,10 @@ export default function Contact() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const { error } = await supabase.from('contact_messages').insert({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          message: form.message.trim()
+        const { error } = await supabase.rpc('submit_contact_message', {
+          message_name: form.name.trim(),
+          message_email: form.email.trim(),
+          message_body: form.message.trim()
         });
 
         if (error) {

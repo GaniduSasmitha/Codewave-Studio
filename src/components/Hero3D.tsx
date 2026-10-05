@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
-import { Effects, Instance, Instances, RoundedBox, Sparkles } from '@react-three/drei';
-import { CanvasTexture, getConsoleFunction, MathUtils, setConsoleFunction, SRGBColorSpace, Vector2 } from 'three';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Instance, Instances, RoundedBox, Sparkles } from '@react-three/drei';
+import { CanvasTexture, getConsoleFunction, MathUtils, setConsoleFunction, SRGBColorSpace } from 'three';
 import type { Group } from 'three';
-import { UnrealBloomPass } from 'three-stdlib';
 import { useTheme } from '../context/ThemeContext';
-
-const BloomPass = extend(UnrealBloomPass);
 
 function useExpectedContextDisposalLogFilter() {
   useEffect(() => {
@@ -272,8 +269,6 @@ function Laptop({ isMobile, lowPower, reducedMotion, scrollProgress, interaction
 }
 
 function Scene(props: SceneProps) {
-  const bloomEnabled = !props.isMobile && !props.lowPower && !props.reducedMotion;
-
   return (
     <>
       <ambientLight intensity={0.52} color={COLORS.cream} />
@@ -282,7 +277,7 @@ function Scene(props: SceneProps) {
       <pointLight position={[3.5, 1.5, -1]} intensity={14} distance={8} decay={2} color={COLORS.accentBright} />
 
       <Sparkles
-        count={props.isMobile || props.lowPower ? 24 : 72}
+        count={props.isMobile || props.lowPower ? 12 : 36}
         scale={[16, 9, 7]}
         size={props.isMobile ? 0.7 : 0.9}
         speed={props.reducedMotion ? 0 : 0.08}
@@ -290,7 +285,7 @@ function Scene(props: SceneProps) {
         color={COLORS.accentBright}
       />
       <Sparkles
-        count={props.isMobile || props.lowPower ? 10 : 28}
+        count={props.isMobile || props.lowPower ? 6 : 14}
         scale={[14, 8, 6]}
         size={props.isMobile ? 0.55 : 0.72}
         speed={props.reducedMotion ? 0 : 0.05}
@@ -300,11 +295,6 @@ function Scene(props: SceneProps) {
 
       <Laptop {...props} />
 
-      {bloomEnabled && (
-        <Effects multisamping={0} disableGamma>
-          <BloomPass args={[new Vector2(512, 512), 0.26, 0.32, 0.48]} threshold={0.48} strength={0.26} radius={0.32} />
-        </Effects>
-      )}
     </>
   );
 }
@@ -317,6 +307,8 @@ export default function Hero3D() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [lowPower, setLowPower] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [sceneActive, setSceneActive] = useState(true);
+  const [documentVisible, setDocumentVisible] = useState(() => !document.hidden);
   const heroRef = useRef<HTMLDivElement>(null);
   const scrollProgress = useRef(0);
   const interaction = useRef<InteractionState>({ pointerX: 0, pointerY: 0, dragX: 0, dragY: 0 });
@@ -340,6 +332,12 @@ export default function Hero3D() {
   }, []);
 
   useEffect(() => {
+    const updateVisibility = () => setDocumentVisible(!document.hidden);
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
+
+  useEffect(() => {
     const updateScroll = () => {
       if (isMobile) {
         scrollProgress.current = MathUtils.clamp(
@@ -348,6 +346,7 @@ export default function Hero3D() {
           1,
         );
         if (heroRef.current) heroRef.current.style.opacity = '1';
+        setSceneActive(true);
         return;
       }
 
@@ -356,6 +355,7 @@ export default function Hero3D() {
       if (heroRef.current) {
         heroRef.current.style.opacity = String(1 - MathUtils.smoothstep(progress, 0.5, 0.96));
       }
+      setSceneActive(progress < 0.96);
     };
     updateScroll();
     window.addEventListener('scroll', updateScroll, { passive: true });
@@ -460,12 +460,12 @@ export default function Hero3D() {
       }}
     >
       <Canvas
-        frameloop={reducedMotion ? 'demand' : 'always'}
-        dpr={lowPower ? [1, 1.25] : isMobile ? [1.25, 1.75] : [1, 1.5]}
+        frameloop={reducedMotion || !sceneActive || !documentVisible ? 'demand' : 'always'}
+        dpr={lowPower || isMobile ? [1, 1] : [1, 1.25]}
         camera={{ position: [0, 0.2, 7.1], fov: isMobile ? 48 : 48, near: 0.1, far: 50 }}
-        gl={{ antialias: !lowPower, alpha: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: !lowPower && !isMobile, alpha: true, powerPreference: 'low-power' }}
         style={{ background: 'transparent', touchAction: isMobile ? 'pan-y' : 'auto' }}
-        shadows={!isMobile && !lowPower}
+        shadows={false}
       >
         <RendererBackground color={isDark ? COLORS.background : '#F0F4F9'} />
         <fog attach="fog" args={[isDark ? COLORS.background : '#F0F4F9', 8, 20]} />

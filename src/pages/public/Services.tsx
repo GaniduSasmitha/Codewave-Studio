@@ -9,7 +9,6 @@ const services = [
   {
     id: "starter",
     title: "Business Website",
-    icon: "🏢",
     price: "$79 total",
     desc: "A premium corporate presence custom tailored to display your services, build brand authority, and capture leads.",
     features: [
@@ -22,7 +21,6 @@ const services = [
   {
     id: "business",
     title: "E-commerce Store",
-    icon: "🛒",
     price: "$199 total",
     desc: "A fully custom digital store complete with product catalog, CMS/blog, custom contact forms, and SEO setup.",
     features: [
@@ -35,7 +33,6 @@ const services = [
   {
     id: "custom",
     title: "Web App / Custom Software",
-    icon: "⚡",
     price: "starting at $399",
     desc: "Full-stack web application featuring custom database architecture, user authentication, admin dashboards, and custom logic.",
     features: [
@@ -48,7 +45,6 @@ const services = [
   {
     id: "maintenance",
     title: "Maintenance & Support",
-    icon: "🔧",
     price: "$15/month",
     desc: "Keep your application secure, up-to-date, and lightning-fast with dedicated support and server health checks.",
     features: [
@@ -90,11 +86,10 @@ export default function Services() {
           <ScrollReveal key={i} delay={i * 0.1}>
             <GlassCard className="h-full flex flex-col justify-between p-8 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/80 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/50">
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="text-4xl">{service.icon}</div>
-                  <div className="text-right">
-                    <span className="text-xs text-[#1E3A5F] dark:text-[#B7C4DC] block uppercase tracking-wider font-semibold">{service.id === 'custom' ? 'Starting from' : 'Service price'}</span>
-                    <span className="text-2xl font-black text-[#0B132B] dark:text-[#F9E79F]">{service.price}</span>
+                <div className="flex items-center justify-end">
+                  <div className="flex h-24 w-full flex-col justify-center rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-4 py-3 text-center shadow-[0_0_24px_rgba(212,175,55,0.14)]">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#725700] dark:text-[#F3C623]">{service.id === 'custom' ? 'Starting from' : 'Service price'}</span>
+                    <span className="mt-1 block text-3xl font-black leading-none text-[#725700] dark:text-[#F9E79F]">{service.price}</span>
                   </div>
                 </div>
 
@@ -116,7 +111,7 @@ export default function Services() {
                 <AnimatedButton
                   onClick={() => handleSelectPackage(service.id)}
                   variant={i === 1 || i === 2 ? 'primary' : 'glass'}
-                  className="w-full py-3 cursor-pointer"
+                  className="flex h-16 w-full items-center justify-center px-4 cursor-pointer"
                 >
                   {service.id === 'custom' ? 'Get a Quote' : `Order ${service.title}`}
                 </AnimatedButton>

@@ -116,8 +116,7 @@ export function useAuth() {
         password,
         options: {
           data: {
-            full_name: fullName,
-            role: 'customer' // Trigger will capture and default, but passing here too
+            full_name: fullName
           }
         }
       });

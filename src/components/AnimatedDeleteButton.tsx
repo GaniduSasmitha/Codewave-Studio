@@ -236,7 +236,7 @@ export default function AnimatedDeleteButton({
 
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl flex-shrink-0">
-                        🗑️
+                        Delete
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-white tracking-tight">{confirmTitle}</h3>

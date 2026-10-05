@@ -157,13 +157,10 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
       setProgress(75);
 
       const slipUrlPath = uploadData.path;
-      const { error: updateError } = await supabase
-        .from('orders')
-        .update({
-          slip_url: slipUrlPath,
-          status: 'pending_verification'
-        })
-        .eq('id', orderId);
+      const { error: updateError } = await supabase.rpc('submit_payment_slip', {
+        order_id: orderId,
+        slip_path: slipUrlPath
+      });
 
       if (updateError) {
         throw updateError;
@@ -201,7 +198,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     return (
       <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/5 text-left" hoverEffect={false}>
         <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 font-semibold mb-2">
-          <span className="text-xl">✅</span>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">Slip submitted — awaiting verification</h3>
         </div>
         <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">
@@ -219,7 +215,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
             }}
             className="px-3.5 py-1.5 rounded-lg border border-amber-500/30 hover:border-amber-500/60 bg-amber-500/10 text-amber-600 dark:text-amber-300 hover:text-amber-700 dark:hover:text-amber-200 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
           >
-            <span>🔄</span> Replace / Re-upload Receipt
+            Replace / Re-upload Receipt
           </button>
         </div>
       </GlassCard>
@@ -279,7 +275,6 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
               htmlFor={inputId}
               className="w-full border-2 border-dashed border-slate-300 dark:border-slate-800 hover:border-primary/50 bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-900/40 rounded-xl p-5 flex flex-col items-center justify-center text-center min-h-[110px] cursor-pointer group transition-all select-none relative"
             >
-              <span className="text-3xl mb-1 group-hover:scale-110 transition-transform pointer-events-none">📄</span>
               <span className="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors pointer-events-none">
                 Tap / Click to Select Receipt
               </span>
@@ -298,11 +293,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                   onError={() => setPreviewFailed(true)}
                   className="w-16 h-16 object-cover rounded-lg border border-slate-300 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-900"
                 />
-              ) : (
-                <div className="w-16 h-16 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-3xl shrink-0">
-                  📑
-                </div>
-              )}
+              ) : null}
               <div className="min-w-0">
                 <p className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[180px] sm:max-w-[280px]">
                   {file.name}
@@ -329,7 +320,7 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
                 disabled={uploading}
                 className="px-3 py-1.5 rounded-lg border border-red-500/30 hover:bg-red-500/10 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center gap-1 cursor-pointer z-20 relative"
               >
-                <span>🗑️</span> Remove
+                Remove
               </button>
             </div>
           </div>

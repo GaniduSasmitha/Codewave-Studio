@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
@@ -15,13 +15,14 @@ import {
 import { FaAws } from 'react-icons/fa6';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
-import Hero3D from '../../components/Hero3D';
 import AnimatedButton from '../../components/AnimatedButton';
 import GlassCard from '../../components/GlassCard';
 import SectionHeading from '../../components/SectionHeading';
 import ScrollReveal from '../../components/ScrollReveal';
 import SlipUpload from '../../components/SlipUpload';
 import AnimatedDeleteButton from '../../components/AnimatedDeleteButton';
+
+const Hero3D = lazy(() => import('../../components/Hero3D'));
 
 import evoraImg from '../../assets/projects/evora.png';
 import fitnessTrackerImg from '../../assets/projects/fitness-tracker.png';
@@ -73,23 +74,19 @@ const packages = [
 const features = [
   {
     title: "Lightning Performance",
-    desc: "Built with modern React tooling and performance-conscious components tailored to each project.",
-    icon: "⚡"
+    desc: "Built with modern React tooling and performance-conscious components tailored to each project."
   },
   {
     title: "Immersive 3D Elements",
-    desc: "Interactive low-poly WebGL shapes and 3D product views custom-crafted using React Three Fiber and GSAP animations.",
-    icon: "📦"
+    desc: "Interactive low-poly WebGL shapes and 3D product views custom-crafted using React Three Fiber and GSAP animations."
   },
   {
     title: "Secure & Scalable",
-    desc: "Complete database operations, authentication routines, and secure file uploads handled via Supabase API engines.",
-    icon: "🔒"
+    desc: "Complete database operations, authentication routines, and secure file uploads handled via Supabase API engines."
   },
   {
     title: "Responsive Design",
-    desc: "Curated dark mode colors, glassmorphic blur overlays, and responsive mobile grids that look stunning on any resolution.",
-    icon: "📱"
+    desc: "Curated dark mode colors, glassmorphic blur overlays, and responsive mobile grids that look stunning on any resolution."
   }
 ];
 
@@ -164,6 +161,12 @@ export default function Home() {
   const [description, setDescription] = useState('');
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const [orderError, setOrderError] = useState('');
+  const [shouldRenderHero, setShouldRenderHero] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShouldRenderHero(true), 400);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const fetchOrders = async (silent = false) => {
     if (!user) return;
@@ -282,12 +285,9 @@ export default function Home() {
         description: description.trim()
       });
 
-      const { error } = await supabase.from('orders').insert({
-        customer_id: user.id,
-        package: selectedPackage,
-        price: selectedPrice,
-        requirements: reqData,
-        status: 'pending_payment'
+      const { error } = await supabase.rpc('create_customer_order', {
+        package_id: selectedPackage,
+        requirements_payload: reqData
       });
 
       if (error) throw error;
@@ -316,16 +316,9 @@ export default function Home() {
       throw new Error('Cannot delete an order that is currently in progress.');
     }
 
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ deleted_by_user: true })
-      .eq('id', order.id)
-      .select();
+    const { error } = await supabase.rpc('hide_own_order', { order_id: order.id });
 
     if (error) throw new Error(error.message || 'Failed to delete order.');
-    if (!data || data.length === 0) {
-      throw new Error('Failed to delete order: database permission denied or order not found.');
-    }
 
     setOrders((prev) => prev.filter((o) => o.id !== order.id));
   };
@@ -381,7 +374,11 @@ export default function Home() {
             </div>
           </div>
           <div className="relative h-[380px] sm:h-[420px] lg:h-auto lg:min-h-[500px]">
-            <Hero3D />
+            {shouldRenderHero ? (
+              <Suspense fallback={<div className="h-full w-full rounded-[2rem] bg-[radial-gradient(circle_at_70%_34%,rgba(212,175,55,0.12),rgba(19,27,46,0.7)_30%,#0A0F12_68%)]" />}>
+                <Hero3D />
+              </Suspense>
+            ) : <div className="h-full w-full rounded-[2rem] bg-[radial-gradient(circle_at_70%_34%,rgba(212,175,55,0.12),rgba(19,27,46,0.7)_30%,#0A0F12_68%)]" />}
           </div>
         </section>
 
@@ -404,7 +401,6 @@ export default function Home() {
               </div>
             ) : orders.length === 0 ? (
               <GlassCard className="p-12 text-center border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/80 dark:bg-[#131B2E]/80 max-w-xl mx-auto mt-8">
-                <div className="text-4xl mb-4">📂</div>
                 <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F]">No active orders</h3>
                 <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm mt-2 max-w-sm mx-auto">
                   You don't have any custom design or development orders. Start your first project now.
@@ -751,9 +747,6 @@ export default function Home() {
               <ScrollReveal key={i} delay={i * 0.1}>
                 <GlassCard className="h-full flex flex-col justify-between border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/90 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/50">
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/15 dark:bg-[#070D1D] border border-[#D4AF37]/40 dark:border-[#D4AF37]/60 shadow-md dark:shadow-[0_0_18px_rgba(212,175,55,0.25)] flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                      {feat.icon}
-                    </div>
                     <h3 className="text-xl font-bold text-[#0B132B] dark:text-[#F9E79F] mb-3">{feat.title}</h3>
                     <p className="text-[#1E3A5F] dark:text-[#8496B8] text-sm leading-relaxed">{feat.desc}</p>
                   </div>
