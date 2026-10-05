@@ -9,7 +9,9 @@ const services = [
   {
     id: "starter",
     title: "Business Web",
-    price: "LKR 30,000 total",
+    price: "LKR 30,000",
+    period: "total",
+    subtitle: "Service price",
     desc: "A premium corporate presence custom tailored to display your services, build brand authority, and capture leads.",
     features: [
       "Custom responsive design",
@@ -21,7 +23,9 @@ const services = [
   {
     id: "business",
     title: "E-commerce Store",
-    price: "LKR 70,000 total",
+    price: "LKR 70,000",
+    period: "total",
+    subtitle: "Service price",
     desc: "A fully custom digital store complete with product catalog, CMS/blog, custom contact forms, and SEO setup.",
     features: [
       "Up to 10 included pages",
@@ -33,7 +37,9 @@ const services = [
   {
     id: "custom",
     title: "Web App / Custom Software",
-    price: "starting at LKR 120,000",
+    price: "LKR 120,000",
+    period: "starting at",
+    subtitle: "Starting from",
     desc: "Full-stack web application featuring custom database architecture, user authentication, admin dashboards, and custom logic.",
     features: [
       "Full-stack web app & database",
@@ -45,7 +51,9 @@ const services = [
   {
     id: "maintenance",
     title: "Maintenance & Support",
-    price: "LKR 15,000/month",
+    price: "LKR 15,000",
+    period: "/ month",
+    subtitle: "Service price",
     desc: "Keep your application secure, up-to-date, and lightning-fast with dedicated support and server health checks.",
     features: [
       "Scheduled server monitoring checks",
@@ -87,9 +95,14 @@ export default function Services() {
             <GlassCard className="h-full flex flex-col justify-between p-8 border border-[#CBD5E1] dark:border-[#1E3A5F] bg-white/80 dark:bg-[#131B2E]/90 hover:border-[#D4AF37]/50">
               <div className="space-y-6">
                 <div className="flex items-center justify-end">
-                  <div className="flex h-24 w-full flex-col justify-center rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-4 py-3 text-center shadow-[0_0_24px_rgba(212,175,55,0.14)]">
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#725700] dark:text-[#F3C623]">{service.id === 'custom' ? 'Starting from' : 'Service price'}</span>
-                    <span className="mt-1 block text-3xl font-black leading-none text-[#725700] dark:text-[#F9E79F]">{service.price}</span>
+                  <div className="flex min-h-[96px] w-full flex-col justify-center rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-3 py-3 text-center shadow-[0_0_24px_rgba(212,175,55,0.14)]">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#725700] dark:text-[#F3C623]">{service.subtitle}</span>
+                    <div className="mt-1.5 flex items-baseline justify-center gap-1 flex-wrap">
+                      <span className="text-2xl sm:text-[26px] font-black leading-tight text-[#725700] dark:text-[#F9E79F]">{service.price}</span>
+                      {service.period && service.period !== 'total' && (
+                        <span className="text-xs font-bold text-[#725700]/90 dark:text-[#F3C623]/90">{service.period}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
 

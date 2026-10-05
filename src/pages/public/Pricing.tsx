@@ -26,7 +26,8 @@ const tiers = [
   {
     id: "custom",
     name: "Web App",
-    price: "starting at LKR 120,000",
+    prefix: "Starting at",
+    price: "LKR 120,000",
     billing: "Quote-based",
     desc: "Full-stack web app, database, user auth, admin dashboard, unlimited revisions during build, timeline based on scope.",
     popular: false
@@ -156,9 +157,18 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
             </span>
           </div>
 
-          <div className="flex items-end gap-2">
-            <span className={`${tier.id === 'custom' ? 'text-2xl' : 'text-3xl'} font-black leading-none`}>{tier.price}</span>
-            <span className="pb-0.5 text-[10px] font-semibold text-[#1E3A5F]">{tier.billing}</span>
+          <div className="flex items-end justify-between gap-2">
+            <div>
+              {'prefix' in tier && tier.prefix && (
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-[#7A5C07] leading-tight mb-0.5">
+                  {tier.prefix}
+                </span>
+              )}
+              <span className="text-2xl font-black leading-tight tracking-tight">
+                {tier.price}
+              </span>
+            </div>
+            <span className="pb-0.5 text-[10px] font-semibold text-[#1E3A5F] shrink-0">{tier.billing}</span>
           </div>
 
           <ul className="mt-4 grid gap-1.5 text-[11px] font-medium leading-4 text-[#1E3A5F]">
