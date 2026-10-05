@@ -124,13 +124,11 @@ export default function SlipUpload({ orderId, userId, orderStatus, slipUrl, onUp
     setProgress(15);
 
     try {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) {
-        console.warn("Auth User warning:", authError.message);
-      }
-      const currentUserId = authData?.user?.id || userId;
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
 
-      if (!currentUserId) {
+      const currentUserId = session?.user.id;
+      if (!currentUserId || currentUserId !== userId) {
         throw new Error("Authentication session missing. Please log in again.");
       }
 

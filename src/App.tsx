@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
 
 // Layouts
 const PublicLayout = lazy(() => import('./layouts/PublicLayout'));
@@ -33,7 +34,8 @@ import CustomCursor from './components/CustomCursor';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <AuthProvider>
+        <Router>
         <CustomCursor />
         <ScrollToTop />
         <RouteWaveTransition />
@@ -70,7 +72,8 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         </Suspense>
-      </Router>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
