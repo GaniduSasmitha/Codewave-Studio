@@ -141,11 +141,12 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           id={envelopeId}
           initial={false}
           animate={{
-            y: isOpen ? -190 : 10,
-            scale: isOpen ? 1 : 0.96
+            y: isOpen ? -215 : 0,
+            scale: isOpen ? 1 : 0.96,
+            height: isOpen ? 375 : 215
           }}
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
-          className={`absolute inset-x-3 -top-20 h-[375px] rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-4 sm:p-5 text-[#0B132B] shadow-2xl flex flex-col justify-between sm:inset-x-4 ${isOpen ? 'z-40' : 'z-10'}`}
+          className={`absolute inset-x-3.5 top-3 rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-4 sm:p-5 text-[#0B132B] shadow-2xl flex flex-col justify-between overflow-hidden sm:inset-x-4 ${isOpen ? 'z-40' : 'z-10'}`}
         >
           <div>
             <div className="mb-2.5 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-2.5">
