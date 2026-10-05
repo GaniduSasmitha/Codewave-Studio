@@ -108,7 +108,7 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
   const envelopeId = `pricing-envelope-${tier.id}`;
 
   return (
-    <article className="relative mx-auto h-[460px] w-full max-w-[390px] pt-20 sm:h-[480px] sm:pt-24">
+    <article className="relative mx-auto h-[500px] w-full max-w-[390px] pt-20 sm:h-[530px] sm:pt-24">
       <div
         role="button"
         tabIndex={0}
@@ -141,44 +141,46 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           id={envelopeId}
           initial={false}
           animate={{
-            y: isOpen ? -150 : 10,
+            y: isOpen ? -190 : 10,
             scale: isOpen ? 1 : 0.96
           }}
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
-          className={`absolute inset-x-4 -top-20 h-[330px] overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-5 text-[#0B132B] shadow-2xl sm:inset-x-6 ${isOpen ? 'z-40' : 'z-10'}`}
+          className={`absolute inset-x-3 -top-20 h-[375px] rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-4 sm:p-5 text-[#0B132B] shadow-2xl flex flex-col justify-between sm:inset-x-4 ${isOpen ? 'z-40' : 'z-10'}`}
         >
-          <div className="mb-3 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-3">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#7A5C07]">Codewave Studio</p>
-              <h3 className="mt-1 text-xl font-extrabold">{tier.name} Package</h3>
-            </div>
-            <span className="rounded-full bg-[#D4AF37]/20 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#7A5C07]">
-              {tier.id === 'custom' ? 'Custom' : 'Fixed'}
-            </span>
-          </div>
-
-          <div className="flex items-end justify-between gap-2">
-            <div>
-              {'prefix' in tier && tier.prefix && (
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-[#7A5C07] leading-tight mb-0.5">
-                  {tier.prefix}
-                </span>
-              )}
-              <span className="text-2xl font-black leading-tight tracking-tight">
-                {tier.price}
+          <div>
+            <div className="mb-2.5 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-2.5">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#7A5C07]">Codewave Studio</p>
+                <h3 className="mt-0.5 text-xl font-extrabold">{tier.name} Package</h3>
+              </div>
+              <span className="rounded-full bg-[#D4AF37]/20 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#7A5C07]">
+                {tier.id === 'custom' ? 'Custom' : 'Fixed'}
               </span>
             </div>
-            <span className="pb-0.5 text-[10px] font-semibold text-[#1E3A5F] shrink-0">{tier.billing}</span>
-          </div>
 
-          <ul className="mt-4 grid gap-1.5 text-[11px] font-medium leading-4 text-[#1E3A5F]">
-            {details.map((detail) => (
-              <li key={detail} className="flex items-start gap-2">
-                <span className="mt-0.5 font-black text-[#8A6A00]">✓</span>
-                <span>{detail}</span>
-              </li>
-            ))}
-          </ul>
+            <div className="flex items-end justify-between gap-2">
+              <div>
+                {'prefix' in tier && tier.prefix && (
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[#7A5C07] leading-tight mb-0.5">
+                    {tier.prefix}
+                  </span>
+                )}
+                <span className="text-2xl font-black leading-tight tracking-tight">
+                  {tier.price}
+                </span>
+              </div>
+              <span className="pb-0.5 text-[10px] font-semibold text-[#1E3A5F] shrink-0">{tier.billing}</span>
+            </div>
+
+            <ul className="mt-3 grid gap-1.5 text-[11px] font-medium leading-4 text-[#1E3A5F]">
+              {details.map((detail) => (
+                <li key={detail} className="flex items-start gap-2">
+                  <span className="mt-0.5 font-black text-[#8A6A00]">✓</span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <AnimatedButton
             onClick={(event) => {
@@ -186,8 +188,8 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
               onSelect();
             }}
             variant="primary"
-            className="mt-3 w-fit"
-            style={{ padding: '6px 16px', fontSize: '11px' }}
+            className="mt-3.5 w-fit shrink-0 cursor-pointer"
+            style={{ padding: '7px 18px', fontSize: '11px' }}
           >
             {tier.id === 'custom' ? 'Get a Quote' : `Order ${tier.name}`}
           </AnimatedButton>
