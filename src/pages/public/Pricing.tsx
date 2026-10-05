@@ -148,6 +148,15 @@ function PricingEnvelope({ tier, isOpen, onToggle, onSelect }: PricingEnvelopePr
           transition={{ type: 'spring', stiffness: 210, damping: 24 }}
           className={`absolute inset-x-3.5 top-3 rounded-2xl border border-[#D4AF37]/50 bg-[#FEF9E7] p-4 sm:p-5 text-[#0B132B] shadow-2xl flex flex-col justify-between overflow-hidden sm:inset-x-4 ${isOpen ? 'z-40' : 'z-10'}`}
         >
+          <motion.p
+            initial={false}
+            animate={{ opacity: isOpen ? 0 : 1 }}
+            transition={{ duration: 0.15 }}
+            className="pointer-events-none absolute inset-x-2 top-1 text-center text-[9px] font-extrabold uppercase leading-3 tracking-[0.16em] text-[#7A5C07]"
+          >
+            {tier.name} Package
+          </motion.p>
+
           <div>
             <div className="mb-2.5 flex items-start justify-between gap-3 border-b border-[#D4AF37]/35 pb-2.5">
               <div>
