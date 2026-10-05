@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -6,10 +6,10 @@ import GlassCard from '../../components/GlassCard';
 import AnimatedButton from '../../components/AnimatedButton';
 
 const packages = [
-  { id: "starter", name: "Starter Package", price: 79, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
-  { id: "business", name: "Business Suite", price: 199, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
-  { id: "custom", name: "Custom Web App", price: 399, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
-  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "Monthly monitoring, updates, and developer support." }
+  { id: "starter", name: "Business Web", price: 30000, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
+  { id: "business", name: "E-Commerce", price: 70000, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
+  { id: "custom", name: "Web App", price: 120000, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
+  { id: "maintenance", name: "Maintenance & Support", price: 15000, desc: "Monthly monitoring, updates, and developer support." }
 ];
 
 export default function NewOrder() {
@@ -144,7 +144,7 @@ export default function NewOrder() {
                 <p className="text-slate-600 dark:text-slate-300 text-xs mt-2 leading-relaxed">{pkg.desc}</p>
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 dark:border-[#1E3A5F] flex justify-between items-center">
-                <span className="text-xl font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From $${pkg.price}` : `$${pkg.price}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
+                <span className="text-xl font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From LKR ${pkg.price.toLocaleString()}` : `LKR ${pkg.price.toLocaleString()}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
                 <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">{pkg.id === 'custom' ? 'Request quote →' : 'Select →'}</span>
               </div>
             </GlassCard>
@@ -158,7 +158,7 @@ export default function NewOrder() {
           <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1E3A5F] pb-4 mb-2">
             <span className="text-sm font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
             <span className="text-sm font-bold text-slate-900 dark:text-[#F9E79F] bg-slate-100 dark:bg-[#070D1D] border border-slate-200 dark:border-[#1E3A5F] px-3 py-1 rounded">
-              {activePlan?.name} (${activePlan?.price}{selectedPackage === 'maintenance' ? '/month' : ''})
+              {activePlan?.name} (LKR {activePlan?.price.toLocaleString()}{selectedPackage === 'maintenance' ? '/month' : ''})
             </span>
           </div>
 
@@ -226,7 +226,7 @@ export default function NewOrder() {
             </div>
             <div>
               <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Cost</span>
-              <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-1">${activePlan?.price}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
+              <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-1">LKR {activePlan?.price.toLocaleString()}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
             </div>
             <div>
               <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider block">Business Name</span>

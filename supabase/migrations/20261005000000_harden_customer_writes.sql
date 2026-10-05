@@ -37,9 +37,9 @@ begin
   end if;
 
   order_price := case package_id
-    when 'starter' then 79
-    when 'business' then 199
-    when 'maintenance' then 15
+    when 'starter' then 30000
+    when 'business' then 70000
+    when 'maintenance' then 15000
     else null
   end;
   if order_price is null then raise exception 'Invalid package'; end if;

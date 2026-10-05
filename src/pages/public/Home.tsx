@@ -50,9 +50,9 @@ const statusColors: Record<string, string> = {
 };
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -65,10 +65,10 @@ const steps = [
 ];
 
 const packages = [
-  { id: "starter", name: "Starter Package", price: 79, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
-  { id: "business", name: "Business Suite", price: 199, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
-  { id: "custom", name: "Custom Web App", price: 399, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
-  { id: "maintenance", name: "Maintenance & Support", price: 15, desc: "Monthly monitoring, updates, and developer support." }
+  { id: "starter", name: "Business Web", price: 30000, desc: "Up to 5 pages, responsive design, contact form, 5-day delivery." },
+  { id: "business", name: "E-Commerce", price: 70000, desc: "Up to 10 pages, CMS/blog, SEO setup, 10-day delivery." },
+  { id: "custom", name: "Web App", price: 120000, desc: "Quote required. Full-stack web app, database, auth, admin dashboard, and custom scope." },
+  { id: "maintenance", name: "Maintenance & Support", price: 15000, desc: "Monthly monitoring, updates, and developer support." }
 ];
 
 const features = [
@@ -155,7 +155,7 @@ export default function Home() {
   // New Order states
   const [newOrderStep, setNewOrderStep] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState('starter');
-  const [selectedPrice, setSelectedPrice] = useState(79);
+  const [selectedPrice, setSelectedPrice] = useState(30000);
   const [businessName, setBusinessName] = useState('');
   const [preferredDomain, setPreferredDomain] = useState('');
   const [description, setDescription] = useState('');
@@ -296,7 +296,7 @@ export default function Home() {
       setNewOrderOpen(false);
       setNewOrderStep(1);
       setSelectedPackage('starter');
-      setSelectedPrice(79);
+      setSelectedPrice(30000);
       setBusinessName('');
       setPreferredDomain('');
       setDescription('');
@@ -448,7 +448,7 @@ export default function Home() {
                               </h3>
                               <p className="text-xs text-[#1E3A5F] dark:text-[#8496B8] mt-1">Package: {planNames[order.package] || "Custom Build"}</p>
                               <p className="text-sm font-semibold text-[#725700] dark:text-[#F3C623] mt-2">
-                                ${order.price}
+                                LKR {order.price?.toLocaleString()}
                               </p>
                             </div>
                           </div>
@@ -608,7 +608,7 @@ export default function Home() {
                               <p className="text-[#1E3A5F] dark:text-[#8496B8] text-xs mt-1 leading-relaxed">{pkg.desc}</p>
                             </div>
                             <div className="mt-4 pt-3 border-t border-[#CBD5E1] dark:border-[#1E3A5F] flex justify-between items-center">
-                              <span className="text-lg font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From $${pkg.price}` : `$${pkg.price}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
+                              <span className="text-lg font-black text-[#725700] dark:text-[#F3C623]">{pkg.id === 'custom' ? `From LKR ${pkg.price.toLocaleString()}` : `LKR ${pkg.price.toLocaleString()}${pkg.id === 'maintenance' ? '/month' : ''}`}</span>
                               <span className="text-xs font-semibold text-[#1E3A5F] dark:text-[#D4AF37] hover:text-[#F3C623] uppercase tracking-wider">{pkg.id === 'custom' ? 'Request quote →' : 'Select →'}</span>
                             </div>
                           </GlassCard>
@@ -622,7 +622,7 @@ export default function Home() {
                         <div className="flex justify-between items-center border-b border-[#CBD5E1] dark:border-[#1E3A5F] pb-3 mb-1">
                           <span className="text-xs font-semibold text-[#725700] dark:text-[#F3C623] uppercase tracking-wider">Selected plan:</span>
                           <span className="text-xs font-bold text-[#0B132B] dark:text-[#F9E79F] bg-[#F0F4F9] dark:bg-[#070D1D] border border-[#CBD5E1] dark:border-[#1E3A5F] px-2.5 py-1 rounded">
-                            {packages.find(p => p.id === selectedPackage)?.name} (${selectedPrice}{selectedPackage === 'maintenance' ? '/month' : ''})
+                            {packages.find(p => p.id === selectedPackage)?.name} (LKR {selectedPrice.toLocaleString()}{selectedPackage === 'maintenance' ? '/month' : ''})
                           </span>
                         </div>
 
@@ -690,7 +690,7 @@ export default function Home() {
                           </div>
                           <div>
                             <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Cost</span>
-                            <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-0.5">${selectedPrice}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
+                            <span className="text-[#725700] dark:text-[#F3C623] font-bold block mt-0.5">LKR {selectedPrice.toLocaleString()}{selectedPackage === 'maintenance' ? '/month' : ''}</span>
                           </div>
                           <div>
                             <span className="text-[#1E3A5F] dark:text-[#8496B8] font-semibold uppercase tracking-wider block">Business Name</span>

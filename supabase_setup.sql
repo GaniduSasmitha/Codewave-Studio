@@ -307,7 +307,7 @@ declare requesting_user uuid := auth.uid(); order_price numeric; new_order_id uu
 begin
   if requesting_user is null then raise exception 'Authentication required'; end if;
   if requirements_payload is null or length(requirements_payload) > 2500 then raise exception 'Invalid order requirements'; end if;
-  order_price := case package_id when 'starter' then 79 when 'business' then 199 when 'maintenance' then 15 else null end;
+  order_price := case package_id when 'starter' then 30000 when 'business' then 70000 when 'maintenance' then 15000 else null end;
   if order_price is null then raise exception 'Invalid package'; end if;
   insert into public.orders (customer_id, package, price, requirements, status)
   values (requesting_user, package_id, order_price, requirements_payload, 'pending_payment') returning id into new_order_id;

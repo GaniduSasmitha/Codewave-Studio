@@ -16,9 +16,9 @@ interface AdminNotification {
 }
 
 const planNames: Record<string, string> = {
-  starter: 'Starter Package',
-  business: 'Business Suite',
-  custom: 'Custom Web App',
+  starter: 'Business Web',
+  business: 'E-Commerce',
+  custom: 'Web App',
   maintenance: 'Maintenance & Support'
 };
 
@@ -104,7 +104,7 @@ export default function AdminLayout() {
               id: order.id,
               title: 'New project received',
               subject: planNames[order.package] || 'Custom Project',
-              preview: `Order #${order.id.slice(0, 8)} · $${order.price}`,
+              preview: `Order #${order.id.slice(0, 8)} · LKR ${Number(order.price).toLocaleString()}`,
               to: `/admin/orders/${order.id}`,
               kind: 'order'
             });

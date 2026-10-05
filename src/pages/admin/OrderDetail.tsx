@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -30,9 +30,9 @@ interface Order {
 }
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -318,7 +318,7 @@ export default function OrderDetail() {
                 </div>
                 <div className="text-right">
                   <span className="text-xs text-slate-500 block uppercase tracking-wider font-semibold">Total Price</span>
-                  <span className="text-lg font-bold text-slate-900 dark:text-white">${order.price}</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">LKR {Number(order.price).toLocaleString()}</span>
                 </div>
               </div>
 

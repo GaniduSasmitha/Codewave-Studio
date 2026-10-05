@@ -7,10 +7,10 @@ import AuthMascotsPanel from '../../components/AuthMascotsPanel';
 import GoogleSignInButton from '../../components/GoogleSignInButton';
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package ($79)",
-  business: "Business Suite ($199)",
-  custom: "Custom Web App (Starting at $399)",
-  maintenance: "Maintenance & Support ($15/mo)"
+  starter: "Business Web (LKR 30,000)",
+  business: "E-Commerce (LKR 70,000)",
+  custom: "Web App (Starting at LKR 120,000)",
+  maintenance: "Maintenance & Support (LKR 15,000/mo)"
 };
 
 export default function Signup() {

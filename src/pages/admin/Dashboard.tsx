@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import GlassCard from '../../components/GlassCard';
@@ -13,9 +13,9 @@ interface Order {
 }
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 
             <GlassCard className="p-6 border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/10" hoverEffect={false}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</h3>
-              <p className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3 font-mono">${stats.revenue}</p>
+              <p className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3 font-mono">LKR {stats.revenue.toLocaleString()}</p>
             </GlassCard>
           </div>
 
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
                       <p className="text-xs text-slate-500 mt-1">ID: #{order.id.slice(0, 8)}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-slate-700 dark:text-slate-400 font-semibold">${order.price}</span>
+                      <span className="text-slate-700 dark:text-slate-400 font-semibold">LKR {Number(order.price).toLocaleString()}</span>
                       <span className="text-xs text-slate-500 font-mono hidden md:block">
                         {new Date(order.created_at).toLocaleDateString()}
                       </span>

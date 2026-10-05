@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
@@ -35,9 +35,9 @@ const statusColors: Record<string, string> = {
 };
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -255,7 +255,7 @@ export default function OrdersList() {
                           </div>
                           <div className="text-right">
                             <span className="text-slate-500 block text-[10px] uppercase font-semibold">Price</span>
-                            <span className="font-bold text-slate-900 dark:text-white">${order.price}</span>
+                            <span className="font-bold text-slate-900 dark:text-white">LKR {Number(order.price).toLocaleString()}</span>
                           </div>
                         </div>
                         <div className="flex items-center justify-between pt-1 gap-2">
@@ -334,7 +334,7 @@ export default function OrdersList() {
                             <td className="px-6 py-4 font-semibold text-slate-700 dark:text-slate-300">
                               {planNames[order.package] || "Custom Project"}
                             </td>
-                            <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">${order.price}</td>
+                            <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">LKR {Number(order.price).toLocaleString()}</td>
                             <td className="px-6 py-4">
                               <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
                                 statusColors[order.status] || "bg-slate-500/10 text-slate-500 dark:text-slate-400"

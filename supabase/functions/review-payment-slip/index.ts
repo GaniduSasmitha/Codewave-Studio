@@ -19,9 +19,9 @@ const escapeHtml = (value: unknown) => String(value ?? '')
   .replaceAll("'", '&#039;');
 
 const planNames: Record<string, string> = {
-  starter: 'Starter Package',
-  business: 'Business Suite',
-  custom: 'Custom Web App',
+  starter: 'Business Web',
+  business: 'E-Commerce',
+  custom: 'Web App',
   maintenance: 'Maintenance & Support',
 };
 
@@ -137,7 +137,7 @@ Deno.serve(async (request) => {
   const detailRows = [
     ['Order number', `#${orderNumber}`],
     ['Package', planName],
-    ['Price', `$${order.price}`],
+    ['Price', `LKR ${Number(order.price).toLocaleString()}`],
     ['Business name', requirements.businessName || 'Not provided'],
     ['Preferred domain', requirements.preferredDomain || 'Not specified'],
   ].map(([label, value]) => `
@@ -173,7 +173,7 @@ Deno.serve(async (request) => {
     message,
     `Order number: #${orderNumber}`,
     `Package: ${planName}`,
-    `Price: $${order.price}`,
+    `Price: LKR ${Number(order.price).toLocaleString()}`,
     `Business name: ${requirements.businessName || 'Not provided'}`,
     `Preferred domain: ${requirements.preferredDomain || 'Not specified'}`,
     requirements.description ? `Project details: ${requirements.description}` : '',

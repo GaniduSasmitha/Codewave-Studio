@@ -26,9 +26,9 @@ const steps = [
 ];
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -216,7 +216,7 @@ export default function OrderStatus() {
           </div>
           <div className="text-right">
             <span className="text-xs text-[#725700] dark:text-[#F3C623] block uppercase tracking-wider font-semibold">Total Price</span>
-            <span className="text-xl font-bold text-[#725700] dark:text-[#F3C623]">${order.price}</span>
+            <span className="text-xl font-bold text-[#725700] dark:text-[#F3C623]">LKR {Number(order.price).toLocaleString()}</span>
           </div>
         </div>
 

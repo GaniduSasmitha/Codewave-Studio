@@ -8,8 +8,8 @@ import AnimatedButton from '../../components/AnimatedButton';
 const services = [
   {
     id: "starter",
-    title: "Business Website",
-    price: "$79 total",
+    title: "Business Web",
+    price: "LKR 30,000 total",
     desc: "A premium corporate presence custom tailored to display your services, build brand authority, and capture leads.",
     features: [
       "Custom responsive design",
@@ -21,7 +21,7 @@ const services = [
   {
     id: "business",
     title: "E-commerce Store",
-    price: "$199 total",
+    price: "LKR 70,000 total",
     desc: "A fully custom digital store complete with product catalog, CMS/blog, custom contact forms, and SEO setup.",
     features: [
       "Up to 10 included pages",
@@ -33,7 +33,7 @@ const services = [
   {
     id: "custom",
     title: "Web App / Custom Software",
-    price: "starting at $399",
+    price: "starting at LKR 120,000",
     desc: "Full-stack web application featuring custom database architecture, user authentication, admin dashboards, and custom logic.",
     features: [
       "Full-stack web app & database",
@@ -45,7 +45,7 @@ const services = [
   {
     id: "maintenance",
     title: "Maintenance & Support",
-    price: "$15/month",
+    price: "LKR 15,000/month",
     desc: "Keep your application secure, up-to-date, and lightning-fast with dedicated support and server health checks.",
     features: [
       "Scheduled server monitoring checks",

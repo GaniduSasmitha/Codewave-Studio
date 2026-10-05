@@ -9,24 +9,24 @@ import AnimatedButton from '../../components/AnimatedButton';
 const tiers = [
   {
     id: "starter",
-    name: "Starter",
-    price: "$79",
+    name: "Business Web",
+    price: "LKR 30,000",
     billing: "One-time payment",
     desc: "Up to 5 pages, responsive design, contact form, basic SEO, 1 revision round, 5-day delivery.",
     popular: false
   },
   {
     id: "business",
-    name: "Business",
-    price: "$199",
+    name: "E-Commerce",
+    price: "LKR 70,000",
     billing: "One-time payment",
     desc: "Up to 10 pages, CMS/blog, SEO setup, custom contact forms, 2 revision rounds, 10-day delivery.",
     popular: true
   },
   {
     id: "custom",
-    name: "Custom",
-    price: "starting at $399",
+    name: "Web App",
+    price: "starting at LKR 120,000",
     billing: "Quote-based",
     desc: "Full-stack web app, database, user auth, admin dashboard, unlimited revisions during build, timeline based on scope.",
     popular: false
@@ -269,9 +269,9 @@ export default function Pricing() {
                 <thead className="bg-[#F0F4F9] dark:bg-[#070D1D] text-xs uppercase text-[#0B132B] dark:text-[#F3C623] font-semibold">
                   <tr>
                     <th className="px-6 py-4">Features</th>
-                    <th className="px-6 py-4">Starter</th>
-                    <th className="px-6 py-4">Business</th>
-                    <th className="px-6 py-4">Custom</th>
+                    <th className="px-6 py-4">Business Web</th>
+                    <th className="px-6 py-4">E-Commerce</th>
+                    <th className="px-6 py-4">Web App</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#CBD5E1] dark:divide-[#1E3A5F]">

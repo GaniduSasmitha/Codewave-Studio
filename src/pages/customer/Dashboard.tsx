@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -27,9 +27,9 @@ const statusColors: Record<string, string> = {
 };
 
 const planNames: Record<string, string> = {
-  starter: "Starter Package",
-  business: "Business Suite",
-  custom: "Custom Web App",
+  starter: "Business Web",
+  business: "E-Commerce",
+  custom: "Web App",
   maintenance: "Maintenance & Support"
 };
 
@@ -111,7 +111,7 @@ export default function CustomerDashboard() {
                     {planNames[order.package] || "Custom Project"}
                   </h3>
                   <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mt-2">
-                    ${order.price}
+                    LKR {Number(order.price).toLocaleString()}
                   </p>
                 </div>
               </div>
